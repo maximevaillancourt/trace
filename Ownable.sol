@@ -6,12 +6,6 @@
 pragma solidity ^0.4.20;
 
 contract Ownable {
-    // Required modifiers:
-    // OnlyPassageTeam
-    // OnlyIndustry
-    // OnlyPublic
-    // OnlyGovernment
-    
     address public owner;
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
