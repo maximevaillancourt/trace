@@ -1,4 +1,6 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.19;
+
+import "./Ownable.sol";
 
 contract PassageMethodModifiers is Ownable {
     // Required modifiers:

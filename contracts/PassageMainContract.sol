@@ -1,4 +1,6 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.19;
+
+import "./PassageMethodModifiers.sol";
 
 contract PassageMainContract is PassageMethodModifiers {
     

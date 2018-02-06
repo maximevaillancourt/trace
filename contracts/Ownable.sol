@@ -3,7 +3,7 @@
  * @dev The Ownable contract has an owner address, and provides basic authorization control
  * functions, this simplifies the implementation of "user permissions".
  */
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.19;
 
 contract Ownable {
     address public owner;
