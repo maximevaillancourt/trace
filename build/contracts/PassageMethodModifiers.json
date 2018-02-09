@@ -49,8 +49,8 @@
   ],
   "bytecode": "0x6060604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610285806100536000396000f30060606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610051578063f2fde38b146100a6575b600080fd5b341561005c57600080fd5b6100646100df565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100b157600080fd5b6100dd600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610104565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561015f57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561019b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582000930be04515eebea9b3a548dbbd413dc97b010dcc6acaae66724f4d3c0e318b0029",
   "deployedBytecode": "0x60606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610051578063f2fde38b146100a6575b600080fd5b341561005c57600080fd5b6100646100df565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100b157600080fd5b6100dd600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610104565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561015f57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561019b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582000930be04515eebea9b3a548dbbd413dc97b010dcc6acaae66724f4d3c0e318b0029",
-  "sourceMap": "51:161:2:-;;;524:10:0;516:5;;:18;;;;;;;;;;;;;;;;;;51:161:2;;;;;;",
-  "deployedSourceMap": "51:161:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;239:20:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;879:183;;;;;;;;;;;;;;;;;;;;;;;;;;;;239:20;;;;;;;;;;;;;:::o;879:183::-;683:5;;;;;;;;;;;669:19;;:10;:19;;;661:28;;;;;;;;979:1;959:22;;:8;:22;;;;951:31;;;;;;;;1020:8;992:37;;1013:5;;;;;;;;;;;992:37;;;;;;;;;;;;1047:8;1039:5;;:16;;;;;;;;;;;;;;;;;;879:183;:::o",
+  "sourceMap": "51:161:3:-;;;524:10:1;516:5;;:18;;;;;;;;;;;;;;;;;;51:161:3;;;;;;",
+  "deployedSourceMap": "51:161:3:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;239:20:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;879:183;;;;;;;;;;;;;;;;;;;;;;;;;;;;239:20;;;;;;;;;;;;;:::o;879:183::-;683:5;;;;;;;;;;;669:19;;:10;:19;;;661:28;;;;;;;;979:1;959:22;;:8;:22;;;;951:31;;;;;;;;1020:8;992:37;;1013:5;;;;;;;;;;;992:37;;;;;;;;;;;;1047:8;1039:5;;:16;;;;;;;;;;;;;;;;;;879:183;:::o",
   "source": "pragma solidity ^0.4.19;\n\nimport \"./Ownable.sol\";\n\ncontract PassageMethodModifiers is Ownable {\n    // Required modifiers:\n    // OnlyPassageTeam\n    // OnlyIndustry\n    // OnlyPublic\n    // OnlyGovernment\n    \n}",
   "sourcePath": "/home/mv/edu/usherbrooke/s5-h18/ige592/Passage_Project/contracts/PassageMethodModifiers.sol",
   "ast": {
@@ -58,7 +58,7 @@
       "absolutePath": "/home/mv/edu/usherbrooke/s5-h18/ige592/Passage_Project/contracts/PassageMethodModifiers.sol",
       "exportedSymbols": {
         "PassageMethodModifiers": [
-          120
+          262
         ]
       }
     },
@@ -72,42 +72,42 @@
             ".19"
           ]
         },
-        "id": 116,
+        "id": 258,
         "name": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:24:3"
       },
       {
         "attributes": {
-          "SourceUnit": 56,
+          "SourceUnit": 114,
           "absolutePath": "/home/mv/edu/usherbrooke/s5-h18/ige592/Passage_Project/contracts/Ownable.sol",
           "file": "./Ownable.sol",
-          "scope": 121,
+          "scope": 263,
           "symbolAliases": [
             null
           ],
           "unitAlias": ""
         },
-        "id": 117,
+        "id": 259,
         "name": "ImportDirective",
-        "src": "26:23:2"
+        "src": "26:23:3"
       },
       {
         "attributes": {
           "contractDependencies": [
-            55
+            113
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
-            120,
-            55
+            262,
+            113
           ],
           "name": "PassageMethodModifiers",
           "nodes": [
             null
           ],
-          "scope": 121
+          "scope": 263
         },
         "children": [
           {
@@ -121,27 +121,27 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Ownable",
-                  "referencedDeclaration": 55,
+                  "referencedDeclaration": 113,
                   "type": "contract Ownable"
                 },
-                "id": 118,
+                "id": 260,
                 "name": "UserDefinedTypeName",
-                "src": "86:7:2"
+                "src": "86:7:3"
               }
             ],
-            "id": 119,
+            "id": 261,
             "name": "InheritanceSpecifier",
-            "src": "86:7:2"
+            "src": "86:7:3"
           }
         ],
-        "id": 120,
+        "id": 262,
         "name": "ContractDefinition",
-        "src": "51:161:2"
+        "src": "51:161:3"
       }
     ],
-    "id": 121,
+    "id": 263,
     "name": "SourceUnit",
-    "src": "0:212:2"
+    "src": "0:212:3"
   },
   "compiler": {
     "name": "solc",
@@ -149,5 +149,5 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-02-06T22:18:55.349Z"
+  "updatedAt": "2018-02-08T23:04:51.026Z"
 }
