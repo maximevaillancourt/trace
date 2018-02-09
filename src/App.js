@@ -13,6 +13,9 @@ class App extends Component {
 
     this.state = {
       products: [],
+      name: "",
+      description: "",
+      location: "",
       Passage: null,
       accounts: null,
       web3: null
@@ -74,7 +77,7 @@ class App extends Component {
 
   handleCreateNewProduct = () => {
     // Create a dummy product
-    this.state.Passage.createProduct("allo", "myDescription", "Montreal", {from: this.state.accounts[0], gas:3000000})
+    this.state.Passage.createProduct(this.state.name, this.state.description, this.state.location, {from: this.state.accounts[0], gas:3000000})
       .then((result) => {
         // success! display a success message maybe?
       })
@@ -95,7 +98,19 @@ class App extends Component {
           <div className="pure-g">
             <div className="pure-u-1-1">
               <p><strong>Nouveau produit</strong></p>
-              <button onClick={this.handleCreateNewProduct}>Créer un nouveau produit bidon</button>
+              <div>
+                <label>Nom</label>
+                <input value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></input>
+              </div>
+              <div>
+                <label>Description</label>
+                <input value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></input>
+              </div>
+              <div>
+                <label>Emplacement actuel</label>
+                <input value={this.state.location} onChange={(e) => {this.setState({location: e.target.value})}}></input>
+              </div>
+              <button onClick={this.handleCreateNewProduct}>Créer un nouveau produit</button>
               <p>Derniers produits stockés sur votre blockchain local: </p>
               <ul>
                 {productsItems && productsItems.length > 0 ? productsItems : "Aucun produit." }
