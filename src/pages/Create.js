@@ -34,7 +34,7 @@ class Create extends Component {
   }
 
   handleCreateNewProduct = () => {
-    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:3000000})
+    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         this.setState({success: true})
         setTimeout(() => {

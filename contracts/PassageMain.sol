@@ -68,10 +68,15 @@ contract PassageMain is PassageHelper {
         products[generatedProductId].productId = generatedProductId;
         // Create its first iteration and assign ids
         uint initialIterationId = products[generatedProductId].iterations.push(
-            ProductIteration(0, now, 0, _name, _description, _location));
+          ProductIteration(0, now, 0, _name, _description, _location)
+        );
         products[generatedProductId].latestIterationId = initialIterationId;
+        
+        // TODO: fix this
+        /*
         products[generatedProductId].iterations[initialIterationId].iterationId = initialIterationId;
         products[generatedProductId].iterations[initialIterationId].lastIterationId = initialIterationId;
+        */
 
         productToOwner[generatedProductId] = msg.sender;
         ownerProductCount[msg.sender]++;
@@ -90,9 +95,13 @@ contract PassageMain is PassageHelper {
         // ^ Implement onlyOwner logic
         // ^ _productId is the QRCode value (generated at the moment of creation)
         Product storage product = products[_productId];
-        if (product.productId == 0) return; // Product doesn't exist. Exit now.
+        if (product.productId == 0){
+          return;
+        }
+        // Product doesn't exist. Exit now.
         uint newIterationId = product.iterations.push(
-            ProductIteration(0, now, product.latestIterationId, _name, _description, _location));
+          ProductIteration(0, now, product.latestIterationId, _name, _description, _location)
+        );
         product.iterations[newIterationId].iterationId = newIterationId;
         product.latestIterationId = newIterationId;
     }
