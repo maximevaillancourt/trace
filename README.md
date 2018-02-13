@@ -4,10 +4,11 @@
 
 Assurez-vous de ne pas avoir l'extension MetaMask activée lors du développement de l'application (pour tout de suite -- on pourra corriger ça plus tard).
 
-1. Installer Truffle globalement :
+1. Installer Truffle et React-Redux globalement :
 
     ```
     npm install -g truffle
+    npm install --save react-redux
     ```
 
 2. Dans une fenêtre de terminal, lancer la console de développement de Truffle :
