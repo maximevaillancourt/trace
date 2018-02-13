@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as mainActions from '../actions/mainActions';
 
-class Create extends Component {
+class View extends Component {
 
   render() {
     const productsList = this.props.products.map((p) =>
@@ -30,4 +30,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Create);
+export default connect(mapStateToProps)(View);

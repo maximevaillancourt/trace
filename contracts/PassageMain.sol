@@ -5,6 +5,8 @@ import "./PassageHelper.sol";
 contract PassageMain is PassageHelper {
     
     event ProductCreated(uint newProductId, string name, string description, string location);
+
+    // event OwnershipTransferRequest(uint productId, address indexed currentOwner, address indexed newRequestedOwner);
     
     event ProductDetailsUpdated(uint productId);
     
@@ -30,15 +32,15 @@ contract PassageMain is PassageHelper {
         //Certification[] certifications;
     }
 
+    Actor[] public actors;
+    Certification[] public certifications;
     Product[] public products;
 
-    mapping (uint => address) public productToOwner;
-    mapping (address => uint) ownerProductCount;
+    mapping (uint => uint[]) public initialProductToSubsequentVersions;
+    // map uint to array of uints : {1 => [1, 4, 8, ]}
 
     function createProduct(string _name, string _description, string _location) public {
         uint newProductId = products.push(Product(_name, _description, _location)) - 1;
-        productToOwner[newProductId] = msg.sender;
-        ownerProductCount[msg.sender]++;
         ProductCreated(newProductId, _name, _description, _location);
     }
 
@@ -57,4 +59,11 @@ contract PassageMain is PassageHelper {
     function _markProductAsSold(uint _productId) {
         
     }
+
+    /*
+    function _requestOwnershipTransfer(uint index, address _newOwnerAddress){
+      product[index].nextAuthorizedOwnerAddress = _newOwnerAddress;
+
+    }
+    */
 }
