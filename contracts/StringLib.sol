@@ -1,5 +1,5 @@
 // String Utils v0.1
-
+pragma solidity ^0.4.19;
 /// @title String Utils - String utility functions
 /// @author Piper Merriam - <pipermerriam@gmail.com>
 library StringLib {

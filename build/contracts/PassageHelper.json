@@ -47,15 +47,15 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x6060604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610285806100536000396000f30060606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610051578063f2fde38b146100a6575b600080fd5b341561005c57600080fd5b6100646100df565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100b157600080fd5b6100dd600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610104565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561015f57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561019b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582079ae0ffe7f391be7dcd81631647d3bad1c4a2fd8c044a589ae85b7852968d8e30029",
-  "deployedBytecode": "0x60606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610051578063f2fde38b146100a6575b600080fd5b341561005c57600080fd5b6100646100df565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100b157600080fd5b6100dd600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610104565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561015f57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561019b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582079ae0ffe7f391be7dcd81631647d3bad1c4a2fd8c044a589ae85b7852968d8e30029",
+  "bytecode": "0x6060604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610285806100536000396000f30060606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610051578063f2fde38b146100a6575b600080fd5b341561005c57600080fd5b6100646100df565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100b157600080fd5b6100dd600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610104565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561015f57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561019b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a723058206eae7b0d881e17d39cfcca66e583c5cbee281f86816128e92cced9e3b46b67330029",
+  "deployedBytecode": "0x60606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610051578063f2fde38b146100a6575b600080fd5b341561005c57600080fd5b6100646100df565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100b157600080fd5b6100dd600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610104565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561015f57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561019b57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a723058206eae7b0d881e17d39cfcca66e583c5cbee281f86816128e92cced9e3b46b67330029",
   "sourceMap": "51:152:1:-;;;524:10:0;516:5;;:18;;;;;;;;;;;;;;;;;;51:152:1;;;;;;",
   "deployedSourceMap": "51:152:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;239:20:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;879:183;;;;;;;;;;;;;;;;;;;;;;;;;;;;239:20;;;;;;;;;;;;;:::o;879:183::-;683:5;;;;;;;;;;;669:19;;:10;:19;;;661:28;;;;;;;;979:1;959:22;;:8;:22;;;;951:31;;;;;;;;1020:8;992:37;;1013:5;;;;;;;;;;;992:37;;;;;;;;;;;;1047:8;1039:5;;:16;;;;;;;;;;;;;;;;;;879:183;:::o",
   "source": "pragma solidity ^0.4.19;\n\nimport \"./Ownable.sol\";\n\ncontract PassageHelper is Ownable {\n    // Required modifiers:\n    // OnlyPassageTeam\n    // OnlyIndustry\n    // OnlyPublic\n    // OnlyGovernment\n    \n}",
-  "sourcePath": "/home/mv/edu/usherbrooke/s5-h18/ige592/Passage_Project/contracts/PassageHelper.sol",
+  "sourcePath": "/Users/Raphael/Documents/École/IFT592 - Cours de projet/Passage_Project/contracts/PassageHelper.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/home/mv/edu/usherbrooke/s5-h18/ige592/Passage_Project/contracts/PassageHelper.sol",
+      "absolutePath": "/Users/Raphael/Documents/École/IFT592 - Cours de projet/Passage_Project/contracts/PassageHelper.sol",
       "exportedSymbols": {
         "PassageHelper": [
           61
@@ -79,7 +79,7 @@
       {
         "attributes": {
           "SourceUnit": 56,
-          "absolutePath": "/home/mv/edu/usherbrooke/s5-h18/ige592/Passage_Project/contracts/Ownable.sol",
+          "absolutePath": "/Users/Raphael/Documents/École/IFT592 - Cours de projet/Passage_Project/contracts/Ownable.sol",
           "file": "./Ownable.sol",
           "scope": 62,
           "symbolAliases": [
@@ -149,5 +149,9 @@
   },
   "networks": {},
   "schemaVersion": "1.0.1",
+<<<<<<< Updated upstream
   "updatedAt": "2018-02-13T19:17:13.112Z"
+=======
+  "updatedAt": "2018-02-13T20:01:55.189Z"
+>>>>>>> Stashed changes
 }
