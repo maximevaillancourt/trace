@@ -4,11 +4,19 @@
 
 Assurez-vous de ne pas avoir l'extension MetaMask activée lors du développement de l'application (pour tout de suite -- on pourra corriger ça plus tard).
 
-1. Installer Truffle et React-Redux globalement :
+0. Cloner le projet et y naviguer
 
     ```
-    npm install -g truffle
-    npm install --save react-redux
+    git clone https://[VOTRE_CIP]@depot.ami.usherbrooke.ca/Passage_Group/Passage_Project.git
+    cd Passage_Project
+    ```
+    
+    Ne pas oublier pas de remplacer [VOTRE_CIP] par votre CIP :)
+
+1. Installer Truffle globalement, et installer les dépendances de projet :
+
+    ```
+    npm install -g truffle && npm install
     ```
 
 2. Dans une fenêtre de terminal, lancer la console de développement de Truffle :
@@ -24,10 +32,10 @@ Assurez-vous de ne pas avoir l'extension MetaMask activée lors du développemen
     migrate
     ```
 
-4. Dans une nouvelle fenêtre de terminal, lancer le serveur Webpack pour le front-end qui se hot-reload.
+4. Dans une nouvelle fenêtre de terminal, lancer le serveur Webpack pour le front-end.
 
     ``` 
     npm run start
     ```
 
-Ça devrait ouvrir une nouvelle fenêtre dans le navigateur à http://localhost:3000. :)
+Une nouvelle fenêtre devrait s'ouvrir dans le navigateur à l'adresse http://localhost:3000.
