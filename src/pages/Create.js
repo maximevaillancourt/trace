@@ -6,33 +6,62 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as mainActions from '../actions/mainActions';
 
+import {
+  Container,
+  Button,
+  FormGroup,
+  Label,
+  Input,
+  Alert
+} from 'reactstrap';
+
 class Create extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+
+    this.state = {
+      success: false
+    };
+  }
+
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
 
   handleCreateNewProduct = () => {
     this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:3000000})
       .then((result) => {
-        // success! display a success message?
+        this.setState({success: true})
+        setTimeout(() => {
+          this.setState({success: false})
+        }, 5000)
       })
   }
 
   render() {
     return (
-      <div>
+      <Container>
         <p><strong>Nouveau produit</strong></p>
-        <div>
-            <label>Nom</label>
-            <input value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></input>
-        </div>
-        <div>
-            <label>Description</label>
-            <input value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></input>
-        </div>
-        <div>
-            <label>Emplacement actuel</label>
-            <input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLocation(e.target.value))}}></input>
-        </div>
-        <button onClick={this.handleCreateNewProduct}>Créer un nouveau produit</button>
-      </div>
+        <FormGroup>
+            <Label>Nom</Label>
+            <Input value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
+        </FormGroup>
+        <FormGroup>
+            <Label>Description</Label>
+            <Input value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
+        </FormGroup>
+        <FormGroup>
+            <Label>Emplacement actuel</Label>
+            <Input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLocation(e.target.value))}}></Input>
+        </FormGroup>
+        <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
+        {this.state.success ? <div style={{paddingTop: "15px"}}><Alert>Produit créé avec succès.</Alert></div> : null }
+      </Container>
     );
   }
 }

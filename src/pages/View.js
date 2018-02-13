@@ -6,6 +6,10 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as mainActions from '../actions/mainActions';
 
+import {
+  Container,
+} from 'reactstrap';
+
 class View extends Component {
 
   render() {
@@ -14,12 +18,12 @@ class View extends Component {
     );
     
     return (
-      <div>
+      <Container>
         <p><strong>Derniers produits</strong></p>
         <ul>
-            {productsList}
+          {productsList}
         </ul>
-      </div>
+      </Container>
     );
   }
 }

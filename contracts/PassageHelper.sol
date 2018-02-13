@@ -8,5 +8,4 @@ contract PassageHelper is Ownable {
     // OnlyIndustry
     // OnlyPublic
     // OnlyGovernment
-    
 }

@@ -7,7 +7,36 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as mainActions from './actions/mainActions';
 
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  Container,
+  Row,
+  Col,
+  Jumbotron,
+  Button
+} from 'reactstrap';
+
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+        isOpen: false
+    };
+  }
+  toggle() {
+      this.setState({
+          isOpen: !this.state.isOpen
+      });
+  }
 
   componentWillMount() {
     getWeb3
@@ -53,12 +82,19 @@ class App extends Component {
   render() {
     return (
       <div>
-        <p><b><Link to="/">Passage</Link></b></p>
-        <p><Link to="/create">Create a product</Link></p>
-        <p><Link to="/view">View a product</Link></p>
-        <div>
-          {this.props.children}
-        </div>
+        <Navbar color="faded" light expand="md">
+          <Container>
+            <NavbarBrand tag={Link} to='/'>Passage</NavbarBrand>
+            <NavbarToggler onClick={this.toggle} />
+            <Collapse isOpen={this.state.isOpen} navbar>
+              <Nav className="ml-auto" navbar>
+                <NavItem><NavLink tag={Link} to="/create">Ajouter un produit</NavLink></NavItem>
+                <NavItem><NavLink tag={Link} to="/view">Voir un produit</NavLink></NavItem>
+              </Nav>
+            </Collapse>
+          </Container>
+        </Navbar>
+        {this.props.children}
       </div>
     );
   }
