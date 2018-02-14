@@ -60,6 +60,7 @@ class App extends Component {
         this.props.dispatch(mainActions.setPassageInstance(instance))
         this.props.dispatch(mainActions.setWeb3Accounts(accounts))
 
+        /*
         const _this = this; // TODO: fix this js scope mess (let? arrow function?)
         const event = instance.ProductCreated({fromBlock: 0, toBlock: 'latest'}) // TODO: extract event watchers into a new method/class?
         event.watch(function(error, result){
@@ -75,6 +76,8 @@ class App extends Component {
             console.log(error);
           }
         });
+        */
+       
       })
     })
   }

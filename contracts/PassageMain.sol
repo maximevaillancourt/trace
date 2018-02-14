@@ -4,15 +4,18 @@ import "./PassageHelper.sol";
 import "./StringLib.sol";
 
 contract PassageMain is PassageHelper {
-    
-    event ProductCreated(uint newProductId, string name, string description, string location);
 
+    /***********************
+      EVENT DEFINITIONS
+    ***********************/
+    event ProductCreated(uint newProductId);
     // event OwnershipTransferRequest(uint productId, address indexed currentOwner, address indexed newRequestedOwner);
-    
-    event ProductDetailsUpdated(uint productId);
-    
-    event ProductMarkedAsSold(uint productId);
+    // event ProductDetailsUpdated(uint productId);
+    // event ProductMarkedAsSold(uint productId);
 
+    /***********************
+      STRUCT DEFINITIONS
+    ***********************/
     struct Actor {
         string name;
         string physicalAddress; // Physical address, may be separated (more costly)
@@ -27,101 +30,141 @@ contract PassageMain is PassageHelper {
         uint16 deliveringActor; // Agency/company behind the certification
     }
 
-    struct ProductIteration {
-        uint iterationId;
+    struct ProductVersion {
+        uint versionId;
         uint creationDate;
-        uint lastIterationId;
+        uint lastVersionId;
+        address owner;
+
+        // all data fields below are editable
         string name;
         string description;
         string location;
-        //string notes;
         //string customJsonData;
-        //int latitude; // 6 last digits are decimals (numeric type not supported in solidity)
-        //int longitude;
+        //string latitude; // 6 last digits are decimals (numeric type not supported in solidity)
+        //string longitude;
         //Certification[] certifications;
     }
     
     struct Product {
-        uint productId; // can be used to generate qrcode
-        uint latestIterationId;
-        ProductIteration[] iterations;
-        // Informations that don't change will be added here.
-
-        //address owner; needed?
-        //address nextAuthorizedOwner; needed?
+        // Product data that never changes should be specified below
+        uint productId;
+        uint latestVersionId;
+        uint[] versions;
+        bool isProduct;
+        address owner;
+        //address nextAuthorizedOwner;
     }
     
-    Actor[] public actors;
-    Certification[] public certifications;
+    /***********************
+      MAPPINGS & STORAGE
+    ***********************/
+    mapping (uint => Product) public products; // used to access a product struct directly from an ID
+    uint[] public productIds; // used to access all product IDs
 
-    //Product[] public products;
-    mapping (uint => Product) public products;
-    mapping (uint => address) public productToOwner;
-    mapping (address => uint) public ownerProductCount;
-    mapping (uint => uint[]) public initialProductToSubsequentVersions;
-    // map uint to array of uints : {1 => [1, 4, 8, ]}
-
-    function createProduct(string _name, string _description, string _location) public returns (uint) {
-        // ^ More iteration informations to be added here
-        // Generate a pseudo-random productId
-        uint generatedProductId = uint(keccak256(_description));
-        products[generatedProductId].productId = generatedProductId;
-        // Create its first iteration and assign ids
-        uint initialIterationId = products[generatedProductId].iterations.push(
-          ProductIteration(0, now, 0, _name, _description, _location)
-        );
-        products[generatedProductId].latestIterationId = initialIterationId;
-        
-        // TODO: fix this
-        /*
-        products[generatedProductId].iterations[initialIterationId].iterationId = initialIterationId;
-        products[generatedProductId].iterations[initialIterationId].lastIterationId = initialIterationId;
-        */
-
-        productToOwner[generatedProductId] = msg.sender;
-        ownerProductCount[msg.sender]++;
-        ProductCreated(generatedProductId, _name, _description, _location);
-
-        // User will generate QRCode from this value
-        return generatedProductId;
+    mapping (uint => ProductVersion) public productVersions; // used to access a version struct directly from a version ID
+    uint[] public productVersionIds; // used to access all version IDs
+    
+    /***********************
+      HELPERS (move to PassageHelper & refactor contract inheritance)
+    ***********************/
+    modifier ownerOf(uint _productId) {
+      require(msg.sender == products[_productId].owner);
+      _;
     }
 
-    function getProductById(uint index) external view returns(string, string, string) {
-        //return (products[index].name, products[index].description, products[index].location);
+    function productIdExists(uint _productId) public constant returns(bool isIndeed) {
+      return products[_productId].isProduct;
     }
 
-    function addProductIteration(uint _productId, string _name, string _description, string _location) public {
-        // ^ More iteration informations to be added here
-        // ^ Implement onlyOwner logic
-        // ^ _productId is the QRCode value (generated at the moment of creation)
+    /***********************
+      METHODS
+    ***********************/
+    function createProduct(string _name, string _description, string _location) public {
+    
+        // Generate a product ID
+        uint newProductId = productIds.length;
+
+        // Instead, we could generate a pseudo-random product ID
+        // from the current time and the sender's address
+        //uint newProductId = uint(keccak256(now, msg.sender));
+
+        // Create product
+        var product = products[newProductId];
+
+        // Define product
+        product.productId = newProductId;
+        product.latestVersionId = 0; // temporary value that gets replaced in addProductVersion()
+        product.versions = new uint[](0); // empty array at first
+        product.isProduct = true;
+        product.owner = msg.sender;
+
+        // Add new product ID
+        productIds.push(newProductId);
+
+        // Create initial product version
+        addProductVersion(newProductId, _name, _description, _location);
+
+        // Fire an event to announce the creation of the product
+        ProductCreated(newProductId);
+    }
+
+    function addProductVersion(uint _productId, string _name, string _description, string _location) public {
+        // ^ TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
+
+        // Generate a version ID
+        uint newVersionId = productVersionIds.length;
+
+        // Instead, we could generate a pseudo-random product ID
+        // from the current time, the sender's address, and the productId
+        // uint newVersionId = uint(keccak256(now, msg.sender, _productId));
+
+        // Create product version
+        var version = productVersions[newVersionId];
+
+        // Define new version
+        version.versionId = newVersionId;
+        version.creationDate = now;
+        version.lastVersionId = product.latestVersionId;
+        version.owner = product.owner;
+
+        version.name = _name;
+        version.description = _description;
+        version.location = _location;
+
+        // Save new product version ID
+        productVersionIds.push(newVersionId);
+
+        // Get base product from storage
         Product storage product = products[_productId];
-        if (product.productId == 0){
-          return;
-        }
-        // Product doesn't exist. Exit now.
-        uint newIterationId = product.iterations.push(
-          ProductIteration(0, now, product.latestIterationId, _name, _description, _location)
-        );
-        product.iterations[newIterationId].iterationId = newIterationId;
-        product.latestIterationId = newIterationId;
+
+        // Add new version ID to product
+        product.versions.push(newVersionId);
+
+        // Set ID as product's latest version
+        product.latestVersionId = newVersionId;
     }
 
-    function _editProduct(uint _productId) private {
-        // Still needed?
+    function getProductById(uint _productId) external view returns (string name, string description, string location) {
+
+      if(!productIdExists(_productId)){
+        revert();
+      }
+      
+      // Get the requested product from storage
+      Product storage product = products[_productId];
+
+      // Get the latest product version
+      ProductVersion storage latestVersion = productVersions[product.latestVersionId];
+
+      // Return the requested data
+      return (latestVersion.name, latestVersion.description, latestVersion.location);
     }
 
-    function _getProductPublicDataById(uint _productId) public {
-        
-    }
-
-    function _markProductAsSold(uint _productId) private {
-        
-    }
-
+    // TODO: implement this
     /*
-    function _requestOwnershipTransfer(uint index, address _newOwnerAddress){
+    function requestOwnershipTransfer(uint _productId, address _newOwnerAddress){
       product[index].nextAuthorizedOwnerAddress = _newOwnerAddress;
-
     }
     */
 }

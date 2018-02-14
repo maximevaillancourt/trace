@@ -5,5 +5,6 @@ export default {
   location: "",
   passageInstance: null,
   accounts: null,
-  web3Accounts: null
+  web3Accounts: null,
+  productIdToView: ""
 };

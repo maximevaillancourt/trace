@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import PassageMainContractJson from '../../build/contracts/PassageMain.json'
-import getWeb3 from '../utils/getWeb3'
-
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import * as mainActions from '../actions/mainActions';
 
 import {
@@ -22,6 +18,7 @@ class Create extends Component {
 
     this.toggle = this.toggle.bind(this);
 
+    // TODO: move this to Redux store
     this.state = {
       success: false
     };
@@ -36,6 +33,7 @@ class Create extends Component {
   handleCreateNewProduct = () => {
     this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
+        console.log(result)
         this.setState({success: true})
         setTimeout(() => {
           this.setState({success: false})

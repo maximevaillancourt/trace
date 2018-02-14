@@ -49,6 +49,13 @@ export function addProduct(product) {
   };
 }
 
+export function updateProductIdToView(productId) {
+  return {
+    type: types.UPDATE_PRODUCT_ID_TO_VIEW,
+    payload: productId
+  };
+}
+
 // use this as a thunk template
 export function fetchStuff() {
   return dispatch => {

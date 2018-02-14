@@ -33,6 +33,10 @@ export default function temporaryGodReducer(state = initialState, action) {
       return Object.assign({}, state, {
         products: [...state.products, action.payload]
       });
+    case types.UPDATE_PRODUCT_ID_TO_VIEW:
+      return Object.assign({}, state, {
+        productIdToView: action.payload
+      });
     default:
       return state;
   }
