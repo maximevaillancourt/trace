@@ -7,6 +7,8 @@ import {
   Container,
   FormGroup,
   Input,
+  InputGroup,
+  InputGroupAddon,
   Label,
   Button
 } from 'reactstrap';
@@ -53,8 +55,13 @@ class View extends Component {
       <Container>
         <FormGroup>
           <Label>ID du produit à consulter</Label>
-          <Input value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
-          <Button onClick={this.handleClick.bind(this)}>Voir</Button>
+         
+          <InputGroup>
+            <Input value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
+            <InputGroupAddon addonType="append">
+              <Button color="primary" onClick={this.handleClick.bind(this)}>Voir</Button>
+            </InputGroupAddon>
+          </InputGroup>
         </FormGroup>
         <p><b>Nom:</b> {this.state.name}</p>
         <p><b>Description:</b> {this.state.description}</p>
