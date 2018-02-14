@@ -51,7 +51,7 @@ contract PassageMain is PassageHelper {
         uint productId;
         uint latestVersionId;
         uint[] versions;
-        bool isProduct;
+        bool exists; // always true (used to know if it exists; kinda hackish but it works)
         address owner;
         //address nextAuthorizedOwner;
     }
@@ -74,7 +74,7 @@ contract PassageMain is PassageHelper {
     }
 
     function productIdExists(uint _productId) public constant returns(bool isIndeed) {
-      return products[_productId].isProduct;
+      return products[_productId].exists;
     }
 
     /***********************
@@ -96,7 +96,7 @@ contract PassageMain is PassageHelper {
         product.productId = newProductId;
         product.latestVersionId = 0; // temporary value that gets replaced in addProductVersion()
         product.versions = new uint[](0); // empty array at first
-        product.isProduct = true;
+        product.exists = true;
         product.owner = msg.sender;
 
         // Add new product ID
