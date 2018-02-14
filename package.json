@@ -51,6 +51,7 @@
   "dependencies": {
     "bootstrap": "^4.0.0",
     "dotenv": "^2.0.0",
+    "qrcode.react": "^0.7.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.6",

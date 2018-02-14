@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
+import QRCode from 'qrcode.react'
 
 import {
   Container,
@@ -19,7 +20,8 @@ class View extends Component {
     this.state = {
       name: "",
       description: "",
-      location: ""
+      location: "",
+      id: "",
     };
   }
 
@@ -27,10 +29,12 @@ class View extends Component {
     this.props.passageInstance.getProductById(this.props.productIdToView)
       .then((result) => {
         console.log(result)
+        var _this = this;
         this.setState({
           name: result[0],
           description: result[1],
           location: result[2],
+          id: _this.props.productIdToView,
         })
       })
       .catch((error) => {
@@ -39,6 +43,7 @@ class View extends Component {
           name: "",
           description: "",
           location: "",
+          id: "",
         })
       })
   }
@@ -54,6 +59,7 @@ class View extends Component {
         <p><b>Nom:</b> {this.state.name}</p>
         <p><b>Description:</b> {this.state.description}</p>
         <p><b>Emplacement:</b> {this.state.location}</p>
+        {this.state.name ? <QRCode value={"passage_product_" + this.state.id}/> : null }
       </Container>
     );
   }
