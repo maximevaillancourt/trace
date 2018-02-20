@@ -22,7 +22,7 @@ contract PassageModel {
 
     struct ProductVersion {
         bytes32 versionId;
-        bytes32 lastVersionId;
+        bytes32 previousVersionId;
         uint creationDate;
         address owner;
 

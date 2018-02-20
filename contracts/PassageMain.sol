@@ -48,7 +48,7 @@ contract PassageMain is PassageHelper {
         // Define new version
         version.versionId = newVersionId;
         version.creationDate = now;
-        version.lastVersionId = product.latestVersionId;
+        version.previousVersionId = product.latestVersionId;
         version.owner = product.owner;
 
         version.name = _name;
