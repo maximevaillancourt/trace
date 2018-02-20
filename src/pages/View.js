@@ -6,6 +6,7 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-map
 
 import {
   Container,
+  Button
 } from 'reactstrap';
 
 class View extends Component {
@@ -18,6 +19,8 @@ class View extends Component {
       name: "",
       description: "",
       latitude: "",
+      longitude: "",
+      versionCreationDate: "",
       versions: [],
       id: "",
     };
@@ -33,7 +36,8 @@ class View extends Component {
           description: result[1],
           latitude: parseFloat(result[2]),
           longitude: parseFloat(result[3]),
-          versions: result[4],
+          versionCreationDate: Date(result[4]),
+          versions: result[5],
           id: _this.props.productIdToView,
         })
       })
@@ -44,6 +48,7 @@ class View extends Component {
           description: "",
           latitude: "",
           longitude: "",
+          versionCreationDate: "",
           versions: [],
           id: "",
         })
@@ -69,34 +74,52 @@ class View extends Component {
     ))
 
     return (
-      <Container>
-        <h1>{this.state.name}</h1>
-        <p>{this.state.description}</p>
+      <div>
+
+        <div style={{display:"flex"}}>
+          <div style={{flex: 1}}>
+            <h1>{this.state.name}</h1>
+            <p>{this.state.description}</p>
+            <p>Dernière version : {this.state.versionCreationDate}</p>
+          </div>
+          <div style={{flex:1, textAlign:"right"}}>
+            <QRCode value={this.props.match.params.productId}/>
+          </div>
+
+        </div>
+
+        <hr/>
+        
         <h2>Dernier emplacement connu</h2>
+        <div>
+          {myLat && myLng ? 
+            <MyMapComponent
+              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
+              loadingElement={<div style={{ height: `100%` }} />}
+              containerElement={<div style={{ height: `400px` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+            />
+            :
+            null
+          }
+        </div>
 
-        {myLat && myLng ? 
-          <MyMapComponent
-            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `400px` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-          />
-          :
-          null
-        }
+        <hr/>
 
-        <p><b>Versions:</b></p>
+        <h2>Historique</h2>
+        <Link to={"/products/" + this.props.match.params.productId + "/update"}>
+          <Button color="success">
+            Ajouter une version
+          </Button>
+        </Link>
         <ul>
           {versionsList}
         </ul>
 
-        <div>
-          <Link to={"/products/" + this.props.match.params.productId + "/update"}>Ajouter une version</Link>
-        </div>
         <hr/>
-        {this.state.name ? <QRCode value={this.props.match.params.productId}/> : null }
+
         
-      </Container>
+      </div>
     );
   }
 }

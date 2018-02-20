@@ -30,7 +30,7 @@ class Update extends Component {
 
   render() {
     return (
-      <Container>
+      <div>
         <p><strong>Mise à jour de produit</strong></p>
         <FormGroup>
             <Label>Nom</Label>
@@ -45,7 +45,7 @@ class Update extends Component {
             <Input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLatLng(e.target.value))}}></Input>
         </FormGroup>
         <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
-      </Container>
+      </div>
     );
   }
 }

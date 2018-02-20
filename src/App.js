@@ -84,8 +84,8 @@ class App extends Component {
 
   render() {
     const appJSX = (
-      <div>
-        <Navbar color="faded" light style={{marginBottom: "1em", padding:"1em 0"}} expand="md">
+      <div style={{fontFamily: "Roboto"}}>
+        <Navbar color="faded" light style={{marginBottom: "1.5em"}} expand="md">
           <Container>
             <NavbarBrand tag={Link} to='/'>Passage</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
@@ -97,7 +97,9 @@ class App extends Component {
             </Collapse>
           </Container>
         </Navbar>
-        {this.props.children}
+        <Container>
+          {this.props.children}
+        </Container>
       </div>
     )
 

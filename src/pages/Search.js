@@ -18,7 +18,7 @@ class Search extends Component {
   render() {
     
     return (
-      <Container>
+      <div>
         <FormGroup>
           <Label>ID du produit à consulter</Label>
           <InputGroup>
@@ -28,7 +28,7 @@ class Search extends Component {
             </InputGroupAddon>
           </InputGroup>
         </FormGroup>        
-      </Container>
+      </div>
     );
   }
 }

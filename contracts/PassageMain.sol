@@ -71,7 +71,7 @@ contract PassageMain is PassageHelper {
     }
 
     function getProductById(bytes32 _productId) external view productIdExists(_productId)
-    returns (string name, string description, string _latitude, string _longitude, bytes32[] versions) {
+    returns (string name, string description, string _latitude, string _longitude, uint latestVersionCreationDate, bytes32[] versions) {
       
         // Get the requested product from storage
         Product storage product = productIdToProductStruct[_productId];
@@ -80,7 +80,7 @@ contract PassageMain is PassageHelper {
         ProductVersion storage latestVersion = versionIdToVersionStruct[product.latestVersionId];
 
         // Return the requested data
-        return (latestVersion.name, latestVersion.description, latestVersion.latitude, latestVersion.longitude, product.versions);
+        return (latestVersion.name, latestVersion.description, latestVersion.latitude, latestVersion.longitude, latestVersion.creationDate, product.versions);
 
         // TODO: return the product versions using another function (i.e. getProductVersions(_productId))
         // instead of directly (as above)

@@ -47,8 +47,9 @@ class Create extends Component {
     }
 
     return (
-      <Container>
-        <p><strong>Nouveau produit</strong></p>
+      <div>
+        <h2>Nouveau produit</h2>
+        <hr/>
         <FormGroup>
             <Label>Nom</Label>
             <Input value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
@@ -74,7 +75,7 @@ class Create extends Component {
           </div> :
           null
         }
-      </Container>
+      </div>
     );
   }
 }
