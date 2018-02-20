@@ -29,7 +29,7 @@ class View extends Component {
     };
   }
 
-  handleClick = () => {
+  componentDidMount() {
     this.props.passageInstance.getProductById(new String(this.props.productIdToView).valueOf())
       .then((result) => {
         console.log(result)
@@ -56,23 +56,14 @@ class View extends Component {
 
   render() {
     
-    const versionsList = this.state.versions.map((version) => {
-      return <li>{version}</li>
+    const versionsList = this.state.versions.map((version, index) => {
+      return <li>Version {index + 1} ({version})</li>
     })
 
     return (
       <Container>
-        <FormGroup>
-          <Label>ID du produit à consulter</Label>
-          <InputGroup>
-            <Input value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
-            <InputGroupAddon addonType="append">
-              <Button color="primary" onClick={this.handleClick.bind(this)}>Voir</Button>
-            </InputGroupAddon>
-          </InputGroup>
-        </FormGroup>
-        <p><b>Nom:</b> {this.state.name}</p>
-        <p><b>Description:</b> {this.state.description}</p>
+        <h1>{this.state.name}</h1>
+        <p>{this.state.description}</p>
         <p><b>Emplacement:</b> {this.state.location}</p>
         <p><b>Versions:</b></p>
         <ul>
@@ -80,10 +71,10 @@ class View extends Component {
         </ul>
 
         <div>
-          <Link to={"/update/" + this.state.id}>Ajouter une version</Link>
+          <Link to={"/products/" + this.state.id + "/update"}>Ajouter une version</Link>
         </div>
         <hr/>
-        {this.state.name ? <QRCode value={"passage_product_" + this.state.id}/> : null }
+        {this.state.name ? <QRCode value={this.state.id}/> : null }
         
       </Container>
     );

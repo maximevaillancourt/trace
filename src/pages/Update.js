@@ -25,7 +25,8 @@ class Update extends Component {
     console.log(this.params.productId)
     this.props.passageInstance.updateProduct(new String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
-        // product updated! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we update a product
+        // redirect to the product page
+        this.props.history.push('/products/' + this.params.productId);
       })
   }
 
