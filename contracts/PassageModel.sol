@@ -21,8 +21,8 @@ contract PassageModel {
 
     struct ProductVersion {
         bytes32 versionId;
-        uint creationDate;
         bytes32 lastVersionId;
+        uint creationDate;
         address owner;
 
         // all data fields below are editable

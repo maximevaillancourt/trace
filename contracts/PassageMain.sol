@@ -30,13 +30,9 @@ contract PassageMain is PassageHelper {
       ProductCreated(newProductId, msg.sender);
     }
 
-    function addProductVersion(bytes32 _productId, string _name, string _description, string _location) public {
+    function addProductVersion(bytes32 _productId, string _name, string _description, string _location) public productIdExists(_productId) {
       // TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
       // TODO: check if msg.sender == product owner OR if msg.sender is god
-
-      if (!productIdExists(_productId)) {
-        revert();
-      }
 
       // Generate a pseudo-random product ID
       // from the current time, the sender's address, and the productId
@@ -68,11 +64,7 @@ contract PassageMain is PassageHelper {
       product.latestVersionId = newVersionId;
     }
 
-    function getProductById(bytes32 _productId) external view returns (string name, string description, string location) {
-
-      if (!productIdExists(_productId)) {
-        revert();
-      }
+    function getProductById(bytes32 _productId) external view productIdExists(_productId) returns (string name, string description, string location) {
       
       // Get the requested product from storage
       Product storage product = productIdToProductStruct[_productId];
