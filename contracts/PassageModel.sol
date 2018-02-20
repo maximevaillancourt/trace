@@ -48,16 +48,16 @@ contract PassageModel {
     /***********************
       MAPPINGS & STORAGE
     ***********************/
-    mapping (bytes32 => Product) public productIdToProductStruct; // used to access a product struct directly from an ID
-    bytes32[] public productIds; // used to access all product IDs
+    mapping (bytes32 => Product) public productIdToProductStruct; // access a product struct directly from an ID
+    bytes32[] public productIds; // access all product IDs
 
-    mapping (bytes32 => ProductVersion) public versionIdToVersionStruct; // used to access a version struct directly from a version ID
-    bytes32[] public productVersionIds; // used to access all version IDs
+    mapping (bytes32 => ProductVersion) public versionIdToVersionStruct; // access a version struct from a version ID
+    bytes32[] public productVersionIds; // access all version IDs
 
-    mapping (address => bytes32[]) public ownerToProductsId; // used to access an account's products
+    mapping (address => bytes32[]) public ownerToProductsId; // access an account's products
 
     mapping (address => Actor) public actorAddressToActorStruct; // access an actor struct from its Eth address
-    address[] public actorAddresses; // used to access all actor addresses
+    address[] public actorAddresses; // access all actor addresses
 
     mapping (bytes32 => bytes32[]) public nodeToParents; // access a combined product's parents
 

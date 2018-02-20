@@ -6,7 +6,7 @@ import "./PassageHelper.sol";
 contract PassageMain is PassageHelper {
 
 
-    function createProduct(string _name, string _description, string _latitude, string _longitude) public {
+    function createProduct(string _name, string _description, string _latitude, string _longitude) public returns (bytes32 productId) {
     
         // Generate a pseudo-random product ID
         // from the current time and the sender's address
@@ -30,6 +30,8 @@ contract PassageMain is PassageHelper {
 
         // Fire an event to announce the creation of the product
         ProductCreated(newProductId, msg.sender);
+
+        return newProductId;
     }
 
     function updateProduct(bytes32 _productId, string _name, string _description, string _latitude, string _longitude) 
@@ -101,5 +103,20 @@ contract PassageMain is PassageHelper {
         }
     }
 
-    // TODO: combineProduct
+    function combineProducts(bytes32[] _parts, string _name, string _description, string _location) public 
+    returns (bytes32 newProductId) {
+
+        /*
+        UI:
+        - View to scan multiple products to combine
+        - Call this method with dem ids and the new product information
+        - Method returns new combined product Id (created and saved)
+        */
+        var createdProductId = createProduct(_name, _description, _location);
+        for (uint i = 0; i < _parts.length; ++i) {
+            nodeToParents[createdProductId].push(_parts[i]);
+        }
+
+        return createdProductId;
+    }
 }
