@@ -17,7 +17,7 @@ contract PassageMain is PassageHelper {
 
         // Define product
         product.productId = newProductId;
-        product.latestVersionId = 0; // temporary value that gets replaced in updateProduct()
+        product.latestVersionId = "0"; // temporary value that gets replaced in updateProduct()
         product.versions = new bytes32[](0); // empty array at first
         product.exists = true;
         product.owner = msg.sender;
