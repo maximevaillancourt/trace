@@ -14,10 +14,10 @@ export function updateDescription(description) {
   };
 }
 
-export function updateLocation(location) {
+export function updateLatLng(latLng) {
   return {
-    type: types.UPDATE_NEW_PRODUCT_LOCATION,
-    payload: location
+    type: types.UPDATE_NEW_PRODUCT_LATLNG,
+    payload: latLng
   };
 }
 

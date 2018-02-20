@@ -23,7 +23,7 @@ class Update extends Component {
 
   handleUpdateProduct = () => {
     console.log(this.params.productId)
-    this.props.passageInstance.updateProduct(new String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.updateProduct(new String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.latitude, this.props.longitude, {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page
         this.props.history.push('/products/' + this.params.productId);
@@ -44,7 +44,7 @@ class Update extends Component {
         </FormGroup>
         <FormGroup>
             <Label>Emplacement actuel</Label>
-            <Input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLocation(e.target.value))}}></Input>
+            <Input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLatLng(e.target.value))}}></Input>
         </FormGroup>
         <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
       </Container>
@@ -59,7 +59,8 @@ function mapStateToProps(state) {
     web3Accounts: state.temporaryGodReducer.web3Accounts,
     name: state.temporaryGodReducer.name,
     description: state.temporaryGodReducer.description,
-    location: state.temporaryGodReducer.location,
+    latitude: state.temporaryGodReducer.latitude,
+    longitude: state.temporaryGodReducer.longitude,
   };
 }
 

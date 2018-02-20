@@ -29,10 +29,9 @@ contract PassageModel {
         // all data fields below are editable
         string name;
         string description;
-        string location;
+        string latitude;
+        string longitude;
         //string customJsonData;
-        //string latitude; // 6 last digits are decimals (numeric type not supported in solidity)
-        //string longitude;
         //Certification[] certifications;
     }
     

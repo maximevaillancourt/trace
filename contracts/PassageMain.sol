@@ -6,7 +6,7 @@ import "./PassageHelper.sol";
 contract PassageMain is PassageHelper {
 
 
-    function createProduct(string _name, string _description, string _location) public {
+    function createProduct(string _name, string _description, string _latitude, string _longitude) public {
     
         // Generate a pseudo-random product ID
         // from the current time and the sender's address
@@ -26,13 +26,13 @@ contract PassageMain is PassageHelper {
         productIds.push(newProductId);
 
         // Create initial product version
-        updateProduct(newProductId, _name, _description, _location);
+        updateProduct(newProductId, _name, _description, _latitude, _longitude);
 
         // Fire an event to announce the creation of the product
         ProductCreated(newProductId, msg.sender);
     }
 
-    function updateProduct(bytes32 _productId, string _name, string _description, string _location) 
+    function updateProduct(bytes32 _productId, string _name, string _description, string _latitude, string _longitude) 
     public productIdExists(_productId) noChildren(_productId) {
         // TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
         // TODO: check if msg.sender == product owner OR if msg.sender is god
@@ -52,7 +52,8 @@ contract PassageMain is PassageHelper {
 
         version.name = _name;
         version.description = _description;
-        version.location = _location;
+        version.latitude = _latitude;
+        version.longitude = _longitude;
 
         // Save new product version ID
         productVersionIds.push(newVersionId);
@@ -68,7 +69,7 @@ contract PassageMain is PassageHelper {
     }
 
     function getProductById(bytes32 _productId) external view productIdExists(_productId)
-    returns (string name, string description, string location, bytes32[] versions) {
+    returns (string name, string description, string _latitude, string _longitude, bytes32[] versions) {
       
         // Get the requested product from storage
         Product storage product = productIdToProductStruct[_productId];
@@ -77,7 +78,7 @@ contract PassageMain is PassageHelper {
         ProductVersion storage latestVersion = versionIdToVersionStruct[product.latestVersionId];
 
         // Return the requested data
-        return (latestVersion.name, latestVersion.description, latestVersion.location, product.versions);
+        return (latestVersion.name, latestVersion.description, latestVersion.latitude, latestVersion.longitude, product.versions);
 
         // TODO: return the product versions using another function (i.e. getProductVersions(_productId))
         // instead of directly (as above)

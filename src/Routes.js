@@ -8,20 +8,20 @@ import Search from './pages/Search';
 import Update from './pages/Update';
 
 const Routes = () => (
- <Router>
+  <Router>
     <div>
-        <Route path="/" component={App}/>
-        <Route exact path="/create" component={Create} />
-        <Route exact path="/search" component={Search} />
-        <Route exact path="/products/:productId" component={View} />
-        {/*
-          // TODO: view a specific version
-          <Route exact path="/products/:productId/versions/:versionId/" component={View} />
-        */}
-        <Route exact path="/products/:productId/update" component={Update} />
-        {/* TODO: YourProducts.html */}
+      <Route path="/" component={App}/>
+      <Route exact path="/create" component={Create} />
+      <Route exact path="/search" component={Search} />
+      <Route exact path="/products/:productId" component={View} />
+      {/*
+        // TODO: view a specific version
+        <Route exact path="/products/:productId/versions/:versionId/" component={View} />
+      */}
+      <Route exact path="/products/:productId/update" component={Update} />
+      {/* TODO: YourProducts.html */}
     </div>
- </Router>
+  </Router>
 );
 
 export default Routes;

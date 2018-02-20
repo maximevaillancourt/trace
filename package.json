@@ -54,6 +54,8 @@
     "qrcode.react": "^0.7.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-google-maps": "^9.4.5",
+    "react-places-autocomplete": "^6.1.2",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

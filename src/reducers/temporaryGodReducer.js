@@ -13,9 +13,10 @@ export default function temporaryGodReducer(state = initialState, action) {
       return Object.assign({}, state, {
         name: action.payload
       });
-    case types.UPDATE_NEW_PRODUCT_LOCATION:
+    case types.UPDATE_NEW_PRODUCT_LATLNG:
       return Object.assign({}, state, {
-        location: action.payload
+        latitude: action.payload.lat,
+        longitude: action.payload.lng,
       });
     case types.SET_WEB3_INSTANCE:
       return Object.assign({}, state, {

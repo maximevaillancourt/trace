@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
 import QRCode from 'qrcode.react'
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
 import {
   Container,
@@ -14,14 +15,37 @@ import {
 
 class Create extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = { address: 'San Francisco, CA' }
+    this.onChange = (address) => this.setState({ address })
+  }
+
   handleCreateNewProduct = () => {
-    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.location, {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })
   }
 
+  handleFormSubmit = (event) => {
+    event.preventDefault()
+
+    geocodeByAddress(this.state.address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        console.log('Success', latLng)
+        return this.props.dispatch(mainActions.updateLatLng(latLng))
+      })
+      .catch(error => console.error('Error', error))
+  }
+
   render() {
+    const inputProps = {
+      value: this.state.address,
+      onChange: this.onChange,
+    }
+
     return (
       <Container>
         <p><strong>Nouveau produit</strong></p>
@@ -34,8 +58,11 @@ class Create extends Component {
             <Input value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
         </FormGroup>
         <FormGroup>
-            <Label>Emplacement actuel</Label>
-            <Input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLocation(e.target.value))}}></Input>
+            <Label>Emplacement actuel</Label>            
+            <form onSubmit={this.handleFormSubmit}>
+              <PlacesAutocomplete inputProps={inputProps} />
+              <button type="submit">Submit</button>
+            </form>
         </FormGroup>
         <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
         {this.props.alert && this.props.alert.visible ?
@@ -59,7 +86,8 @@ function mapStateToProps(state) {
     web3Accounts: state.temporaryGodReducer.web3Accounts,
     name: state.temporaryGodReducer.name,
     description: state.temporaryGodReducer.description,
-    location: state.temporaryGodReducer.location,
+    latitude: state.temporaryGodReducer.latitude,
+    longitude: state.temporaryGodReducer.longitude,
     alert: state.temporaryGodReducer.alert,
   };
 }
