@@ -20,9 +20,9 @@ contract PassageModel {
     }
 
     struct ProductVersion {
-        uint versionId;
+        bytes32 versionId;
         uint creationDate;
-        uint lastVersionId;
+        bytes32 lastVersionId;
         address owner;
 
         // all data fields below are editable
@@ -37,9 +37,9 @@ contract PassageModel {
     
     struct Product {
         // Product data that never changes should be specified below
-        uint productId;
-        uint latestVersionId;
-        uint[] versions;
+        bytes32 productId;
+        bytes32 latestVersionId;
+        bytes32[] versions;
         bool exists; // always true (used to know if it exists; kinda hackish but it works)
         address owner;
         address nextAuthorizedOwnerAddress;
@@ -48,13 +48,13 @@ contract PassageModel {
     /***********************
       MAPPINGS & STORAGE
     ***********************/
-    mapping (uint => Product) public productIdToProductStruct; // used to access a product struct directly from an ID
-    uint[] public productIds; // used to access all product IDs
+    mapping (bytes32 => Product) public productIdToProductStruct; // used to access a product struct directly from an ID
+    bytes32[] public productIds; // used to access all product IDs
 
-    mapping (uint => ProductVersion) public versionIdToVersionStruct; // used to access a version struct directly from a version ID
-    uint[] public productVersionIds; // used to access all version IDs
+    mapping (bytes32 => ProductVersion) public versionIdToVersionStruct; // used to access a version struct directly from a version ID
+    bytes32[] public productVersionIds; // used to access all version IDs
 
-    mapping (address => uint[]) public ownerToProductsId; // used to access an account's products
+    mapping (address => bytes32[]) public ownerToProductsId; // used to access an account's products
 
     mapping (address => Actor) public actorAddressToActorStruct; // access an actor struct from its Eth address
     address[] public actorAddresses; // used to access all actor addresses

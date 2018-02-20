@@ -60,30 +60,33 @@ class App extends Component {
         this.props.dispatch(mainActions.setPassageInstance(instance))
         this.props.dispatch(mainActions.setWeb3Accounts(accounts))
 
-        /*
-        const _this = this; // TODO: fix this js scope mess (let? arrow function?)
-        const event = instance.ProductCreated({fromBlock: 0, toBlock: 'latest'}) // TODO: extract event watchers into a new method/class?
-        event.watch(function(error, result){
+        const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
+        event.watch((error, result) => {
           if (!error){
             const newProduct = {
               id: result.args.newProductId,
-              name: result.args.name,
-              description: result.args.description,
-              location: result.args.location,
+              owner: result.args.owner,
             }
-            return _this.props.dispatch(mainActions.addProduct(newProduct))
+
+            // Do we want to keep a list of all added products in the app's state?
+            // return this.props.dispatch(mainActions.addProduct(newProduct))
+            
+            return this.props.dispatch(mainActions.createAlert({
+              color: "success",
+              content: "Product created: " + newProduct.id
+            }))
+
           } else {
             console.log(error);
           }
         });
-        */
        
       })
     })
   }
 
   render() {
-    return (
+    const appJSX = (
       <div>
         <Navbar color="faded" light expand="md">
           <Container>
@@ -99,13 +102,29 @@ class App extends Component {
         </Navbar>
         {this.props.children}
       </div>
+    )
+
+    const waitingForWeb3JSX = (
+      <div style={{
+        textAlign: "center",
+        padding: "1em"
+      }}>
+        Waiting for web3...
+      </div>      
+    )
+    return (
+      <div>
+        {this.props.web3 && this.props.passageInstance && this.props.web3Accounts ? appJSX : waitingForWeb3JSX}
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    web3: state.temporaryGodReducer.web3
+    web3: state.temporaryGodReducer.web3,
+    web3Accounts: state.temporaryGodReducer.web3Accounts,
+    passageInstance: state.temporaryGodReducer.passageInstance
   };
 }
 

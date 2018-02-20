@@ -9,13 +9,13 @@ contract PassageHelper is PassageEvents {
     // OnlyPublic
     // OnlyGovernment
 
-    modifier ownerOf(uint _productId) {
+    modifier ownerOf(bytes32 _productId) {
       require(msg.sender == productIdToProductStruct[_productId].owner);
       _;
     }
 
     // TODO: convert to modifier
-    function productIdExists(uint _productId) public constant returns(bool isIndeed) {
+    function productIdExists(bytes32 _productId) public constant returns(bool isIndeed) {
       return productIdToProductStruct[_productId].exists;
     }
 
@@ -26,13 +26,13 @@ contract PassageHelper is PassageEvents {
     // liste de god accounts qui peuvent ajouter *leurs* certifications à n'importe quel produit
 
     // request to transfer *product* ownership
-    function requestOwnershipTransfer(uint _productId, address _newOwnerAddress) {
+    function requestOwnershipTransfer(bytes32 _productId, address _newOwnerAddress) {
       require(msg.sender == productIdToProductStruct[_productId].owner);
       productIdToProductStruct[_productId].nextAuthorizedOwnerAddress = _newOwnerAddress;
     }
 
     // accept a *product* ownership transfer
-    function acceptOwnershipTransfer(uint _productId) {
+    function acceptOwnershipTransfer(bytes32 _productId) {
       require(newOwnerStruct.accountAddress == productIdToProductStruct[_productId].nextAuthorizedOwnerAddress);
       Actor storage newOwnerStruct = actorAddressToActorStruct[msg.sender];
       productIdToProductStruct[_productId].nextAuthorizedOwnerAddress = 0;

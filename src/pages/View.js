@@ -28,7 +28,7 @@ class View extends Component {
   }
 
   handleClick = () => {
-    this.props.passageInstance.getProductById(this.props.productIdToView)
+    this.props.passageInstance.getProductById(new String(this.props.productIdToView).valueOf())
       .then((result) => {
         console.log(result)
         var _this = this;

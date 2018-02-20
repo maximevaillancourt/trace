@@ -6,5 +6,10 @@ export default {
   passageInstance: null,
   accounts: null,
   web3Accounts: null,
-  productIdToView: ""
+  productIdToView: "",
+  alert: {
+    visible: false,
+    content: "",
+    color: "",
+  }
 };

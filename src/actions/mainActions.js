@@ -56,20 +56,32 @@ export function updateProductIdToView(productId) {
   };
 }
 
-// use this as a thunk template
-export function fetchStuff() {
-  return dispatch => {
-    /*
-    return fetch(url(), {
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(json => dispatch(receiveStuff(json)));
-    */
+function hideAlert() {
+  return {
+    type: types.HIDE_ALERT,
   };
 }
+
+function showAlertWithContent({color, content}) {
+  return {
+    type: types.SHOW_ALERT_WITH_CONTENT,
+    payload: {
+      color: color,
+      content: content
+    }
+  };
+}
+
+export function createAlert({color, content}) {
+  return dispatch => {
+    dispatch(showAlertWithContent({color, content}))
+
+    /*
+    // hide alert after 5 seconds
+    setTimeout(() => {
+      dispatch(hideAlert())
+    }, 5000)
+    */
+  }
+}
+  

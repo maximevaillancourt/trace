@@ -37,6 +37,18 @@ export default function temporaryGodReducer(state = initialState, action) {
       return Object.assign({}, state, {
         productIdToView: action.payload
       });
+    case types.HIDE_ALERT:
+      return Object.assign({}, state, {
+        alert: initialState.alert
+      })
+    case types.SHOW_ALERT_WITH_CONTENT:
+      return Object.assign({}, state, {
+        alert: {
+          visible: true,
+          content: action.payload.content,
+          color: action.payload.color
+        }
+      })
     default:
       return state;
   }

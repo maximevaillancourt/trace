@@ -8,7 +8,7 @@ contract PassageMain is PassageHelper {
     
       // Generate a pseudo-random product ID
       // from the current time and the sender's address
-      uint newProductId = uint(keccak256(now, msg.sender));
+      bytes32 newProductId = sha3(now, msg.sender);
 
       // Create product
       var product = productIdToProductStruct[newProductId];
@@ -16,7 +16,7 @@ contract PassageMain is PassageHelper {
       // Define product
       product.productId = newProductId;
       product.latestVersionId = 0; // temporary value that gets replaced in addProductVersion()
-      product.versions = new uint[](0); // empty array at first
+      product.versions = new bytes32[](0); // empty array at first
       product.exists = true;
       product.owner = msg.sender;
 
@@ -27,10 +27,10 @@ contract PassageMain is PassageHelper {
       addProductVersion(newProductId, _name, _description, _location);
 
       // Fire an event to announce the creation of the product
-      ProductCreated(newProductId);
+      ProductCreated(newProductId, msg.sender);
     }
 
-    function addProductVersion(uint _productId, string _name, string _description, string _location) public {
+    function addProductVersion(bytes32 _productId, string _name, string _description, string _location) public {
       // TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
       // TODO: check if msg.sender == product owner OR if msg.sender is god
 
@@ -40,7 +40,7 @@ contract PassageMain is PassageHelper {
 
       // Generate a pseudo-random product ID
       // from the current time, the sender's address, and the productId
-      uint newVersionId = uint(keccak256(now, msg.sender, _productId));
+      bytes32 newVersionId = sha3(now, msg.sender, _productId);
 
       // Create product version
       var version = versionIdToVersionStruct[newVersionId];
@@ -68,7 +68,7 @@ contract PassageMain is PassageHelper {
       product.latestVersionId = newVersionId;
     }
 
-    function getProductById(uint _productId) external view returns (string name, string description, string location) {
+    function getProductById(bytes32 _productId) external view returns (string name, string description, string location) {
 
       if (!productIdExists(_productId)) {
         revert();
