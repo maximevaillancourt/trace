@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
-import QRCode from 'qrcode.react'
 
 import {
   Container,
@@ -9,7 +8,6 @@ import {
   FormGroup,
   Label,
   Input,
-  Alert
 } from 'reactstrap';
 
 class Update extends Component {
@@ -23,7 +21,7 @@ class Update extends Component {
 
   handleUpdateProduct = () => {
     console.log(this.params.productId)
-    this.props.passageInstance.updateProduct(new String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.latitude, this.props.longitude, {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.latitude, this.props.longitude, {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page
         this.props.history.push('/products/' + this.params.productId);

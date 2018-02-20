@@ -56,11 +56,13 @@ export function updateProductIdToView(productId) {
   };
 }
 
+/*
 function hideAlert() {
   return {
     type: types.HIDE_ALERT,
   };
 }
+*/
 
 function showAlertWithContent({color, content, rawData}) {
   return {

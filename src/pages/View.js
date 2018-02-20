@@ -1,18 +1,11 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 import {
   Container,
-  FormGroup,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  Label,
-  Button
 } from 'reactstrap';
 
 class View extends Component {
@@ -31,7 +24,7 @@ class View extends Component {
   }
 
   componentDidMount() {
-    this.props.passageInstance.getProductById(new String(this.props.productIdToView).valueOf())
+    this.props.passageInstance.getProductById(String(this.props.match.params.productId).valueOf())
       .then((result) => {
         console.log(result)
         var _this = this;
@@ -81,12 +74,16 @@ class View extends Component {
         <p>{this.state.description}</p>
         <h2>Dernier emplacement connu</h2>
 
-        <MyMapComponent
-          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
-          loadingElement={<div style={{ height: `100%` }} />}
-          containerElement={<div style={{ height: `400px` }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-        />
+        {myLat && myLng ? 
+          <MyMapComponent
+            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `400px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
+          :
+          null
+        }
 
         <p><b>Versions:</b></p>
         <ul>
@@ -94,10 +91,10 @@ class View extends Component {
         </ul>
 
         <div>
-          <Link to={"/products/" + this.state.id + "/update"}>Ajouter une version</Link>
+          <Link to={"/products/" + this.props.match.params.productId + "/update"}>Ajouter une version</Link>
         </div>
         <hr/>
-        {this.state.name ? <QRCode value={this.state.id}/> : null }
+        {this.state.name ? <QRCode value={this.props.match.params.productId}/> : null }
         
       </Container>
     );

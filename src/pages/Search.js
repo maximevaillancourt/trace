@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
-import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
 
 import {

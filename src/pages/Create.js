@@ -58,7 +58,7 @@ class Create extends Component {
             <Input value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
         </FormGroup>
         <FormGroup>
-            <Label>Emplacement actuel</Label>            
+            <Label>Emplacement actuel</Label>
             <form onSubmit={this.handleFormSubmit}>
               <PlacesAutocomplete inputProps={inputProps} />
               <button type="submit">Submit</button>

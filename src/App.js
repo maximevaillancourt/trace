@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import {connect} from 'react-redux';
+
 import PassageMainContractJson from '../build/contracts/PassageMain.json'
 import getWeb3 from './utils/getWeb3'
 
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import * as mainActions from './actions/mainActions';
 
 import {
@@ -16,10 +16,6 @@ import {
   NavItem,
   NavLink,
   Container,
-  Row,
-  Col,
-  Jumbotron,
-  Button
 } from 'reactstrap';
 
 class App extends Component {
@@ -89,7 +85,7 @@ class App extends Component {
   render() {
     const appJSX = (
       <div>
-        <Navbar color="faded" light expand="md">
+        <Navbar color="faded" light style={{marginBottom: "1em", padding:"1em 0"}} expand="md">
           <Container>
             <NavbarBrand tag={Link} to='/'>Passage</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
@@ -129,5 +125,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default withRouter(connect(mapStateToProps)(App));
 
