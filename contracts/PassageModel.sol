@@ -1,5 +1,6 @@
 pragma solidity ^0.4.19;
 
+
 contract PassageModel {
 
     /***********************
@@ -58,6 +59,10 @@ contract PassageModel {
 
     mapping (address => Actor) public actorAddressToActorStruct; // access an actor struct from its Eth address
     address[] public actorAddresses; // used to access all actor addresses
+
+    mapping (bytes32 => bytes32[]) public nodeToParents; // access a combined product's parents
+
+    mapping (bytes32 => bytes32[]) public nodeToChildren; // access a divided product's children
 
     // TODO: list of god accounts (mapping? array?)
     // TODO: handle certifying actors addresses
