@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
 import QRCode from 'qrcode.react'
+import { Link } from 'react-router-dom'
 
 import {
   Container,
@@ -23,6 +24,7 @@ class View extends Component {
       name: "",
       description: "",
       location: "",
+      versions: [],
       id: "",
     };
   }
@@ -36,6 +38,7 @@ class View extends Component {
           name: result[0],
           description: result[1],
           location: result[2],
+          versions: result[3],
           id: _this.props.productIdToView,
         })
       })
@@ -45,17 +48,22 @@ class View extends Component {
           name: "",
           description: "",
           location: "",
+          versions: [],
           id: "",
         })
       })
   }
 
   render() {
+    
+    const versionsList = this.state.versions.map((version) => {
+      return <li>{version}</li>
+    })
+
     return (
       <Container>
         <FormGroup>
           <Label>ID du produit à consulter</Label>
-         
           <InputGroup>
             <Input value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
             <InputGroupAddon addonType="append">
@@ -66,7 +74,17 @@ class View extends Component {
         <p><b>Nom:</b> {this.state.name}</p>
         <p><b>Description:</b> {this.state.description}</p>
         <p><b>Emplacement:</b> {this.state.location}</p>
+        <p><b>Versions:</b></p>
+        <ul>
+          {versionsList}
+        </ul>
+
+        <div>
+          <Link to={"/update/" + this.state.id}>Ajouter une version</Link>
+        </div>
+        <hr/>
         {this.state.name ? <QRCode value={"passage_product_" + this.state.id}/> : null }
+        
       </Container>
     );
   }

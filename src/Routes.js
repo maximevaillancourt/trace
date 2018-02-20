@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import App from './App';
 import Create from './pages/Create';
 import View from './pages/View';
+import Update from './pages/Update';
 
 const Routes = () => (
  <Router>
@@ -11,6 +12,7 @@ const Routes = () => (
         <Route path="/" component={App}/>
         <Route exact path="/create" component={Create} />
         <Route exact path="/view" component={View} />
+        <Route exact path="/update/:productId" component={Update} />
         {/* TODO: YourProducts.html */}
     </div>
  </Router>

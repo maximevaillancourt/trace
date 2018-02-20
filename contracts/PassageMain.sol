@@ -17,23 +17,22 @@ contract PassageMain is PassageHelper {
 
         // Define product
         product.productId = newProductId;
-        product.latestVersionId = 0; // temporary value that gets replaced in addProductVersion()
+        product.latestVersionId = 0; // temporary value that gets replaced in updateProduct()
         product.versions = new bytes32[](0); // empty array at first
         product.exists = true;
         product.owner = msg.sender;
-        // TODO? add to ownerToProductsId
 
         // Add new product ID
         productIds.push(newProductId);
 
         // Create initial product version
-        addProductVersion(newProductId, _name, _description, _location);
+        updateProduct(newProductId, _name, _description, _location);
 
         // Fire an event to announce the creation of the product
         ProductCreated(newProductId, msg.sender);
     }
 
-    function addProductVersion(bytes32 _productId, string _name, string _description, string _location) 
+    function updateProduct(bytes32 _productId, string _name, string _description, string _location) 
     public productIdExists(_productId) noChildren(_productId) {
         // TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
         // TODO: check if msg.sender == product owner OR if msg.sender is god
@@ -68,8 +67,8 @@ contract PassageMain is PassageHelper {
         product.latestVersionId = newVersionId;
     }
 
-    function getProductById(bytes32 _productId) external view productIdExists(_productId) 
-    returns (string name, string description, string location) {
+    function getProductById(bytes32 _productId) external view productIdExists(_productId)
+    returns (string name, string description, string location, bytes32[] versions) {
       
         // Get the requested product from storage
         Product storage product = productIdToProductStruct[_productId];
@@ -78,7 +77,10 @@ contract PassageMain is PassageHelper {
         ProductVersion storage latestVersion = versionIdToVersionStruct[product.latestVersionId];
 
         // Return the requested data
-        return (latestVersion.name, latestVersion.description, latestVersion.location);
+        return (latestVersion.name, latestVersion.description, latestVersion.location, product.versions);
+
+        // TODO: return the product versions using another function (i.e. getProductVersions(_productId))
+        // instead of directly (as above)
     }
 
     function saveProductChildren(bytes32 _originalProductId, bytes32[] _newProductIds) public 
