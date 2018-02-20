@@ -103,7 +103,7 @@ contract PassageMain is PassageHelper {
         }
     }
 
-    function combineProducts(bytes32[] _parts, string _name, string _description, string _location) public 
+    function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude) public 
     returns (bytes32 newProductId) {
 
         /*
@@ -112,7 +112,7 @@ contract PassageMain is PassageHelper {
         - Call this method with dem ids and the new product information
         - Method returns new combined product Id (created and saved)
         */
-        var createdProductId = createProduct(_name, _description, _location);
+        var createdProductId = createProduct(_name, _description, _latitude, _longitude);
         for (uint i = 0; i < _parts.length; ++i) {
             nodeToParents[createdProductId].push(_parts[i]);
         }
