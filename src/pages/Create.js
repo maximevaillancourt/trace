@@ -42,7 +42,7 @@ class Create extends Component {
           <div style={{paddingTop: "15px"}}>
             <Alert color={this.props.alert.color}>
               {this.props.alert.content}
-               <QRCode value={this.props.alert.content}/>
+               <QRCode value={this.props.alert.rawData}/>
             </Alert>
           </div> :
           null

@@ -46,7 +46,8 @@ export default function temporaryGodReducer(state = initialState, action) {
         alert: {
           visible: true,
           content: action.payload.content,
-          color: action.payload.color
+          color: action.payload.color,
+          rawData: action.payload.rawData
         }
       })
     default:

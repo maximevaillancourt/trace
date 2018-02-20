@@ -73,7 +73,8 @@ class App extends Component {
             
             return this.props.dispatch(mainActions.createAlert({
               color: "success",
-              content: "Product created: " + newProduct.id
+              content: "Product created: " + newProduct.id,
+              rawData: newProduct.id,
             }))
 
           } else {

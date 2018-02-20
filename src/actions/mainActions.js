@@ -62,19 +62,20 @@ function hideAlert() {
   };
 }
 
-function showAlertWithContent({color, content}) {
+function showAlertWithContent({color, content, rawData}) {
   return {
     type: types.SHOW_ALERT_WITH_CONTENT,
     payload: {
       color: color,
-      content: content
+      content: content,
+      rawData: rawData
     }
   };
 }
 
-export function createAlert({color, content}) {
+export function createAlert({color, content, rawData}) {
   return dispatch => {
-    dispatch(showAlertWithContent({color, content}))
+    dispatch(showAlertWithContent({color, content, rawData}))
 
     /*
     // hide alert after 5 seconds

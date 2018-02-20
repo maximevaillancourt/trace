@@ -11,5 +11,6 @@ export default {
     visible: false,
     content: "",
     color: "",
+    rawData: ""
   }
 };
