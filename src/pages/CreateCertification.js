@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
 
+import AnnotatedSection from '../components/AnnotatedSection'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
+
 import {
   Container,
   Button,
@@ -30,17 +34,27 @@ class CreateCertification extends Component {
   render() {
     return (
       <div>
-        <h2>Nouvelle certification</h2>
-        <hr/>
-        <FormGroup>
-            <Label>Nom</Label>
-            <Input value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
-        </FormGroup>
-        <FormGroup>
-            <Label>URL de l'image de la certification</Label>
-            <Input value={this.state.imageUrl} onChange={(e) => {this.setState({imageUrl: e.target.value})}}></Input>
-        </FormGroup>
-        <Button color="primary" onClick={this.handleCreateNewCertification}>Créer une nouvelle certification</Button>
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faCertificate}/>
+              Nouvelle certification
+            </div>
+          }
+          panelContent = {
+            <div>
+              <FormGroup>
+                  <Label>Nom</Label>
+                  <Input placeholder="Nom de la certification" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
+              </FormGroup>
+              <FormGroup>
+                  <Label>URL de l'image de la certification</Label>
+                  <Input placeholder="https://" value={this.state.imageUrl} onChange={(e) => {this.setState({imageUrl: e.target.value})}}></Input>
+              </FormGroup>
+              <Button color="primary" onClick={this.handleCreateNewCertification}>Créer une nouvelle certification</Button>
+            </div>
+          }
+        />
       </div>
     );
   }

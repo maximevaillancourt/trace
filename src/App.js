@@ -81,7 +81,7 @@ class App extends Component {
      }
 
     const appJSX = (
-      <div style={{minHeight:"100vh", borderTop:"3px solid #50b796", backgroundColor: "black", fontFamily: "Barlow"}}>
+      <div style={{minHeight:"100vh", borderTop:"4px solid #50b796", backgroundColor: "black", fontFamily: "Barlow"}}>
         <Navbar color="faded" light style={{paddingTop: "1em", paddingBottom:"2em", backgroundColor: bodyColor}} expand="md">
           <Container>
             <Link to='/'><img style={{width:"130px", marginRight: "20px"}} src="/logo-black.svg"/></Link>

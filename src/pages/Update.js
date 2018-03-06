@@ -4,6 +4,10 @@ import * as mainActions from '../actions/mainActions';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
+import AnnotatedSection from '../components/AnnotatedSection'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faArrowAltCircleUp from '@fortawesome/fontawesome-free-solid/faArrowAltCircleUp'
+
 import {
   Container,
   Button,
@@ -87,29 +91,40 @@ class Update extends Component {
 
     return (
       <div>
-        <p><strong>Mise à jour de produit</strong></p>
-        <FormGroup>
-            <Label>Emplacement actuel</Label>
-            <PlacesAutocomplete
-              inputProps={inputProps}
-              onSelect={this.handleSelect}
-              classNames={{input: "form-control"}}
-            />
-        </FormGroup>
-        <FormGroup>
-          {
-            Object.keys(this.state.customDataInputs).map(inputKey =>
-              <FormGroup style={{display:"flex"}} key={inputKey}>
-                <Input value={this.state.customDataInputs[inputKey].key} placeholder="key" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                <Input value={this.state.customDataInputs[inputKey].value} placeholder="value" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
-              </FormGroup>
-            )
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faArrowAltCircleUp}/>
+              Nouvelles informations
+            </div>
           }
-          <Link to="#" onClick={ () => this.appendInput() }>
-            Ajouter un champ de données personnalisé
-          </Link>
-        </FormGroup>
-        <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
+          panelContent = {
+            <div>
+              <FormGroup>
+                  <Label>Emplacement actuel</Label>
+                  <PlacesAutocomplete
+                    inputProps={inputProps}
+                    onSelect={this.handleSelect}
+                    classNames={{input: "form-control"}}
+                  />
+              </FormGroup>
+              <FormGroup>
+                {
+                  Object.keys(this.state.customDataInputs).map(inputKey =>
+                    <FormGroup style={{display:"flex"}} key={inputKey}>
+                      <Input value={this.state.customDataInputs[inputKey].key} placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                    </FormGroup>
+                  )
+                }
+                <Link to="#" onClick={ () => this.appendInput() }>
+                  Ajouter un champ de données personnalisé
+                </Link>
+              </FormGroup>
+              <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
+            </div>
+          }
+        />
       </div>
     );
   }

@@ -5,6 +5,10 @@ import QRCode from 'qrcode.react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
+import AnnotatedSection from '../components/AnnotatedSection'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faStar from '@fortawesome/fontawesome-free-solid/faStar'
+
 import {
   Container,
   Button,
@@ -94,59 +98,69 @@ class Create extends Component {
 
     return (
       <div>
-        <h2>Nouveau produit</h2>
-        <hr/>
-        <FormGroup>
-            <Label>Nom</Label>
-            <Input placeholder="Nom du produit" value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
-        </FormGroup>
-        <FormGroup>
-            <Label>Description</Label>
-            <Input placeholder="Description sommaire du produit" value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
-        </FormGroup>
-        <FormGroup>
-            <Label>Emplacement actuel</Label>
-            <PlacesAutocomplete
-              inputProps={inputProps}
-              onSelect={this.handleSelect}
-              classNames={{input: "form-control"}}
-            />
-        </FormGroup>
-        <FormGroup>
-          <Label>
-            Certification(s)
-            <Link style={{marginLeft: "10px"}} to="/createcertification">Créer +</Link>
-          </Label>
-          <div>
-            {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
-              this.state.availableCertifications.map((certification, index) => 
-                <div key={index}>
-                  <input style={{marginRight: "5px"}} onChange={this.handleChange} name={certification.id} type="checkbox"></input>
-                  <span>{certification.name}</span>
-                </div>
-              )
-              :
-              <div style={{marginLeft:"15px"}}>
-                Aucune certification existante.
-                <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
-              </div>
-            }
-          </div>
-        </FormGroup>
-        <FormGroup>
-          {
-            Object.keys(this.state.customDataInputs).map(inputKey =>
-              <FormGroup style={{display:"flex"}} key={inputKey}>
-                <Input placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                <Input placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
-              </FormGroup>
-            )
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
+              Informations du produit
+            </div>
           }
-          <Link to="#" onClick={ () => this.appendInput() }>
-            Ajouter un champ de données personnalisé
-          </Link>
-        </FormGroup>
-        <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
+          panelContent = {
+            <div>
+              <FormGroup>
+                  <Label>Nom</Label>
+                  <Input placeholder="Nom du produit" value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
+              </FormGroup>
+              <FormGroup>
+                  <Label>Description</Label>
+                  <Input placeholder="Description sommaire du produit" value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
+              </FormGroup>
+              <FormGroup>
+                  <Label>Emplacement actuel</Label>
+                  <PlacesAutocomplete
+                    inputProps={inputProps}
+                    onSelect={this.handleSelect}
+                    classNames={{input: "form-control"}}
+                  />
+              </FormGroup>
+              <FormGroup>
+                <Label>
+                  Certification(s)
+                  <Link style={{marginLeft: "10px"}} to="/createcertification">Créer +</Link>
+                </Label>
+                <div>
+                  {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
+                    this.state.availableCertifications.map((certification, index) => 
+                      <div key={index}>
+                        <input style={{marginRight: "5px"}} onChange={this.handleChange} name={certification.id} type="checkbox"></input>
+                        <span>{certification.name}</span>
+                      </div>
+                    )
+                    :
+                    <div style={{marginLeft:"15px"}}>
+                      Aucune certification existante.
+                      <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
+                    </div>
+                  }
+                </div>
+              </FormGroup>
+              <FormGroup>
+                {
+                  Object.keys(this.state.customDataInputs).map(inputKey =>
+                    <FormGroup style={{display:"flex"}} key={inputKey}>
+                      <Input placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                      <Input placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                    </FormGroup>
+                  )
+                }
+                <Link to="#" onClick={ () => this.appendInput() }>
+                  Ajouter un champ de données personnalisé
+                </Link>
+              </FormGroup>
+              <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
+            </div>
+          }
+        />
       </div>
     );
   }
