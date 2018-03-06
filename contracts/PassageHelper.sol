@@ -2,7 +2,6 @@ pragma solidity ^0.4.19;
 
 import "./PassageEvents.sol";
 
-
 contract PassageHelper is PassageEvents {
 
     // TODO:

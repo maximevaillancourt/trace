@@ -44,7 +44,7 @@ class View extends Component {
           description: result[1],
           latitude: parseFloat(result[2]),
           longitude: parseFloat(result[3]),
-          versionCreationDate: Date(result[4]),
+          versionCreationDate: new Date(result[4].c * 1000).toString(),
           versions: result[5],
           id: props.match.params.productId,
         })
@@ -91,7 +91,7 @@ class View extends Component {
           <div style={{flex: 1}}>
             <h1>{this.state.name}</h1>
             <p>Description : {this.state.description}</p>
-            <p>Dernière version : {this.state.versionCreationDate}</p>
+            <p>Version timestamp : {this.state.versionCreationDate}</p>
             { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].toString() ?
                 <Link to={"/products/" + this.props.match.params.productId}>
                   <Button color="info">
@@ -118,18 +118,20 @@ class View extends Component {
         </div>
         <hr/>
         
-        <h2>Dernier emplacement connu</h2>
-        <pre>{myLat}, {myLng}</pre>
+        <h2>Emplacement (à cette version)</h2>
         <div>
           {myLat && myLng ? 
-            <MyMapComponent
-              googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
-              loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `400px` }} />}
-              mapElement={<div style={{ height: `100%` }} />}
-            />
+            <div>
+              <pre>{myLat}, {myLng}</pre>
+              <MyMapComponent
+                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ height: `400px` }} />}
+                mapElement={<div style={{ height: `100%` }} />}
+              />
+            </div>
             :
-            null
+            <p>Impossible d'afficher l'emplacement géographique.</p>
           }
         </div>
 

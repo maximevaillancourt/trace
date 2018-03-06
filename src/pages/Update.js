@@ -40,7 +40,7 @@ class Update extends Component {
 
   handleUpdateProduct = () => {
     console.log(this.params.productId)
-    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page
         this.props.history.push('/products/' + this.params.productId);
@@ -56,14 +56,6 @@ class Update extends Component {
     return (
       <div>
         <p><strong>Mise à jour de produit</strong></p>
-        <FormGroup>
-            <Label>Nom</Label>
-            <Input value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
-        </FormGroup>
-        <FormGroup>
-            <Label>Description</Label>
-            <Input value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
-        </FormGroup>
         <FormGroup>
             <Label>Emplacement actuel</Label>
             <PlacesAutocomplete

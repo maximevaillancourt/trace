@@ -27,19 +27,18 @@ contract PassageModel {
         address owner;
 
         // all data fields below are editable
-        string name;
-        string description;
         string latitude;
         string longitude;
         //string customJsonData;
     }
     
     struct Product {
-        // Product data that never changes should be specified below
+        string name;
+        string description;
         bytes32 productId;
         bytes32 latestVersionId;
         bytes32[] versions;
-        bool exists; // always true (used to know if it exists; kinda hackish but it works)
+        bool exists; // always true (used to know if the product exists; kinda hackish but it works)
         address owner;
         address nextAuthorizedOwnerAddress;
         //Certification[] certifications;

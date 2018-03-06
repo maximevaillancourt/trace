@@ -79,8 +79,8 @@ class App extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 <NavItem><NavLink tag={Link} to="/my-products">Mes produits</NavLink></NavItem>
-                <NavItem><NavLink tag={Link} to="/create">Ajouter un produit</NavLink></NavItem>
-                <NavItem><NavLink tag={Link} to="/search">Rechercher un produit</NavLink></NavItem>
+                <NavItem><NavLink tag={Link} to="/create">Nouveau produit</NavLink></NavItem>
+                <NavItem><NavLink tag={Link} to="/search">Recherche</NavLink></NavItem>
               </Nav>
             </Collapse>
           </Container>
