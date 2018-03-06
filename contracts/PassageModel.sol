@@ -27,7 +27,7 @@ contract PassageModel {
         address owner; // used to keep track of who owned the product at that version (could be a "bytes32 actorId")
         string latitude;
         string longitude;
-        //string customJsonData;
+        string customJsonData;
     }
     
     struct Product {

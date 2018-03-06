@@ -24,6 +24,7 @@ class View extends Component {
       versions: [],
       certifications: [],
       id: "",
+      customDataJson: ""
     };
   }
 
@@ -47,6 +48,7 @@ class View extends Component {
           versionCreationDate: new Date(result[4].c * 1000).toString(),
           versions: result[5],
           id: props.match.params.productId,
+          certifications: []
         })
 
         const certificationsArray = result[6];
@@ -63,7 +65,6 @@ class View extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
         this.setState({
           name: "",
           description: "",
@@ -73,6 +74,19 @@ class View extends Component {
           versions: [],
           certifications: [],
           id: "",
+        })
+      })
+
+
+    this.props.passageInstance.getProductCustomDataById(String(props.match.params.productId).valueOf(), props.match.params.versionId ? String(props.match.params.versionId).valueOf() : "latest")
+      .then((result) => {
+        this.setState({
+          customDataJson: result
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          customDataJson: ""
         })
       })
   }
@@ -88,7 +102,6 @@ class View extends Component {
     }).reverse()
 
     const certificationsList = this.state.certifications.map((certification, index) => {
-      console.log(certification)
       return (
         <li key={index}>
           <div>{certification.name}</div>
@@ -109,13 +122,18 @@ class View extends Component {
       </GoogleMap>
     ))
 
+    const customData = this.state.customDataJson ? JSON.parse(this.state.customDataJson) : {};
+
     return (
       <div>
         <div style={{display:"flex"}}>
           <div style={{flex: 1}}>
             <h1>{this.state.name}</h1>
-            <p>Description : {this.state.description}</p>
-            <p>Version timestamp : {this.state.versionCreationDate}</p>
+            <p>Description du produit : {this.state.description}</p>
+            <p>Date de création de la version : {this.state.versionCreationDate}</p>
+            {
+              Object.keys(customData).map(key => <p>{key} : {customData[key]}</p>)
+            }
             { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].toString() ?
                 <Link to={"/products/" + this.props.match.params.productId}>
                   <Button color="info">

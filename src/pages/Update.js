@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import { Link } from 'react-router-dom'
 
 import {
   Container,
@@ -18,12 +19,37 @@ class Update extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { address: '' }
+    this.state = {
+      address: '',
+      customDataInputs: {}
+    }
     this.onChange = (address) => this.setState({ address })
   }
 
   componentDidMount() {
     this.params = this.props.match.params;
+
+    this.props.passageInstance.getProductCustomDataById(String(this.params.productId).valueOf(), this.params.versionId ? String(this.params.versionId).valueOf() : "latest")
+      .then((result) => {
+        const customData = JSON.parse(result);
+        Object.keys(customData).map(dataKey => {
+          const inputKey = this.appendInput();
+          this.setState({
+            customDataInputs: {...this.state.customDataInputs, [inputKey]: {key: dataKey, value: customData[dataKey]}}
+          })
+        })
+      })
+      .catch((error) => {
+        this.setState({
+          customDataJson: ""
+        })
+      })
+  }
+
+  appendInput() {
+    var newInputKey = `input-${Object.keys(this.state.customDataInputs).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
+    this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: "", value: ""} }});
+    return newInputKey;
   }
 
   handleSelect = (address) => {
@@ -32,15 +58,20 @@ class Update extends Component {
     geocodeByAddress(this.state.address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        console.log('Success', latLng)
+        // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
         return this.props.dispatch(mainActions.updateLatLng(latLng))
       })
       .catch(error => console.error('Error', error))
   }
 
   handleUpdateProduct = () => {
-    console.log(this.params.productId)
-    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
+
+    var customDataObject = {}
+    Object.keys(this.state.customDataInputs).map(inputKey => {
+      customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+    })
+
+    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.latitude.toString(), this.props.longitude.toString(), JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page
         this.props.history.push('/products/' + this.params.productId);
@@ -51,6 +82,7 @@ class Update extends Component {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
+      placeholder: "Emplacement (adresse, lat/long)"
     }
 
     return (
@@ -63,6 +95,19 @@ class Update extends Component {
               onSelect={this.handleSelect}
               classNames={{input: "form-control"}}
             />
+        </FormGroup>
+        <FormGroup>
+          {
+            Object.keys(this.state.customDataInputs).map(inputKey =>
+              <FormGroup style={{display:"flex"}} key={inputKey}>
+                <Input value={this.state.customDataInputs[inputKey].key} placeholder="key" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                <Input value={this.state.customDataInputs[inputKey].value} placeholder="value" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+              </FormGroup>
+            )
+          }
+          <Link to="#" onClick={ () => this.appendInput() }>
+            Ajouter un champ de données personnalisé
+          </Link>
         </FormGroup>
         <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
       </div>

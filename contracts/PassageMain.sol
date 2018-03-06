@@ -9,7 +9,8 @@ contract PassageMain is PassageHelper {
       string _description,
       string _latitude,
       string _longitude,
-      bytes32[] _certificationsIds
+      bytes32[] _certificationsIds,
+      string _customJsonData
     ) public returns (bytes32 productId) {
     
         // Generate a pseudo-random product ID
@@ -37,7 +38,7 @@ contract PassageMain is PassageHelper {
         ownerToProductsId[msg.sender].push(newProductId);
 
         // Create initial product version
-        updateProduct(newProductId, _latitude, _longitude);
+        updateProduct(newProductId, _latitude, _longitude, _customJsonData);
 
         // Fire an event to announce the creation of the product
         ProductCreated(newProductId, msg.sender);
@@ -48,7 +49,8 @@ contract PassageMain is PassageHelper {
     function updateProduct(
       bytes32 _productId, 
       string _latitude, 
-      string _longitude
+      string _longitude,
+      string _customJsonData
     ) public productIdExists(_productId) noChildren(_productId) {
         // TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
         // TODO: check if msg.sender == product owner OR if msg.sender is god
@@ -68,6 +70,7 @@ contract PassageMain is PassageHelper {
 
         version.latitude = _latitude;
         version.longitude = _longitude;
+        version.customJsonData = _customJsonData;
 
         // Save new product version ID
         productVersionIds.push(newVersionId);
@@ -107,6 +110,31 @@ contract PassageMain is PassageHelper {
         // instead of directly (as above)
     }
 
+    function getProductCustomDataById(bytes32 _productId, bytes32 specificVersionId) external view productIdExists(_productId)
+    returns (string customJsonData) {
+
+        // Get the requested product from storage
+        Product storage product = productIdToProductStruct[_productId];
+
+        // Initialize a variable that will hold the requested product version struct
+        ProductVersion storage requestedVersion;
+
+        if (specificVersionId == "latest") {
+          // Get the latest product version
+          requestedVersion = versionIdToVersionStruct[product.latestVersionId];
+
+        } else {
+          // Get the requested product version
+          requestedVersion = versionIdToVersionStruct[specificVersionId];
+        }
+
+        // Return the requested data
+        return (requestedVersion.customJsonData);
+
+        // TODO: return the product versions using another function (i.e. getProductVersions(_productId))
+        // instead of directly (as above)
+    }
+
     function saveProductChildren(bytes32 _originalProductId, bytes32[] _newProductIds) public 
     productIdExists(_originalProductId) productIdsExist(_newProductIds) {
       
@@ -127,8 +155,11 @@ contract PassageMain is PassageHelper {
     function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude) public 
     returns (bytes32 newProductId) {
 
-        // TODO: handle certifications check
+        // TODO: handle certifications merge
         bytes32[] certificationsIds;
+
+        // TODO: handle custom data merge
+        string customDataJson;
 
         /*
         UI:
@@ -136,7 +167,7 @@ contract PassageMain is PassageHelper {
         - Call this method with dem ids and the new product information
         - Method returns new combined product Id (created and saved)
         */
-        var createdProductId = createProduct(_name, _description, _latitude, _longitude, certificationsIds);
+        var createdProductId = createProduct(_name, _description, _latitude, _longitude, certificationsIds, customDataJson);
         for (uint i = 0; i < _parts.length; ++i) {
             nodeToParents[createdProductId].push(_parts[i]);
         }

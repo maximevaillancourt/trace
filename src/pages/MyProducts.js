@@ -14,7 +14,6 @@ class View extends Component {
   constructor(props) {
     super(props);
 
-    // TODO: move this to Redux store
     this.state = {
       products: []
     };
@@ -23,12 +22,10 @@ class View extends Component {
   componentDidMount() {
     this.props.passageInstance.getOwnerProducts()
       .then((result) => {
-        console.log(result)
 
         result.map((productId) => {
           this.props.passageInstance.getProductById(String(productId).valueOf(), "latest")
             .then((result) => {
-              console.log(result)
               var _this = this;
               const product = {
                 name: result[0],
@@ -53,7 +50,7 @@ class View extends Component {
     const products = this.state.products.map((product, index) => {
       return (
         <li key={index}>
-          <Link to={`/products/${product.id}`}>{product.name} ({product.description})</Link>
+          <Link to={`/products/${product.id}`}>{product.name || "Produit sans nom"} ({product.description || "Aucune description"})</Link>
         </li>
       )
     })

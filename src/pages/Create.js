@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
 import QRCode from 'qrcode.react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import { Link } from 'react-router-dom'
 
 import {
   Container,
@@ -20,7 +21,8 @@ class Create extends Component {
     this.state = {
       address: '',
       availableCertifications: [],
-      selectedCertifications: {}
+      selectedCertifications: {},
+      customDataInputs: {},
     }
     this.onChange = (address) => this.setState({ address })
   }
@@ -55,7 +57,12 @@ class Create extends Component {
         certificationsArray.push(key)
       }
     })
-    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, {from: this.props.web3Accounts[0], gas:1000000})
+
+    var customDataObject = {}
+    Object.keys(this.state.customDataInputs).map(inputKey => {
+      customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+    })
+    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })
@@ -67,16 +74,22 @@ class Create extends Component {
     geocodeByAddress(this.state.address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        console.log('Success', latLng)
+        // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
         return this.props.dispatch(mainActions.updateLatLng(latLng))
       })
       .catch(error => console.error('Error', error))
+  }
+
+  appendInput() {
+    var newInputKey = `input-${Object.keys(this.state.customDataInputs).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
+    this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: "", value: ""} }});
   }
 
   render() {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
+      placeholder: "Emplacement (adresse, lat/long)"
     }
 
     return (
@@ -85,11 +98,11 @@ class Create extends Component {
         <hr/>
         <FormGroup>
             <Label>Nom</Label>
-            <Input value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
+            <Input placeholder="Nom du produit" value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
         </FormGroup>
         <FormGroup>
             <Label>Description</Label>
-            <Input value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
+            <Input placeholder="Description sommaire du produit" value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
         </FormGroup>
         <FormGroup>
             <Label>Emplacement actuel</Label>
@@ -100,18 +113,34 @@ class Create extends Component {
             />
         </FormGroup>
         <FormGroup>
-          <Label>Certification(s)</Label>
+          <Label>
+            Certification(s)
+            <Link style={{marginLeft: "10px"}} to="/createcertification">créer +</Link>
+          </Label>
           <div>
             {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
               this.state.availableCertifications.map((certification, index) => 
                 <div key={index}>
-                  <input onChange={this.handleChange} name={certification.id} type="checkbox"></input>
+                  <input style={{marginRight: "5px"}} onChange={this.handleChange} name={certification.id} type="checkbox"></input>
                   <span>{certification.name}</span>
                 </div>
               )
               :
               "Aucune certification existante"}
           </div>
+        </FormGroup>
+        <FormGroup>
+          {
+            Object.keys(this.state.customDataInputs).map(inputKey =>
+              <FormGroup style={{display:"flex"}} key={inputKey}>
+                <Input placeholder="key" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                <Input placeholder="value" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+              </FormGroup>
+            )
+          }
+          <Link to="#" onClick={ () => this.appendInput() }>
+            Ajouter un champ de données personnalisé
+          </Link>
         </FormGroup>
         <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
       </div>
