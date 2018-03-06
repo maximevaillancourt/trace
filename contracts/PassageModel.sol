@@ -7,41 +7,42 @@ contract PassageModel {
       STRUCT DEFINITIONS
     ***********************/
     struct Actor {
+        bytes32 actorId;
         string name;
-        string physicalAddress; // Physical address, may be separated (more costly)
         address accountAddress; // Ethereum address
-        // Actor type (industry expert, governmental agency, etc.). 
-        //Should be a uint16 and reference another struct maybe?
-        string actorType;
+        string physicalAddress; // Physical address, may be separated (more costly)
     }
 
     struct Certification {
+        bytes32 certificationId;
         string name;
-        uint16 deliveringActor; // Agency/company behind the certification
+        string imageUrl;
+        //bytes32 certificationActorId; // Agency/company behind the certification
     }
 
     struct ProductVersion {
         bytes32 versionId;
         bytes32 previousVersionId;
         uint creationDate;
-        address owner;
-
-        // all data fields below are editable
+        address owner; // used to keep track of who owned the product at that version (could be a "bytes32 actorId")
         string latitude;
         string longitude;
         //string customJsonData;
     }
     
     struct Product {
-        string name;
-        string description;
+        bool exists; // always true! (used to check if the product exists)
+
         bytes32 productId;
         bytes32 latestVersionId;
         bytes32[] versions;
-        bool exists; // always true (used to know if the product exists; kinda hackish but it works)
+        bytes32[] certificationsIds;
+        
         address owner;
         address nextAuthorizedOwnerAddress;
-        //Certification[] certifications;
+
+        string name;
+        string description;
     }
     
     /***********************
@@ -57,6 +58,9 @@ contract PassageModel {
 
     mapping (address => Actor) public actorAddressToActorStruct; // access an actor struct from its Eth address
     address[] public actorAddresses; // access all actor addresses
+
+    mapping (bytes32 => Certification) public certificationIdToCertificationStruct; // access a version struct from a version ID
+    bytes32[] public certificationIds; // access all version IDs
 
     mapping (bytes32 => bytes32[]) public nodeToParents; // access a combined product's parents
 

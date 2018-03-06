@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import App from './App';
 import Create from './pages/Create';
+import CreateCertification from './pages/CreateCertification';
 import View from './pages/View';
 import MyProducts from './pages/MyProducts';
 import Search from './pages/Search';
@@ -13,6 +14,7 @@ const Routes = () => (
     <div>
       <App>
         <Route exact path="/create" component={Create} />
+        <Route exact path="/CreateCertification" component={CreateCertification} />
         <Route exact path="/search" component={Search} />
         <Route exact path="/products/:productId" component={View} />
         {/* TODO: Split product */}

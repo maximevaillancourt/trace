@@ -80,6 +80,7 @@ class App extends Component {
               <Nav className="ml-auto" navbar>
                 <NavItem><NavLink tag={Link} to="/my-products">Mes produits</NavLink></NavItem>
                 <NavItem><NavLink tag={Link} to="/create">Nouveau produit</NavLink></NavItem>
+                <NavItem><NavLink tag={Link} to="/createcertification">Nouvelle certification</NavLink></NavItem>
                 <NavItem><NavLink tag={Link} to="/search">Recherche</NavLink></NavItem>
               </Nav>
             </Collapse>

@@ -22,6 +22,7 @@ class View extends Component {
       longitude: "",
       versionCreationDate: "",
       versions: [],
+      certifications: [],
       id: "",
     };
   }
@@ -37,8 +38,7 @@ class View extends Component {
   fetchProduct(props){
     this.props.passageInstance.getProductById(String(props.match.params.productId).valueOf(), props.match.params.versionId ? String(props.match.params.versionId).valueOf() : "latest")
       .then((result) => {
-        console.log(result)
-        var _this = this;
+
         this.setState({
           name: result[0],
           description: result[1],
@@ -48,6 +48,19 @@ class View extends Component {
           versions: result[5],
           id: props.match.params.productId,
         })
+
+        const certificationsArray = result[6];
+        certificationsArray.map((certificationId) => {
+          this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
+            .then((certificationResult) => {
+              const certification = {
+                name: certificationResult[0],
+                imageUrl: certificationResult[1],
+                id: certificationId,
+              }
+              this.setState({certifications: [...this.state.certifications, certification]})
+            });
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -58,6 +71,7 @@ class View extends Component {
           longitude: "",
           versionCreationDate: "",
           versions: [],
+          certifications: [],
           id: "",
         })
       })
@@ -72,6 +86,16 @@ class View extends Component {
         </li>
       )
     }).reverse()
+
+    const certificationsList = this.state.certifications.map((certification, index) => {
+      console.log(certification)
+      return (
+        <li key={index}>
+          <div>{certification.name}</div>
+          <img style={{maxWidth:"100px"}} src={certification.imageUrl}/>
+        </li>
+      )
+    })
 
     const myLat = this.state.latitude;
     const myLng = this.state.longitude;
@@ -134,6 +158,13 @@ class View extends Component {
             <p>Impossible d'afficher l'emplacement géographique.</p>
           }
         </div>
+
+        <hr/>
+
+        <h2>Certifications</h2>
+        <ul>
+          {certificationsList}
+        </ul>
 
         <hr/>
 
