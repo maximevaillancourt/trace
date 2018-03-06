@@ -59,20 +59,7 @@ class App extends Component {
         const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
         event.watch((error, result) => {
           if (!error){
-            const newProduct = {
-              id: result.args.newProductId,
-              owner: result.args.owner,
-            }
-
-            // Do we want to keep a list of all added products in the app's state?
-            // return this.props.dispatch(mainActions.addProduct(newProduct))
-            
-            return this.props.dispatch(mainActions.createAlert({
-              color: "success",
-              content: "Product created: " + newProduct.id,
-              rawData: newProduct.id,
-            }))
-
+            this.props.history.push('/products/' + result.args.newProductId); // upon product creation, redirect to the product page
           } else {
             console.log(error);
           }
@@ -91,6 +78,7 @@ class App extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
+                <NavItem><NavLink tag={Link} to="/my-products">Mes produits</NavLink></NavItem>
                 <NavItem><NavLink tag={Link} to="/create">Ajouter un produit</NavLink></NavItem>
                 <NavItem><NavLink tag={Link} to="/search">Rechercher un produit</NavLink></NavItem>
               </Nav>

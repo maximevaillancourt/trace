@@ -17,7 +17,7 @@ class Create extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { address: 'San Francisco, CA' }
+    this.state = { address: '' }
     this.onChange = (address) => this.setState({ address })
   }
 
@@ -28,8 +28,8 @@ class Create extends Component {
       })
   }
 
-  handleFormSubmit = (event) => {
-    event.preventDefault()
+  handleSelect = (address, placeId) => {
+    this.setState({ address })
 
     geocodeByAddress(this.state.address)
       .then(results => getLatLng(results[0]))
@@ -60,21 +60,13 @@ class Create extends Component {
         </FormGroup>
         <FormGroup>
             <Label>Emplacement actuel</Label>
-            <form onSubmit={this.handleFormSubmit}>
-              <PlacesAutocomplete inputProps={inputProps} />
-              <button type="submit">Submit</button>
-            </form>
+            <PlacesAutocomplete
+              inputProps={inputProps}
+              onSelect={this.handleSelect}
+              classNames={{input: "form-control"}}
+            />
         </FormGroup>
         <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
-        {this.props.alert && this.props.alert.visible ?
-          <div style={{paddingTop: "15px"}}>
-            <Alert color={this.props.alert.color}>
-              {this.props.alert.content}
-               <QRCode value={this.props.alert.rawData}/>
-            </Alert>
-          </div> :
-          null
-        }
       </div>
     );
   }

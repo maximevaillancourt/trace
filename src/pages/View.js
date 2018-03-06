@@ -26,8 +26,16 @@ class View extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.passageInstance.getProductById(String(this.props.match.params.productId).valueOf())
+  componentWillReceiveProps(nextProps){
+    this.fetchProduct(nextProps);
+  }
+
+  componentDidMount(){
+    this.fetchProduct(this.props);
+  }
+
+  fetchProduct(props){
+    this.props.passageInstance.getProductById(String(props.match.params.productId).valueOf(), props.match.params.versionId ? String(props.match.params.versionId).valueOf() : "latest")
       .then((result) => {
         console.log(result)
         var _this = this;
@@ -38,7 +46,7 @@ class View extends Component {
           longitude: parseFloat(result[3]),
           versionCreationDate: Date(result[4]),
           versions: result[5],
-          id: _this.props.productIdToView,
+          id: props.match.params.productId,
         })
       })
       .catch((error) => {
@@ -58,8 +66,12 @@ class View extends Component {
   render() {
     
     const versionsList = this.state.versions.map((version, index) => {
-      return <li key={index}>Version {index + 1} ({version})</li>
-    })
+      return (
+        <li key={index}>
+          <Link to={`/products/${this.props.match.params.productId}/versions/${version}`}>Version {index + 1} ({version})</Link>
+        </li>
+      )
+    }).reverse()
 
     const myLat = this.state.latitude;
     const myLng = this.state.longitude;
@@ -75,22 +87,39 @@ class View extends Component {
 
     return (
       <div>
-
         <div style={{display:"flex"}}>
           <div style={{flex: 1}}>
             <h1>{this.state.name}</h1>
-            <p>{this.state.description}</p>
+            <p>Description : {this.state.description}</p>
             <p>Dernière version : {this.state.versionCreationDate}</p>
+            { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].toString() ?
+                <Link to={"/products/" + this.props.match.params.productId}>
+                  <Button color="info">
+                    Voir la dernière version
+                  </Button>
+                </Link>
+              :
+                <Link to={"/products/" + this.props.match.params.productId + "/update"}>
+                  <Button color="success">
+                    Mettre à jour
+                  </Button>
+                </Link>
+            }
           </div>
           <div style={{flex:1, textAlign:"right"}}>
             <QRCode value={this.props.match.params.productId}/>
+            <p>
+              <small>
+                ProductID: 
+                <pre>{this.state.id}</pre>
+              </small>
+            </p>
           </div>
-
         </div>
-
         <hr/>
         
         <h2>Dernier emplacement connu</h2>
+        <pre>{myLat}, {myLng}</pre>
         <div>
           {myLat && myLng ? 
             <MyMapComponent
@@ -107,11 +136,6 @@ class View extends Component {
         <hr/>
 
         <h2>Historique</h2>
-        <Link to={"/products/" + this.props.match.params.productId + "/update"}>
-          <Button color="success">
-            Ajouter une version
-          </Button>
-        </Link>
         <ul>
           {versionsList}
         </ul>
@@ -126,8 +150,7 @@ class View extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    productIdToView: state.temporaryGodReducer.productIdToView
+    passageInstance: state.temporaryGodReducer.passageInstance
   };
 }
 

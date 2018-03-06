@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
 import {
   Container,
@@ -15,13 +16,31 @@ class Update extends Component {
   // TODO: get the product details to make sure we have the right information before showing the Update page
   // TODO: before actually updating the product, check if there is a newer version (i.e. someone else updated the product before us)
 
+  constructor(props) {
+    super(props)
+    this.state = { address: '' }
+    this.onChange = (address) => this.setState({ address })
+  }
+
   componentDidMount() {
     this.params = this.props.match.params;
   }
 
+  handleSelect = (address) => {
+    this.setState({ address })
+
+    geocodeByAddress(this.state.address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        console.log('Success', latLng)
+        return this.props.dispatch(mainActions.updateLatLng(latLng))
+      })
+      .catch(error => console.error('Error', error))
+  }
+
   handleUpdateProduct = () => {
     console.log(this.params.productId)
-    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.latitude, this.props.longitude, {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page
         this.props.history.push('/products/' + this.params.productId);
@@ -29,6 +48,11 @@ class Update extends Component {
   }
 
   render() {
+    const inputProps = {
+      value: this.state.address,
+      onChange: this.onChange,
+    }
+
     return (
       <div>
         <p><strong>Mise à jour de produit</strong></p>
@@ -42,7 +66,11 @@ class Update extends Component {
         </FormGroup>
         <FormGroup>
             <Label>Emplacement actuel</Label>
-            <Input value={this.props.location} onChange={(e) => {this.props.dispatch(mainActions.updateLatLng(e.target.value))}}></Input>
+            <PlacesAutocomplete
+              inputProps={inputProps}
+              onSelect={this.handleSelect}
+              classNames={{input: "form-control"}}
+            />
         </FormGroup>
         <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
       </div>

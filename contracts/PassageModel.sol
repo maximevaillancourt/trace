@@ -32,7 +32,6 @@ contract PassageModel {
         string latitude;
         string longitude;
         //string customJsonData;
-        //Certification[] certifications;
     }
     
     struct Product {
@@ -43,6 +42,7 @@ contract PassageModel {
         bool exists; // always true (used to know if it exists; kinda hackish but it works)
         address owner;
         address nextAuthorizedOwnerAddress;
+        //Certification[] certifications;
     }
     
     /***********************
