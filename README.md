@@ -25,12 +25,13 @@ Assurez-vous de ne pas avoir l'extension MetaMask activée lors du développemen
     truffle develop
     ```
 
-3. Dans la console de développement de Truffle qu'on vient de lancer, exécuter les commandes suivantes : 
+3. Dans la console de développement de Truffle qu'on vient de lancer, entrer la commande suivante pour compiler et déployer les contrats intelligents : 
 
     ```
-    compile
-    migrate
+    migrate --reset
     ```
+    
+    Noter que cette commande réinitialise votre blockchain local, donc toutes les données y étant stockées seront perdues.
 
 4. Dans une nouvelle fenêtre de terminal, lancer le serveur Webpack pour le front-end.
 
@@ -38,4 +39,4 @@ Assurez-vous de ne pas avoir l'extension MetaMask activée lors du développemen
     npm run start
     ```
 
-Une nouvelle fenêtre devrait s'ouvrir dans le navigateur à l'adresse http://localhost:3000.
+Une nouvelle fenêtre devrait s'ouvrir dans le navigateur à l'adresse `http://localhost:3000`.
