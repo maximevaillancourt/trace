@@ -4,9 +4,15 @@ import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
+import faList from '@fortawesome/fontawesome-free-solid/faList'
+
+import AnnotatedSection from '../components/AnnotatedSection'
+import Search from '../components/Search';
+
 import {
-  Container,
-  Button
+  Container
 } from 'reactstrap';
 
 class View extends Component {
@@ -46,25 +52,50 @@ class View extends Component {
   }
 
   render() {
-    
     const products = this.state.products.map((product, index) => {
       return (
-        <li key={index}>
-          <Link to={`/products/${product.id}`}>{product.name || "Produit sans nom"} ({product.description || "Aucune description"})</Link>
-        </li>
+        <Link to={`/products/${product.id}`}>
+          <div key={index}>
+            <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
+            <hr/>
+          </div>
+        </Link>
       )
     })
 
     return (
       <div>
-        <h2>Mes produits</h2>
-        <ul>
-          {products && products.length > 0 ? products : "Loading..."}
-        </ul>
-
-        <hr/>
-
-        
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faSearch}/>
+              Consulter un produit
+            </div>
+          }
+          panelContent = {
+            <div>
+              <Search/>
+            </div>
+          }
+        />
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faList}/>
+              Mes produits
+              <Link style={{marginLeft: "10px"}} to="/create">Ajouter +</Link>
+            </div>
+          }
+          panelContent = {
+            <div>
+              {products && products.length > 0 ? products : 
+              <div>
+                Vous n'avez créé aucun produit.
+                <Link style={{marginLeft: "10px"}} to="/create">Ajouter un produit</Link>
+              </div>}
+            </div>
+          }
+        />
       </div>
     );
   }

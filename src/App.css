@@ -1,0 +1,17 @@
+.btn-primary {
+  background-color: hsl(161, 42%, 52%);
+  border-color: hsl(161, 42%, 52%);
+}
+
+.btn-primary:hover{
+  background-color:  hsl(161, 42%, 42%);
+  border-color: hsl(161, 42%, 42%);
+}
+
+a {
+  color: hsl(161, 42%, 52%);
+}
+
+a:hover {
+  color: hsl(161, 42%, 42%);
+}

@@ -89,7 +89,7 @@ class Create extends Component {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
-      placeholder: "Emplacement (adresse, lat/long)"
+      placeholder: "Emplacement (adresse, latitude & longitude, entreprise)"
     }
 
     return (
@@ -115,7 +115,7 @@ class Create extends Component {
         <FormGroup>
           <Label>
             Certification(s)
-            <Link style={{marginLeft: "10px"}} to="/createcertification">créer +</Link>
+            <Link style={{marginLeft: "10px"}} to="/createcertification">Créer +</Link>
           </Label>
           <div>
             {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
@@ -126,15 +126,19 @@ class Create extends Component {
                 </div>
               )
               :
-              "Aucune certification existante"}
+              <div style={{marginLeft:"15px"}}>
+                Aucune certification existante.
+                <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
+              </div>
+            }
           </div>
         </FormGroup>
         <FormGroup>
           {
             Object.keys(this.state.customDataInputs).map(inputKey =>
               <FormGroup style={{display:"flex"}} key={inputKey}>
-                <Input placeholder="key" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                <Input placeholder="value" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                <Input placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                <Input placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
               </FormGroup>
             )
           }

@@ -4,9 +4,20 @@ import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+import faThumbtack from '@fortawesome/fontawesome-free-solid/faThumbtack'
+import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
+import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
+import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
+import faHistory from '@fortawesome/fontawesome-free-solid/faHistory'
+
+import AnnotatedSection from '../components/AnnotatedSection'
+
 import {
   Container,
-  Button
+  Button,
+  Table
 } from 'reactstrap';
 
 class View extends Component {
@@ -14,7 +25,6 @@ class View extends Component {
   constructor(props) {
     super(props);
 
-    // TODO: move this to Redux store
     this.state = {
       name: "",
       description: "",
@@ -96,17 +106,16 @@ class View extends Component {
     const versionsList = this.state.versions.map((version, index) => {
       return (
         <li key={index}>
-          <Link to={`/products/${this.props.match.params.productId}/versions/${version}`}>Version {index + 1} ({version})</Link>
+          <Link to={`/products/${this.props.match.params.productId}/versions/${version}`}>Version {index + 1}</Link>
         </li>
       )
     }).reverse()
 
     const certificationsList = this.state.certifications.map((certification, index) => {
       return (
-        <li key={index}>
-          <div>{certification.name}</div>
-          <img style={{maxWidth:"100px"}} src={certification.imageUrl}/>
-        </li>
+        <div key={index}>
+          {certification.imageUrl ? <img style={{maxWidth:"100px"}} src={certification.imageUrl}/> : <div>{certification.name}</div>}
+        </div>
       )
     })
 
@@ -126,74 +135,140 @@ class View extends Component {
 
     return (
       <div>
-        <div style={{display:"flex"}}>
-          <div style={{flex: 1}}>
-            <h1>{this.state.name}</h1>
-            <p>Description du produit : {this.state.description}</p>
-            <p>Date de création de la version : {this.state.versionCreationDate}</p>
-            {
-              Object.keys(customData).map(key => <p>{key} : {customData[key]}</p>)
-            }
-            { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].toString() ?
-                <Link to={"/products/" + this.props.match.params.productId}>
-                  <Button color="info">
-                    Voir la dernière version
-                  </Button>
-                </Link>
-              :
-                <Link to={"/products/" + this.props.match.params.productId + "/update"}>
-                  <Button color="success">
-                    Mettre à jour
-                  </Button>
-                </Link>
-            }
-          </div>
-          <div style={{flex:1, textAlign:"right"}}>
-            <QRCode value={this.props.match.params.productId}/>
-            <p>
-              <small>
-                ProductID: 
-                <pre>{this.state.id}</pre>
-              </small>
-            </p>
-          </div>
-        </div>
-        <hr/>
-        
-        <h2>Emplacement (à cette version)</h2>
-        <div>
-          {myLat && myLng ? 
+        <AnnotatedSection
+          annotationContent = {
             <div>
-              <pre>{myLat}, {myLng}</pre>
-              <MyMapComponent
-                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
-                loadingElement={<div style={{ height: `100%` }} />}
-                containerElement={<div style={{ height: `400px` }} />}
-                mapElement={<div style={{ height: `100%` }} />}
-              />
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faInfoCircle}/>
+              Définition du produit
             </div>
-            :
-            <p>Impossible d'afficher l'emplacement géographique.</p>
           }
-        </div>
+          panelContent = {
+            <Table>
+              <tbody>
+                <tr>
+                  <th scope="row">Nom</th>
+                  <td>{this.state.name}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Description</th>
+                  <td>{this.state.description}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Date de création de la version</th>
+                  <td>{this.state.versionCreationDate}</td>
+                </tr>
+                {
+                  Object.keys(customData).map(key =>
+                    <tr key={key}>
+                      <th scope="row">{key}</th>
+                      <td>{customData[key]}</td>
+                    </tr>
+                  )
+                }
+              </tbody>
+            </Table>
+          }
+        />
 
-        <hr/>
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faThumbtack}/>
+              Informations de suivi
+            </div>
+          }
+          panelContent = {
+            <div style={{display: "flex"}}>
+              <QRCode style={{flex:"1"}} value={this.props.match.params.productId}/>
+              <div style={{paddingLeft: "15px", flex:"1"}}>
+                Identifiant unique du produit
+                <pre>{this.state.id}</pre>
+              </div>
+            </div>
+          }
+        />
 
-        <h2>Certifications</h2>
-        <ul>
-          {certificationsList}
-        </ul>
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faWrench}/>
+              Actions
+            </div>
+          }
+          panelContent = {
+            <div>
+              { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].toString() ?
+                  <Link to={"/products/" + this.props.match.params.productId}>
+                    <Button color="info">
+                      Voir la dernière version
+                    </Button>
+                  </Link>
+                :
+                  <Link to={"/products/" + this.props.match.params.productId + "/update"}>
+                    <Button color="success">
+                      Mettre à jour
+                    </Button>
+                  </Link>
+              }
+            </div>
+          }
+        />
 
-        <hr/>
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faMapMarker}/>
+              Emplacement géographique
+            </div>
+          }
+          panelContent = {
+            <div>
+              {myLat && myLng ? 
+                <div>
+                  <pre>{myLat}, {myLng}</pre>
+                  <MyMapComponent
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
+                    loadingElement={<div style={{ height: `100%` }} />}
+                    containerElement={<div style={{ height: `400px` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                  />
+                </div>
+                :
+                <p>Impossible d'afficher l'emplacement géographique.</p>
+              }
+            </div>
+          }
+        />
 
-        <h2>Historique</h2>
-        <ul>
-          {versionsList}
-        </ul>
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faCertificate}/>
+              Certifications attribuées
+            </div>
+          }
+          panelContent = {
+            <div>
+              {certificationsList && certificationsList.length > 0 ? certificationsList : "Aucune certification."}
+            </div>
+          }
+        />
 
-        <hr/>
-
-        
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faHistory}/>
+              Historique des versions
+            </div>
+          }
+          panelContent = {
+            <div>
+              <ul>
+                {versionsList}
+              </ul>
+            </div>
+          }
+        />
       </div>
     );
   }

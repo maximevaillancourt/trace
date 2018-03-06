@@ -20,11 +20,11 @@ class Search extends Component {
     return (
       <div>
         <FormGroup>
-          <Label>ID du produit à consulter</Label>
+          <Label>Identifiant unique du produit à consulter</Label>
           <InputGroup>
-            <Input value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
+            <Input placeholder="0x..." value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
             <InputGroupAddon addonType="append">
-              <Link to={"/products/" + this.props.productIdToView}><Button color="primary">Voir</Button></Link>
+              <Link to={"/products/" + this.props.productIdToView}><Button style={{borderBottomLeftRadius:"0", borderTopLeftRadius:"0"}} color="primary">Consulter</Button></Link>
             </InputGroupAddon>
           </InputGroup>
         </FormGroup>        

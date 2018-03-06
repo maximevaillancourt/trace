@@ -5,7 +5,9 @@ import {connect} from 'react-redux';
 import PassageMainContractJson from '../build/contracts/PassageMain.json'
 import getWeb3 from './utils/getWeb3'
 
-import * as mainActions from './actions/mainActions';
+import blockies from 'ethereum-blockies-png'
+
+import * as mainActions from './actions/mainActions'
 
 import {
   Collapse,
@@ -16,6 +18,7 @@ import {
   NavItem,
   NavLink,
   Container,
+  Button
 } from 'reactstrap';
 
 class App extends Component {
@@ -70,25 +73,47 @@ class App extends Component {
   }
 
   render() {
+    const bodyColor = "hsl(136.7, 25%, 98.1%)";
+
+    const activeLinkStyle = {
+      fontWeight: 'bold',
+      color: 'red'
+     }
+
     const appJSX = (
-      <div style={{fontFamily: "Roboto"}}>
-        <Navbar color="faded" light style={{marginBottom: "1.5em"}} expand="md">
+      <div style={{minHeight:"100vh", borderTop:"3px solid #50b796", backgroundColor: "black", fontFamily: "Barlow"}}>
+        <Navbar color="faded" light style={{paddingTop: "1em", paddingBottom:"2em", backgroundColor: bodyColor}} expand="md">
           <Container>
-            <NavbarBrand tag={Link} to='/'>Passage</NavbarBrand>
+            <Link to='/'><img style={{width:"130px", marginRight: "20px"}} src="/logo-black.svg"/></Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
+              {/*
+              <Nav className="mr-auto" navbar>
+                <NavItem><NavLink tag={Link} to="/create">Produits</NavLink></NavItem>
+                <NavItem><NavLink tag={Link} to="/createcertification">Certifications</NavLink></NavItem>
+              </Nav>
+              */}
               <Nav className="ml-auto" navbar>
-                <NavItem><NavLink tag={Link} to="/my-products">Mes produits</NavLink></NavItem>
-                <NavItem><NavLink tag={Link} to="/create">Nouveau produit</NavLink></NavItem>
-                <NavItem><NavLink tag={Link} to="/createcertification">Nouvelle certification</NavLink></NavItem>
-                <NavItem><NavLink tag={Link} to="/search">Recherche</NavLink></NavItem>
+                <NavItem>
+                  <NavLink tag={Link} to="#">
+                    Mon compte
+                    <img style={{marginLeft: "10px", width:"20px", height:"20px", borderRadius:"3px"}} src={blockies.createDataURL({ scale: 5, seed: this.props.web3 && this.props.passageInstance && this.props.web3Accounts ? this.props.web3Accounts[0] : ""})}/>
+                  </NavLink>
+                </NavItem>
               </Nav>
             </Collapse>
           </Container>
         </Navbar>
-        <Container>
-          {this.props.children}
-        </Container>
+        <div style={{backgroundColor: bodyColor, paddingBottom: "3em"}}>
+          <Container>
+            {this.props.children}
+          </Container>
+        </div>
+        <div style={{padding: "2em 0", color:"white", backgroundColor: "#000000"}}>
+          <Container>
+            © 2018 Trace
+          </Container>
+        </div>
       </div>
     )
 

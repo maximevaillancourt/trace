@@ -49,8 +49,12 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.4",
+    "@fortawesome/fontawesome-free-solid": "^5.0.8",
+    "@fortawesome/react-fontawesome": "0.0.17",
     "bootstrap": "^4.0.0",
     "dotenv": "^2.0.0",
+    "ethereum-blockies-png": "^0.1.2",
     "qrcode.react": "^0.7.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
