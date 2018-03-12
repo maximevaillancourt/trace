@@ -113,8 +113,8 @@ class View extends Component {
 
     const certificationsList = this.state.certifications.map((certification, index) => {
       return (
-        <div key={index}>
-          {certification.imageUrl ? <img style={{maxWidth:"100px"}} src={certification.imageUrl}/> : <div>{certification.name}</div>}
+        <div style={{display:"inline-block", marginRight:"15px", width:"100px", height:"100px"}} key={index}>
+          {certification.imageUrl ? <img style={{width:"100%"}} src={certification.imageUrl}/> : <div>{certification.name}</div>}
         </div>
       )
     })
