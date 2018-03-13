@@ -157,6 +157,7 @@ class Create extends Component {
                   Ajouter un champ de données personnalisé
                 </Link>
               </FormGroup>
+              {/* TODO: Do not save empty custom data fields */}
               <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
             </div>
           }

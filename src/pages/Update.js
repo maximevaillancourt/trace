@@ -121,6 +121,7 @@ class Update extends Component {
                   Ajouter un champ de données personnalisé
                 </Link>
               </FormGroup>
+              {/* TODO: Do not save empty custom data fields */}
               <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
             </div>
           }
