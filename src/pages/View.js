@@ -280,7 +280,7 @@ class View extends Component {
           }
           panelContent = {
             <div>
-              <Link style={{marginLeft: "10px"}} to="/split">Séparer ce produit</Link>
+              <Link style={{marginLeft: "10px"}} to={"/products/" + this.props.match.params.productId + "/split"}>Séparer ce produit</Link>
             </div>
           }
         />
