@@ -10,6 +10,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faqrcode from '@fortawesome/fontawesome-free-solid/faQrcode'
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
 import faStar from '@fortawesome/fontawesome-free-solid/faStar'
+import faList from '@fortawesome/fontawesome-free-solid/faList'
 
 import {
   Container,
@@ -20,7 +21,7 @@ import {
   Alert
 } from 'reactstrap';
 
-class CombineScan extends Component {
+class CombineList extends Component {
 
   constructor(props) {
     super(props)
@@ -29,6 +30,7 @@ class CombineScan extends Component {
       availableCertifications: [],
       selectedCertifications: {},
       customDataInputs: {},
+      products: []
     }
     this.onChange = (address) => this.setState({ address })
   }
@@ -47,7 +49,30 @@ class CombineScan extends Component {
               this.setState({availableCertifications: [...this.state.availableCertifications, certification]})
             });
         });
-    })
+    }),
+    this.props.passageInstance.getOwnerProducts()
+      .then((result) => {
+
+        result.map((productId) => {
+          this.props.passageInstance.getProductById(String(productId).valueOf(), "latest")
+            .then((result) => {
+              var _this = this;
+              const product = {
+                name: result[0],
+                description: result[1],
+                latitude: parseFloat(result[2]),
+                longitude: parseFloat(result[3]),
+                versionCreationDate: Date(result[4]),
+                versions: result[5],
+                id: productId,
+              }
+              this.setState({products: [...this.state.products, product]})
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        })
+      });
   }
 
   handleChange = (e) => {
@@ -92,6 +117,22 @@ class CombineScan extends Component {
   }
 
   render() {
+    const products = this.state.products.map((product, index) => {
+      return (
+        <div>
+          <FormGroup>
+              <Input type="checkbox" name="productSelection" onChange={(e) => {}}></Input>
+          </FormGroup>
+          <Link to={`/products/${product.id}`}>
+            <div key={index}>
+              <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
+              <hr/>
+            </div>
+          </Link>
+        </div>
+      )
+    })
+
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
@@ -100,29 +141,21 @@ class CombineScan extends Component {
 
     return (
       <div>
-        {/* Section d'ajout des identifiants */}
+        {/* Section de sélection des produits */}
         <AnnotatedSection
           annotationContent = {
             <div>
-              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faqrcode}/>
-              Identifiants des produits
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faList}/>
+              Sélection des produits
             </div>
           }
           panelContent = {
             <div>
-              <FormGroup>
-                {
-                  Object.keys(this.state.customDataInputs).map(inputKey =>
-                    <FormGroup style={{display:"flex"}} key={inputKey}>
-                      Identifiant du produit: 
-                      <Input placeholder="0x..." style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
-                    </FormGroup>
-                  )
-                }
-                <Link to="#" onClick={ () => this.appendInput() }>
-                  Ajouter un produit à la combinaison
-                </Link>
-              </FormGroup>
+              {products && products.length > 0 ? products : 
+              <div>
+                Vous n'avez créé aucun produit.
+                <Link style={{marginLeft: "10px"}} to="/create">Ajouter un produit</Link>
+              </div>}
             </div>
           }
         />
@@ -210,4 +243,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(CombineScan);
+export default connect(mapStateToProps)(CombineList);
