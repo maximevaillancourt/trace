@@ -8,6 +8,7 @@ import View from './pages/View';
 import MyProducts from './pages/MyProducts';
 import Update from './pages/Update';
 import NotFound from './pages/NotFound';
+import CombineScan from './pages/CombineScan';
 
 const Routes = () => (
   <Router>
@@ -20,6 +21,7 @@ const Routes = () => (
           <Route exact path="/products/:productId" component={View} />
           {/* TODO: Split product */}
           {/* TODO: Combine products */}
+          <Route exact path="/combineScan" component={CombineScan} />
           <Route exact path="/products/:productId/versions/:versionId" component={View} />
           <Route exact path="/products/:productId/update" component={Update} />
           <Route path="*" component={NotFound} />

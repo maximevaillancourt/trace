@@ -106,7 +106,12 @@ class View extends Component {
           }
           panelContent = {
             <div>
-              <Link style={{marginLeft: "10px"}} to="/combine">Combiner des produits</Link>
+              <div>
+                <Link style={{marginLeft: "10px"}} to="/combineVisual">Mode visuel</Link>
+              </div>
+              <div>
+                <Link style={{marginLeft: "10px"}} to="/combineScan">Mode scan QR</Link>
+              </div>
             </div>
           }
         />
