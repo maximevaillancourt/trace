@@ -11,6 +11,7 @@ import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
 import faHistory from '@fortawesome/fontawesome-free-solid/faHistory'
+import faUngroup from '@fortawesome/fontawesome-free-solid/faObjectUngroup'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 
@@ -266,6 +267,20 @@ class View extends Component {
               <ul>
                 {versionsList}
               </ul>
+            </div>
+          }
+        />
+
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUngroup}/>
+              Séparer ce produit
+            </div>
+          }
+          panelContent = {
+            <div>
+              <Link style={{marginLeft: "10px"}} to="/split">Séparer ce produit</Link>
             </div>
           }
         />

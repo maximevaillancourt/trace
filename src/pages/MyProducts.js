@@ -7,6 +7,7 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-map
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
 import faList from '@fortawesome/fontawesome-free-solid/faList'
+import faGroup from '@fortawesome/fontawesome-free-solid/faObjectGroup'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import Search from '../components/Search';
@@ -93,6 +94,19 @@ class View extends Component {
                 Vous n'avez créé aucun produit.
                 <Link style={{marginLeft: "10px"}} to="/create">Ajouter un produit</Link>
               </div>}
+            </div>
+          }
+        />
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faGroup}/>
+              Combiner des produits
+            </div>
+          }
+          panelContent = {
+            <div>
+              <Link style={{marginLeft: "10px"}} to="/combine">Combiner des produits</Link>
             </div>
           }
         />
