@@ -211,10 +211,19 @@ contract PassageMain is PassageHelper {
 
     function getCertificationById(bytes32 _certificationId) external view returns (string name, string imageUrl) {
 
-        // Get the requested product from storage
+        // Get the requested certification from storage
         Certification storage certification = certificationIdToCertificationStruct[_certificationId];
 
         // Return the requested data
         return (certification.name, certification.imageUrl);
+    }
+
+    function getVersionLatLngById(bytes32 _versionId) external view returns (string latitude, string longitude) {
+
+        // Get the requested version from storage
+        ProductVersion storage version = versionIdToVersionStruct[_versionId];
+
+        // Return the requested data
+        return (version.latitude, version.longitude);
     }
 }
