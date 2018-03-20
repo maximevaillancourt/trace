@@ -11,12 +11,14 @@ contract PassageModel {
         string name;
         address accountAddress; // Ethereum address
         string physicalAddress; // Physical address, may be separated (more costly)
+        // TODO: actor certification? ISO:9001?
     }
 
     struct Certification {
         bytes32 certificationId;
         string name;
         string imageUrl;
+        // TODO: date d'expiration de la certification
         //bytes32 certificationActorId; // Agency/company behind the certification
     }
 
@@ -40,6 +42,10 @@ contract PassageModel {
         
         address owner;
         address nextAuthorizedOwnerAddress;
+
+        // TODO: ontologie / catégorie / standard de descriptions de produits (catégories) ???
+        // TODO: catégories favorites selon le domaine d'activités de l'organisation qui utilise la plateforme
+        // TODO: UPC/EAN codes, GS1 categories https://www.gs1.org/gpc/latest
 
         string name;
         string description;

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, Polyline } from "react-google-maps"
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
@@ -57,7 +57,7 @@ class View extends Component {
           latitude: parseFloat(result[2]),
           longitude: parseFloat(result[3]),
           versionCreationDate: new Date(result[4].c * 1000).toString(),
-          versions: result[5],
+          versions: [],
           id: props.match.params.productId,
           certifications: []
         })
@@ -72,6 +72,20 @@ class View extends Component {
                 id: certificationId,
               }
               this.setState({certifications: [...this.state.certifications, certification]})
+            });
+        });
+
+        const versionsArray = result[5];
+        versionsArray.map((versionId) => {
+          this.props.passageInstance.getVersionLatLngById(String(versionId).valueOf())
+            .then((latLngResult) => {
+              console.log(latLngResult)
+              const version = {
+                latitude: parseFloat(latLngResult[0]),
+                longitude: parseFloat(latLngResult[1]),
+                id: versionId,
+              }
+              this.setState({versions: [...this.state.versions, version]})
             });
         });
       })
@@ -107,7 +121,7 @@ class View extends Component {
     const versionsList = this.state.versions.map((version, index) => {
       return (
         <li key={index}>
-          <Link to={`/products/${this.props.match.params.productId}/versions/${version}`}>Version {index + 1}</Link>
+          <Link to={`/products/${this.props.match.params.productId}/versions/${version.id}`}>Version {index + 1}</Link>
         </li>
       )
     }).reverse()
@@ -120,15 +134,40 @@ class View extends Component {
       )
     })
 
-    const myLat = this.state.latitude;
-    const myLng = this.state.longitude;
+    const currentLat = this.state.latitude;
+    const currentLng = this.state.longitude;
+
+    const markersJSX = this.state.versions.map((version, index) => {
+      return (
+        <Marker key={index} label={(index + 1).toString()} position={{ lat: version.latitude, lng: version.longitude }} />
+      )
+    })
+
+    const versionsLatLngs = this.state.versions.map((version, index) => {
+      return { lat: version.latitude, lng: version.longitude }
+    });
+
+    const polylineJSX = (
+      <Polyline
+        path={versionsLatLngs}
+        geodesic
+        options={{
+          strokeColor: 'red',
+          strokeOpacity: 0.5,
+          strokeWeight: 4
+        }}
+      />
+    )
 
     const MyMapComponent = withScriptjs(withGoogleMap((props) =>
       <GoogleMap
         defaultZoom={8}
-        defaultCenter={{ lat: myLat, lng: myLng }}
+        defaultCenter={{ lat: currentLat, lng: currentLng }}
       >
-        {<Marker position={{ lat: myLat, lng: myLng }} />}
+        <div>
+          {markersJSX}
+          {polylineJSX}
+        </div>
       </GoogleMap>
     ))
 
@@ -198,7 +237,7 @@ class View extends Component {
           }
           panelContent = {
             <div>
-              { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].toString() ?
+              { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].id.toString() ?
                   <Link to={"/products/" + this.props.match.params.productId}>
                     <Button color="info">
                       Voir la dernière version
@@ -224,9 +263,9 @@ class View extends Component {
           }
           panelContent = {
             <div>
-              {myLat && myLng ? 
+              {currentLat && currentLng ? 
                 <div>
-                  <pre>{myLat}, {myLng}</pre>
+                  <pre>{currentLat}, {currentLng}</pre>
                   <MyMapComponent
                     googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` }} />}
