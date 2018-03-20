@@ -25,6 +25,7 @@ contract PassageMain is PassageHelper {
         product.latestVersionId = "0"; // temporary value that gets replaced in updateProduct()
         product.versions = new bytes32[](0); // empty array at first
         product.exists = true;
+        product.archived = false;
         product.owner = msg.sender;
 
         product.name = _name;
@@ -154,9 +155,19 @@ contract PassageMain is PassageHelper {
 
     function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude) public 
     returns (bytes32 newProductId) {
-
-        // TODO: handle certifications merge
-        bytes32[] certificationsIds;
+        /* WIP
+        // Merge certifications (all parts must have a cert for the final product to have it)
+        bytes32[] certificationIds;
+        bytes32[] finalCertificationIds;
+        // Fetch all certs present and count
+        for (uint part = 0; part < _parts.length; ++part) {
+            bytes32[] currentCerts = productIdToProductStruct[_parts[part]].certificationsIds;
+            for (uint j = 0; j < currentCerts.length; ++j) {
+                certificationIds.push(currentCerts[j]);
+            }
+        }
+        // TODO check if present in all (count)
+        */
 
         // TODO: handle custom data merge
         string customDataJson;
@@ -167,9 +178,10 @@ contract PassageMain is PassageHelper {
         - Call this method with dem ids and the new product information
         - Method returns new combined product Id (created and saved)
         */
-        var createdProductId = createProduct(_name, _description, _latitude, _longitude, certificationsIds, customDataJson);
+        var createdProductId = createProduct(_name, _description, _latitude, _longitude, finalCertificationIds, customDataJson);
         for (uint i = 0; i < _parts.length; ++i) {
             nodeToParents[createdProductId].push(_parts[i]);
+            // TODO: Archive product parts
         }
 
         return createdProductId;

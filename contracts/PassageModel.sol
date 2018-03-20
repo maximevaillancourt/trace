@@ -34,6 +34,7 @@ contract PassageModel {
     
     struct Product {
         bool exists; // always true! (used to check if the product exists)
+        bool archived; // set to true when product gets merged/split
 
         bytes32 productId;
         bytes32 latestVersionId;

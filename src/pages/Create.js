@@ -62,6 +62,7 @@ class Create extends Component {
       }
     })
 
+    // Do not save empty values
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
