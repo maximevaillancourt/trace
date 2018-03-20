@@ -45,7 +45,7 @@ contract PassageModel {
 
         // TODO: ontologie / catégorie / standard de descriptions de produits (catégories) ???
         // TODO: catégories favorites selon le domaine d'activités de l'organisation qui utilise la plateforme
-        // TODO: UPC/EAN codes, GS1 categories
+        // TODO: UPC/EAN codes, GS1 categories https://www.gs1.org/gpc/latest
 
         string name;
         string description;
