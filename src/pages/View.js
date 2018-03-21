@@ -218,9 +218,9 @@ class View extends Component {
             </div>
           }
           panelContent = {
-            <div style={{display: "flex"}}>
-              <QRCode style={{flex:"1"}} value={this.props.match.params.productId}/>
-              <div style={{paddingLeft: "15px", flex:"1"}}>
+            <div>
+              <QRCode value={this.props.match.params.productId}/>
+              <div>
                 Identifiant unique du produit
                 <pre>{this.state.id}</pre>
               </div>
