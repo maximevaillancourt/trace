@@ -4,6 +4,7 @@ import * as mainActions from '../actions/mainActions';
 import QRCode from 'qrcode.react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
+import ebayCategoryMap from '../utils/ebay-categories.json'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -15,8 +16,10 @@ import {
   FormGroup,
   Label,
   Input,
-  Alert
+  Alert,
 } from 'reactstrap';
+
+const token = "v^1.1#i^1#f^0#p^1#I^3#r^0#t^H4sIAAAAAAAAAOVXbWwURRju9eMQChiJYFNAjwVTLeze7N72PhZ6cKVFGukH3FGxasjc7ixderd72ZnjeqVK04TGCBLBWrTG0GhjYqJRDCIo1WgNJMoPxCAJEY1GEdDoD4lGNMTZvaNcK+GzCIn7ZzMz77zzPM/7sTug0zm+vHtp9x+THOPy+ztBZ77DwReD8c6iuZML8kuL8kCOgaO/c05nYVfByQUYxmMJaQXCCUPHyNUWj+lYsicrmaSpSwbEGpZ0GEdYIrIUDtUtkwQOSAnTIIZsxBhXbXUlA4Hq8Xh9Ub8fRD2ioNJZ/bzPiFHJBKACfEAIeCt8SBEEL13HOIlqdUygTioZAfB+FnhYgY/woiTwkhjgPILYzLiakIk1Q6cmHGCCNlzJ3mvmYL00VIgxMgl1wgRrQ0vCDaHa6pr6yAJ3jq9gVocwgSSJR44WGwpyNcFYEl36GGxbS+GkLCOMGXcwc8JIp1LoPJhrgG9LHQjwCpBlPiCgKBJFcUykXGKYcUgujcOa0RRWtU0lpBONpC+nKFUjuhbJJDuqpy5qq13Wa3kSxjRVQ2YlU1MVejjU2MgE62CbFkdNkI2YUEZsuGoVyyuqVxahWMH6ZeANQBlmT8m4ymo86pjFhq5olmLYVW+QKkQho9HC8DnCUKMGvcEMqcSCk2vnPS8gEJqtiGZCmCQtuhVUFKcquOzh5eUf3k2IqUWTBA17GL1g60NrKpHQFGb0op2I2dxpw5VMCyEJye1OpVJcysMZ5hq3AADvXlW3LCy3oDhkMrZWrVN77fIbWM2mIiO6E2sSSScoljaaqBSAvoYJ0iIWRH9W95GwgqNn/zWRw9k9shzGqjy8CKKoKkf5CkQ7TcA3FuURzGao28KBojDNxqHZikgiZqWpTPMsGUempkieClXw+FXEKt6AyooBVWWjFYqX5VWEAELRqBzw/2+q5ErzPCwbCdRoxDQ5PVbZPjaZ7jGVRmiSdFUyTcdhFIvR15Um/kWpYovqDSdp1fpVEbV8YOoEJjTOSm9ONuJuA9K+Zk2ttlFfF2+Nfg9vqdBSghmmmpL5kHE2XQ6vkzkTYSNp0m8412C19ojRinRaK8Q0YjFkNvHXpcSYNvWb0dAvykqOaVTG1bcas6vplNeY2JDcXMqFXY5Vo2nzFQLvFQUeBK6L22I7qJH0f9CxriqqSw1MkHIDfkDcI+9CwTz74bscg6DLsZdep+gVhuXngvudBSsLCyYyWCOIw1BXokYbp0GVw9oanf7qm4hrRekE1Mx8p+OR6acX/p1zC+t/DJQM38PGF/DFOZcyMOPCShF/+12TeD/wCDxPYykGmsHsC6uF/LTCO7cLju8Pu2ev/2LjoQ27Po2+jra8+S6YNGzkcBTl0fTIY6cdKWv8JPLXvkM7v5o1dOLDJ+8+crZs872+1l+KfJ+/dOj3F7a8VjNw2wbnue3PSr1H8xc+PW/9gPzBDz/3vne0Ax5I4RWTnQ3Vi747s/9R2PN4V9m4A59NeGoob8ee3rqeg/P25IN7nK6Z+4eK33i13VcKpd4HnDvf39U3eKpnEap7YmLNn8+fefDFOWXPxL0vH3tlVvf8Y4PtLe+0Hz+3aej0l54pJQUfFU/YNK6rcU95SelK0rN3W3t33/Gzx9qWk6MnzvQ9N7V535TN+6d/PL8k8XXHQ6Xf/rThreUzd9/342BZx2/ryr8J7th6eNn6uezZpamObcaM8o0Dvx55e+Yd+qm+kw1Ttw6kDvrXrtudCeM/3Y91Qh8PAAA=";
 
 class Create extends Component {
 
@@ -27,6 +30,8 @@ class Create extends Component {
       availableCertifications: [],
       selectedCertifications: {},
       customDataInputs: {},
+      selectedCategories: {},
+      ebayCategoryMap: ebayCategoryMap
     }
     this.onChange = (address) => this.setState({ address })
   }
@@ -45,7 +50,7 @@ class Create extends Component {
               this.setState({availableCertifications: [...this.state.availableCertifications, certification]})
             });
         });
-    })
+      })
   }
 
   handleChange = (e) => {
@@ -72,7 +77,7 @@ class Create extends Component {
       })
   }
 
-  handleSelect = (address, placeId) => {
+  handleGeoSelect = (address, placeId) => {
     this.setState({ address })
 
     geocodeByAddress(this.state.address)
@@ -84,9 +89,67 @@ class Create extends Component {
       .catch(error => console.error('Error', error))
   }
 
-  appendInput() {
+  handleCategorySelect = (event) => {
+    const categoryId = event.target.value;
+    const categoryObject = this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.find(category => category.category.categoryId == categoryId);
+    this.selectCategory(categoryObject.categoryTreeNodeLevel, categoryObject.category.categoryId)
+  }
+
+  selectCategory = (categoryLevel, categoryId) => {
+    const selectedCategories = Object.assign({}, this.state.selectedCategories)
+    selectedCategories[categoryLevel] = categoryId
+    this.setState({selectedCategories: selectedCategories})
+  }
+
+  setCustomAspects = (categoryId) => {
+    fetch(`https://api.sandbox.ebay.com/commerce/taxonomy/v1_beta/category_tree/0/get_item_aspects_for_category?category_id=${categoryId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept-Encoding': 'application/gzip'
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        data.aspects.map(aspect => {
+          this.appendInput(aspect.localizedAspectName, "")
+        })
+      })
+
+      // Category selection flow:
+      // 1. Select main category
+      // 2. If selected category has children categories, append subcategory dropdown
+      // 3. Repeat until we reach a leaf category (no more children)
+      // 4. Set leaf category aspects (not append!) as new input FormGroups
+      
+      // OAuth Flow : place the OAuth token in redux
+      // if invalid, request a new one
+
+      // TODO: append subcategory dropdown
+  }
+  
+  getCategoryById(categoryId) {
+    const obj = this.state.ebayCategoryMap
+    const key = "categoryId"
+    const value = categoryId
+    // Base case
+    if (obj[key] === value) {
+      return obj;
+    } else {
+      for (var i = 0, len = Object.keys(obj).length; i < len; i++) {
+        if (typeof obj[i] == 'object') {
+          var found = this.getCategoryById(obj[i], key, value);
+          if (found) {
+            // If the object was found in the recursive call, bubble it up.
+            return found;
+          }
+        }
+      }
+    }
+  }
+
+  appendInput(key = "", value = "") {
     var newInputKey = `input-${Object.keys(this.state.customDataInputs).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
-    this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: "", value: ""} }});
+    this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: key, value: value} }});
   }
 
   render() {
@@ -119,9 +182,32 @@ class Create extends Component {
                   <Label>Emplacement actuel</Label>
                   <PlacesAutocomplete
                     inputProps={inputProps}
-                    onSelect={this.handleSelect}
+                    onSelect={this.handleGeoSelect}
                     classNames={{input: "form-control"}}
                   />
+              </FormGroup>
+              <FormGroup>
+                  <Label>Catégorie</Label>
+                  <Input type="select" name="select" id="exampleSelect" onChange={this.handleCategorySelect}>
+                    {this.state.ebayCategoryMap.rootCategoryNode ?
+                      this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.map((categoryObject, index) => {
+                        return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
+                      })
+                      :
+                      undefined}
+                  </Input>
+                  {
+                    Object.keys(this.state.selectedCategories).map(categoryLevel => (
+                      <Input key={categoryLevel} type="select" name="select" id="exampleSelect" onChange={this.handleCategorySelect}>
+                        {
+                          Object.keys(this.state.selectedCategories).map((category, index) => {
+                            console.log(this.state.selectedCategories[category])
+                            return (<option value={this.state.selectedCategories[category]} key={index}>{category}</option>)
+                          })
+                        }
+                      </Input>
+                    ))
+                  }
               </FormGroup>
               <FormGroup>
                 <Label>
@@ -148,8 +234,8 @@ class Create extends Component {
                 {
                   Object.keys(this.state.customDataInputs).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
-                      <Input placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                      <Input placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].key} placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
                     </FormGroup>
                   )
                 }
