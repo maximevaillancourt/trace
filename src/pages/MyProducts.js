@@ -29,7 +29,7 @@ class View extends Component {
   componentDidMount() {
     this.props.passageInstance.getOwnerProducts({gas:1000000})
       .then((result) => {
-
+        console.log(result);
         result.map((productId) => {
           this.props.passageInstance.getProductById(String(productId).valueOf(), "latest")
             .then((result) => {
