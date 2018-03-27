@@ -1,9 +1,13 @@
 pragma solidity ^0.4.19;
 
 import "./PassageHelper.sol";
+import "./Dictionary.sol";
 
 contract PassageMain is PassageHelper {
-
+        
+    using DictionaryBytes32Uint for DictionaryBytes32Uint.Data;
+    DictionaryBytes32Uint.Data private dic;    
+    
     function createProduct(
       string _name,
       string _description,
@@ -155,22 +159,11 @@ contract PassageMain is PassageHelper {
 
     function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude) public 
     returns (bytes32 newProductId) {
-        /* WIP
-        // Merge certifications (all parts must have a cert for the final product to have it)
-        bytes32[] certificationIds;
-        bytes32[] finalCertificationIds;
-        // Fetch all certs present and count
-        for (uint part = 0; part < _parts.length; ++part) {
-            bytes32[] currentCerts = productIdToProductStruct[_parts[part]].certificationsIds;
-            for (uint j = 0; j < currentCerts.length; ++j) {
-                certificationIds.push(currentCerts[j]);
-            }
-        }
-        // TODO check if present in all (count)
-        */
+
+        bytes32[] memory finalCertificationIds = mergeCertifications(_parts);
 
         // TODO: handle custom data merge
-        string customDataJson;
+        string memory customDataJson;
 
         /*
         UI:
@@ -181,14 +174,48 @@ contract PassageMain is PassageHelper {
         var createdProductId = createProduct(_name, _description, _latitude, _longitude, finalCertificationIds, customDataJson);
         for (uint i = 0; i < _parts.length; ++i) {
             nodeToParents[createdProductId].push(_parts[i]);
-            // TODO: Archive product parts
+            productIdToProductStruct[_parts[i]].archived = true;
         }
 
         return createdProductId;
     }
 
+    function mergeCertifications(bytes32[] parts) private returns (bytes32[] certificationsIds) {
+
+        bytes32[] storage certsIds;
+        for (uint i = 0; i < parts.length; ++i) {
+            var product = productIdToProductStruct[parts[i]];
+            bytes32[] memory partCerts = product.certificationsIds;
+            for (uint j = 0; j < partCerts.length; ++j) {
+                var prevValue = dic.get(partCerts[j]);
+                dic.set(partCerts[j], prevValue + 1);
+            }
+        }
+
+        bytes32[] memory dicKeys = dic.keys();
+        for (uint k = 0; k < dicKeys.length; ++k) {
+            if (dic.get(dicKeys[k]) == parts.length) {
+                certsIds.push(dicKeys[k]);
+                dic.remove(dicKeys[k]);
+            }
+        }
+
+        delete dic;
+        return certsIds;
+    }
+
     function getOwnerProducts() external view returns (bytes32[] productsIds) {
-      return ownerToProductsId[msg.sender];
+        // This function should be view but we need storage for the active products trickery
+        bytes32[] ownedProductsIds = ownerToProductsId[msg.sender];
+        bytes32[] storage activeProducts;
+
+        for (uint i = 0; i < ownedProductsIds.length; ++i) {
+            if (!productIdToProductStruct[ownedProductsIds[i]].archived) {
+                activeProducts.push(ownedProductsIds[i]);
+            }
+        }
+
+        return activeProducts;
     }
 
     function createCertification(
