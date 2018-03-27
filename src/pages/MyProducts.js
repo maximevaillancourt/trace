@@ -55,8 +55,8 @@ class View extends Component {
   render() {
     const products = this.state.products.map((product, index) => {
       return (
-        <Link to={`/products/${product.id}`}>
-          <div key={index}>
+        <Link key={index} to={`/products/${product.id}`}>
+          <div>
             <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
             <hr/>
           </div>

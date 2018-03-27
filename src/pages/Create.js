@@ -19,8 +19,6 @@ import {
   Alert,
 } from 'reactstrap';
 
-const token = "v^1.1#i^1#f^0#p^1#I^3#r^0#t^H4sIAAAAAAAAAOVXbWwURRju9eMQChiJYFNAjwVTLeze7N72PhZ6cKVFGukH3FGxasjc7ixderd72ZnjeqVK04TGCBLBWrTG0GhjYqJRDCIo1WgNJMoPxCAJEY1GEdDoD4lGNMTZvaNcK+GzCIn7ZzMz77zzPM/7sTug0zm+vHtp9x+THOPy+ztBZ77DwReD8c6iuZML8kuL8kCOgaO/c05nYVfByQUYxmMJaQXCCUPHyNUWj+lYsicrmaSpSwbEGpZ0GEdYIrIUDtUtkwQOSAnTIIZsxBhXbXUlA4Hq8Xh9Ub8fRD2ioNJZ/bzPiFHJBKACfEAIeCt8SBEEL13HOIlqdUygTioZAfB+FnhYgY/woiTwkhjgPILYzLiakIk1Q6cmHGCCNlzJ3mvmYL00VIgxMgl1wgRrQ0vCDaHa6pr6yAJ3jq9gVocwgSSJR44WGwpyNcFYEl36GGxbS+GkLCOMGXcwc8JIp1LoPJhrgG9LHQjwCpBlPiCgKBJFcUykXGKYcUgujcOa0RRWtU0lpBONpC+nKFUjuhbJJDuqpy5qq13Wa3kSxjRVQ2YlU1MVejjU2MgE62CbFkdNkI2YUEZsuGoVyyuqVxahWMH6ZeANQBlmT8m4ymo86pjFhq5olmLYVW+QKkQho9HC8DnCUKMGvcEMqcSCk2vnPS8gEJqtiGZCmCQtuhVUFKcquOzh5eUf3k2IqUWTBA17GL1g60NrKpHQFGb0op2I2dxpw5VMCyEJye1OpVJcysMZ5hq3AADvXlW3LCy3oDhkMrZWrVN77fIbWM2mIiO6E2sSSScoljaaqBSAvoYJ0iIWRH9W95GwgqNn/zWRw9k9shzGqjy8CKKoKkf5CkQ7TcA3FuURzGao28KBojDNxqHZikgiZqWpTPMsGUempkieClXw+FXEKt6AyooBVWWjFYqX5VWEAELRqBzw/2+q5ErzPCwbCdRoxDQ5PVbZPjaZ7jGVRmiSdFUyTcdhFIvR15Um/kWpYovqDSdp1fpVEbV8YOoEJjTOSm9ONuJuA9K+Zk2ttlFfF2+Nfg9vqdBSghmmmpL5kHE2XQ6vkzkTYSNp0m8412C19ojRinRaK8Q0YjFkNvHXpcSYNvWb0dAvykqOaVTG1bcas6vplNeY2JDcXMqFXY5Vo2nzFQLvFQUeBK6L22I7qJH0f9CxriqqSw1MkHIDfkDcI+9CwTz74bscg6DLsZdep+gVhuXngvudBSsLCyYyWCOIw1BXokYbp0GVw9oanf7qm4hrRekE1Mx8p+OR6acX/p1zC+t/DJQM38PGF/DFOZcyMOPCShF/+12TeD/wCDxPYykGmsHsC6uF/LTCO7cLju8Pu2ev/2LjoQ27Po2+jra8+S6YNGzkcBTl0fTIY6cdKWv8JPLXvkM7v5o1dOLDJ+8+crZs872+1l+KfJ+/dOj3F7a8VjNw2wbnue3PSr1H8xc+PW/9gPzBDz/3vne0Ax5I4RWTnQ3Vi747s/9R2PN4V9m4A59NeGoob8ee3rqeg/P25IN7nK6Z+4eK33i13VcKpd4HnDvf39U3eKpnEap7YmLNn8+fefDFOWXPxL0vH3tlVvf8Y4PtLe+0Hz+3aej0l54pJQUfFU/YNK6rcU95SelK0rN3W3t33/Gzx9qWk6MnzvQ9N7V535TN+6d/PL8k8XXHQ6Xf/rThreUzd9/342BZx2/ryr8J7th6eNn6uezZpamObcaM8o0Dvx55e+Yd+qm+kw1Ttw6kDvrXrtudCeM/3Y91Qh8PAAA=";
-
 class Create extends Component {
 
   constructor(props) {
@@ -71,6 +69,12 @@ class Create extends Component {
     Object.keys(this.state.customDataInputs).map(inputKey => {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
     })
+
+    Object.keys(this.state.selectedCategories).map(inputKey => {
+      const categoryKey = `Catégorie ${inputKey}`
+      customDataObject[categoryKey] = this.state.selectedCategories[inputKey].category.categoryName
+    })
+
     this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
@@ -89,19 +93,30 @@ class Create extends Component {
       .catch(error => console.error('Error', error))
   }
 
-  handleCategorySelect = (event) => {
+  handleCategorySelect = (event, selectedCategoryLevel) => {
     const categoryId = event.target.value;
-    const categoryObject = this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.find(category => category.category.categoryId == categoryId);
-    this.selectCategory(categoryObject.categoryTreeNodeLevel, categoryObject.category.categoryId)
-  }
+    const categoryObject = 
+      selectedCategoryLevel == 0 ? 
+      this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.find(category => category.category.categoryId == categoryId)
+      :
+      this.state.selectedCategories[selectedCategoryLevel].childCategoryTreeNodes.find(category => category.category.categoryId == categoryId)
 
-  selectCategory = (categoryLevel, categoryId) => {
+    const deepestCategory = categoryObject;
+
     const selectedCategories = Object.assign({}, this.state.selectedCategories)
-    selectedCategories[categoryLevel] = categoryId
+    selectedCategories[parseInt(selectedCategoryLevel)+1] = categoryObject
+    
+    Object.keys(selectedCategories).map(categoryLevel => {
+      if(parseInt(categoryLevel) > parseInt(selectedCategoryLevel)+1){
+        delete selectedCategories[categoryLevel]
+      }
+    })
     this.setState({selectedCategories: selectedCategories})
   }
 
+  // TODO: initialize custom data keys based on selected leaf category
   setCustomAspects = (categoryId) => {
+    const token = "v^1.1#i^1#f^0#p^1#I^3#r^0#t^H4sIAAAAAAAAAOVXbWwURRju9eMQChiJYFNAjwVTLeze7N72PhZ6cKVFGukH3FGxasjc7ixderd72ZnjeqVK04TGCBLBWrTG0GhjYqJRDCIo1WgNJMoPxCAJEY1GEdDoD4lGNMTZvaNcK+GzCIn7ZzMz77zzPM/7sTug0zm+vHtp9x+THOPy+ztBZ77DwReD8c6iuZML8kuL8kCOgaO/c05nYVfByQUYxmMJaQXCCUPHyNUWj+lYsicrmaSpSwbEGpZ0GEdYIrIUDtUtkwQOSAnTIIZsxBhXbXUlA4Hq8Xh9Ub8fRD2ioNJZ/bzPiFHJBKACfEAIeCt8SBEEL13HOIlqdUygTioZAfB+FnhYgY/woiTwkhjgPILYzLiakIk1Q6cmHGCCNlzJ3mvmYL00VIgxMgl1wgRrQ0vCDaHa6pr6yAJ3jq9gVocwgSSJR44WGwpyNcFYEl36GGxbS+GkLCOMGXcwc8JIp1LoPJhrgG9LHQjwCpBlPiCgKBJFcUykXGKYcUgujcOa0RRWtU0lpBONpC+nKFUjuhbJJDuqpy5qq13Wa3kSxjRVQ2YlU1MVejjU2MgE62CbFkdNkI2YUEZsuGoVyyuqVxahWMH6ZeANQBlmT8m4ymo86pjFhq5olmLYVW+QKkQho9HC8DnCUKMGvcEMqcSCk2vnPS8gEJqtiGZCmCQtuhVUFKcquOzh5eUf3k2IqUWTBA17GL1g60NrKpHQFGb0op2I2dxpw5VMCyEJye1OpVJcysMZ5hq3AADvXlW3LCy3oDhkMrZWrVN77fIbWM2mIiO6E2sSSScoljaaqBSAvoYJ0iIWRH9W95GwgqNn/zWRw9k9shzGqjy8CKKoKkf5CkQ7TcA3FuURzGao28KBojDNxqHZikgiZqWpTPMsGUempkieClXw+FXEKt6AyooBVWWjFYqX5VWEAELRqBzw/2+q5ErzPCwbCdRoxDQ5PVbZPjaZ7jGVRmiSdFUyTcdhFIvR15Um/kWpYovqDSdp1fpVEbV8YOoEJjTOSm9ONuJuA9K+Zk2ttlFfF2+Nfg9vqdBSghmmmpL5kHE2XQ6vkzkTYSNp0m8412C19ojRinRaK8Q0YjFkNvHXpcSYNvWb0dAvykqOaVTG1bcas6vplNeY2JDcXMqFXY5Vo2nzFQLvFQUeBK6L22I7qJH0f9CxriqqSw1MkHIDfkDcI+9CwTz74bscg6DLsZdep+gVhuXngvudBSsLCyYyWCOIw1BXokYbp0GVw9oanf7qm4hrRekE1Mx8p+OR6acX/p1zC+t/DJQM38PGF/DFOZcyMOPCShF/+12TeD/wCDxPYykGmsHsC6uF/LTCO7cLju8Pu2ev/2LjoQ27Po2+jra8+S6YNGzkcBTl0fTIY6cdKWv8JPLXvkM7v5o1dOLDJ+8+crZs872+1l+KfJ+/dOj3F7a8VjNw2wbnue3PSr1H8xc+PW/9gPzBDz/3vne0Ax5I4RWTnQ3Vi747s/9R2PN4V9m4A59NeGoob8ee3rqeg/P25IN7nK6Z+4eK33i13VcKpd4HnDvf39U3eKpnEap7YmLNn8+fefDFOWXPxL0vH3tlVvf8Y4PtLe+0Hz+3aej0l54pJQUfFU/YNK6rcU95SelK0rN3W3t33/Gzx9qWk6MnzvQ9N7V535TN+6d/PL8k8XXHQ6Xf/rThreUzd9/342BZx2/ryr8J7th6eNn6uezZpamObcaM8o0Dvx55e+Yd+qm+kw1Ttw6kDvrXrtudCeM/3Y91Qh8PAAA=";    
     fetch(`https://api.sandbox.ebay.com/commerce/taxonomy/v1_beta/category_tree/0/get_item_aspects_for_category?category_id=${categoryId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -114,37 +129,6 @@ class Create extends Component {
           this.appendInput(aspect.localizedAspectName, "")
         })
       })
-
-      // Category selection flow:
-      // 1. Select main category
-      // 2. If selected category has children categories, append subcategory dropdown
-      // 3. Repeat until we reach a leaf category (no more children)
-      // 4. Set leaf category aspects (not append!) as new input FormGroups
-      
-      // OAuth Flow : place the OAuth token in redux
-      // if invalid, request a new one
-
-      // TODO: append subcategory dropdown
-  }
-  
-  getCategoryById(categoryId) {
-    const obj = this.state.ebayCategoryMap
-    const key = "categoryId"
-    const value = categoryId
-    // Base case
-    if (obj[key] === value) {
-      return obj;
-    } else {
-      for (var i = 0, len = Object.keys(obj).length; i < len; i++) {
-        if (typeof obj[i] == 'object') {
-          var found = this.getCategoryById(obj[i], key, value);
-          if (found) {
-            // If the object was found in the recursive call, bubble it up.
-            return found;
-          }
-        }
-      }
-    }
   }
 
   appendInput(key = "", value = "") {
@@ -187,8 +171,9 @@ class Create extends Component {
                   />
               </FormGroup>
               <FormGroup>
-                  <Label>Catégorie</Label>
-                  <Input type="select" name="select" id="exampleSelect" onChange={this.handleCategorySelect}>
+                  <Label>Catégorie(s)</Label>
+                  <Input type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, 0)}>
+                    <option disabled value="" key="none">(sélectionner)</option>
                     {this.state.ebayCategoryMap.rootCategoryNode ?
                       this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.map((categoryObject, index) => {
                         return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
@@ -198,14 +183,17 @@ class Create extends Component {
                   </Input>
                   {
                     Object.keys(this.state.selectedCategories).map(categoryLevel => (
-                      <Input key={categoryLevel} type="select" name="select" id="exampleSelect" onChange={this.handleCategorySelect}>
-                        {
-                          Object.keys(this.state.selectedCategories).map((category, index) => {
-                            console.log(this.state.selectedCategories[category])
-                            return (<option value={this.state.selectedCategories[category]} key={index}>{category}</option>)
-                          })
-                        }
-                      </Input>
+                      this.state.selectedCategories[categoryLevel].childCategoryTreeNodes ?
+                        <Input key={categoryLevel} type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, categoryLevel)}>
+                          <option disabled value="" key="none">(sélectionner)</option>
+                          {
+                            this.state.selectedCategories[categoryLevel].childCategoryTreeNodes.map((categoryObject, index) => {
+                              return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
+                            })
+                          }
+                        </Input>
+                        :
+                        null
                     ))
                   }
               </FormGroup>
