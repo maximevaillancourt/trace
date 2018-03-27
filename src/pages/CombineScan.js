@@ -39,8 +39,16 @@ class CombineScan extends Component {
         productPartsObject.push(value);
       }
     })
-    
-    this.props.passageInstance.combineProducts(productPartsObject, this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
+    var customData = [];
+    for (var i = 0; i < productPartsObject.length; ++i) {
+      this.props.passageInstance.getProductCustomDataById(productPartsObject[i], "latest", {from: this.props.web3Accounts[0], gas:10000000})
+        .then(function(result) {
+          console.log(customData);
+          customData.concat(result);
+        });
+    }
+
+    this.props.passageInstance.combineProducts(productPartsObject, this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), customData, {from: this.props.web3Accounts[0], gas:10000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })

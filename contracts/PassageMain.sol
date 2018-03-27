@@ -157,20 +157,11 @@ contract PassageMain is PassageHelper {
         }
     }
 
-    function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude) public 
+    function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude, string customDataJson) public 
     returns (bytes32 newProductId) {
 
         bytes32[] memory finalCertificationIds = mergeCertifications(_parts);
 
-        // TODO: handle custom data merge
-        string memory customDataJson;
-
-        /*
-        UI:
-        - View to scan multiple products to combine
-        - Call this method with dem ids and the new product information
-        - Method returns new combined product Id (created and saved)
-        */
         var createdProductId = createProduct(_name, _description, _latitude, _longitude, finalCertificationIds, customDataJson);
         for (uint i = 0; i < _parts.length; ++i) {
             nodeToParents[createdProductId].push(_parts[i]);
@@ -204,9 +195,9 @@ contract PassageMain is PassageHelper {
         return certsIds;
     }
 
-    function getOwnerProducts() external view returns (bytes32[] productsIds) {
+    function getOwnerProducts() external returns (bytes32[] productsIds) {
         // This function should be view but we need storage for the active products trickery
-        bytes32[] ownedProductsIds = ownerToProductsId[msg.sender];
+        bytes32[] memory ownedProductsIds = ownerToProductsId[msg.sender];
         bytes32[] storage activeProducts;
 
         for (uint i = 0; i < ownedProductsIds.length; ++i) {
