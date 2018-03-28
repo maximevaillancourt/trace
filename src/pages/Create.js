@@ -101,23 +101,35 @@ class Create extends Component {
       :
       this.state.selectedCategories[selectedCategoryLevel].childCategoryTreeNodes.find(category => category.category.categoryId == categoryId)
 
-    const deepestCategory = categoryObject;
-
     const selectedCategories = Object.assign({}, this.state.selectedCategories)
     selectedCategories[parseInt(selectedCategoryLevel)+1] = categoryObject
     
     Object.keys(selectedCategories).map(categoryLevel => {
+      var shouldResetCustomDataInputs = false;
       if(parseInt(categoryLevel) > parseInt(selectedCategoryLevel)+1){
+        shouldResetCustomDataInputs = true;
         delete selectedCategories[categoryLevel]
+      }
+      if(shouldResetCustomDataInputs){
+        this.setState({ customDataInputs: {} })
       }
     })
     this.setState({selectedCategories: selectedCategories})
+
+    if(!categoryObject.childCategoryTreeNodes){
+      this.setCustomAspects(categoryId)
+    }
   }
 
-  // TODO: initialize custom data keys based on selected leaf category
   setCustomAspects = (categoryId) => {
-    const token = "v^1.1#i^1#f^0#p^1#I^3#r^0#t^H4sIAAAAAAAAAOVXbWwURRju9eMQChiJYFNAjwVTLeze7N72PhZ6cKVFGukH3FGxasjc7ixderd72ZnjeqVK04TGCBLBWrTG0GhjYqJRDCIo1WgNJMoPxCAJEY1GEdDoD4lGNMTZvaNcK+GzCIn7ZzMz77zzPM/7sTug0zm+vHtp9x+THOPy+ztBZ77DwReD8c6iuZML8kuL8kCOgaO/c05nYVfByQUYxmMJaQXCCUPHyNUWj+lYsicrmaSpSwbEGpZ0GEdYIrIUDtUtkwQOSAnTIIZsxBhXbXUlA4Hq8Xh9Ub8fRD2ioNJZ/bzPiFHJBKACfEAIeCt8SBEEL13HOIlqdUygTioZAfB+FnhYgY/woiTwkhjgPILYzLiakIk1Q6cmHGCCNlzJ3mvmYL00VIgxMgl1wgRrQ0vCDaHa6pr6yAJ3jq9gVocwgSSJR44WGwpyNcFYEl36GGxbS+GkLCOMGXcwc8JIp1LoPJhrgG9LHQjwCpBlPiCgKBJFcUykXGKYcUgujcOa0RRWtU0lpBONpC+nKFUjuhbJJDuqpy5qq13Wa3kSxjRVQ2YlU1MVejjU2MgE62CbFkdNkI2YUEZsuGoVyyuqVxahWMH6ZeANQBlmT8m4ymo86pjFhq5olmLYVW+QKkQho9HC8DnCUKMGvcEMqcSCk2vnPS8gEJqtiGZCmCQtuhVUFKcquOzh5eUf3k2IqUWTBA17GL1g60NrKpHQFGb0op2I2dxpw5VMCyEJye1OpVJcysMZ5hq3AADvXlW3LCy3oDhkMrZWrVN77fIbWM2mIiO6E2sSSScoljaaqBSAvoYJ0iIWRH9W95GwgqNn/zWRw9k9shzGqjy8CKKoKkf5CkQ7TcA3FuURzGao28KBojDNxqHZikgiZqWpTPMsGUempkieClXw+FXEKt6AyooBVWWjFYqX5VWEAELRqBzw/2+q5ErzPCwbCdRoxDQ5PVbZPjaZ7jGVRmiSdFUyTcdhFIvR15Um/kWpYovqDSdp1fpVEbV8YOoEJjTOSm9ONuJuA9K+Zk2ttlFfF2+Nfg9vqdBSghmmmpL5kHE2XQ6vkzkTYSNp0m8412C19ojRinRaK8Q0YjFkNvHXpcSYNvWb0dAvykqOaVTG1bcas6vplNeY2JDcXMqFXY5Vo2nzFQLvFQUeBK6L22I7qJH0f9CxriqqSw1MkHIDfkDcI+9CwTz74bscg6DLsZdep+gVhuXngvudBSsLCyYyWCOIw1BXokYbp0GVw9oanf7qm4hrRekE1Mx8p+OR6acX/p1zC+t/DJQM38PGF/DFOZcyMOPCShF/+12TeD/wCDxPYykGmsHsC6uF/LTCO7cLju8Pu2ev/2LjoQ27Po2+jra8+S6YNGzkcBTl0fTIY6cdKWv8JPLXvkM7v5o1dOLDJ+8+crZs872+1l+KfJ+/dOj3F7a8VjNw2wbnue3PSr1H8xc+PW/9gPzBDz/3vne0Ax5I4RWTnQ3Vi747s/9R2PN4V9m4A59NeGoob8ee3rqeg/P25IN7nK6Z+4eK33i13VcKpd4HnDvf39U3eKpnEap7YmLNn8+fefDFOWXPxL0vH3tlVvf8Y4PtLe+0Hz+3aej0l54pJQUfFU/YNK6rcU95SelK0rN3W3t33/Gzx9qWk6MnzvQ9N7V535TN+6d/PL8k8XXHQ6Xf/rThreUzd9/342BZx2/ryr8J7th6eNn6uezZpamObcaM8o0Dvx55e+Yd+qm+kw1Ttw6kDvrXrtudCeM/3Y91Qh8PAAA=";    
-    fetch(`https://api.sandbox.ebay.com/commerce/taxonomy/v1_beta/category_tree/0/get_item_aspects_for_category?category_id=${categoryId}`, {
+
+    // TODO: implement a thin back-end server (using Express.js?) to handle the OAuth token request flow.
+    // This is a temporary way to make the request work. Later on, we'll replace that with a call to our thin back-end server
+    // instead of hardcoding a token value like the one below (which expires every 2 hours)
+    const token = "v^1.1#i^1#I^3#f^0#r^0#p^1#t^H4sIAAAAAAAAAOVXfWwURRTv9csUKFYBUSTm2GpC1P3eO3c3vUuOtpRKPw7uLAIaMrc7266921135myPBNI0FbCxGBrF4FcIEbXGyIdiTPxLTYxBhQgiRogaIopKjNEQRBNwdnst10qgQkUS75/LvHnz5v1+7zdvdrie8oo71y1ad7oycF3x1h6upzgQ4KdyFeVld00vKZ5TVsQVOAS29tzeU9pbcqIGgUzaUZdC5NgWgsHuTNpCqm+MUFnXUm2ATKRaIAORijU1EWtuUgWGUx3XxrZmp6lgY12EksJhPWxASYKSIgiKRqzWSMykHaFEkJIUSVBCsgAhCPFkHqEsbLQQBhaOUALHyzQn0oKc5EVV4FSJZ4SQsoIKtkEXmbZFXBiOivrpqv5atyDXi6cKEIIuJkGoaGNsYaI11lhX35KsYQtiRfM8JDDAWTR2VGvrMNgG0ll48W2Q760mspoGEaLY6PAOY4OqsZFkLiN9n2ogciAMZD2kQQA1XZ8UKhfabgbgi+fhWUydNnxXFVrYxLlLMUrYSD0ENZwftZAQjXVB729JFqRNw4RuhKpfEFsei8epaDPoNjOwDdBJF2iQji+to6WQqIV1KIdpQ+FCkJOF/C7DofIcj9um1rZ002MMBVtsvACSlOF4YvgCYohTq9XqxgzspVPoFxohUCJ+7EgJs7jD8ooKM4SFoD+8NP2jqzF2zVQWw9EI4yd8fkihHcfUqfGTvhDz2ulGEaoDY0dl2a6uLqZLZGy3nRU4jmfvb25KaB0wA6hhX++sE3/z0gto04eiQbISmSrOOSSXbiJUkoDVTkWFe8KSIOZ5H5tWdLz1b4YCzOzY4zBZx0PhOUOT+FRICwMlJUxKp4nmFcp6ecAUyNEZ4HZC7KQ9mWpEZ9kMdE1dFUOGIMoGpPWwYtCSYhh0KqSHad6AkIMwldIU+X9zSiaq84RmOzBup00tN1lqnxyli64eBy7OJWA6TQwTlfwFQSIP5FWC5531CUL0YiASBDgm4wmb0ewMawPS0TzTKj/rK8JtkpvwmioqATiM1NSHrzDGh8ugRzTGhcjOuuT2Zlq9pp60O6FFTgl27XQaum38FTExqe38v2jlF0SlpU1C46prDdk/6ZGXKWyArwXIpb2Bpedh8yFBECRRkK5MqrV+UZO5q9axJljVRTbCUP8XPj3Ysa+gaJH/43sDe7jewC7ykOJY7g6+mptXXnJfacm0OcjEkDGBwSCz3SIf9y5kOmHOAaZbXB5YOXfn0KqCd9fWB7mbR19eFSX81IJnGDf3/EwZf/3sSl7mREHmRYGT+BVc9fnZUv6m0pkVe/dv21wky7PiK6oSLQ17k28mZ3OVo06BQFkREUTRC2fOntx0pvGpW+uPbT/6y4vuykPLPni189dDfW3KA20Db806cHpq4smhT6s/Ovzb+g27NoOqg83xKUeDhxoONGsb8fKVwY3qroNK6evmOzMb9i3ePf/IicoZT6uZ9nv3l/UtjFP9DTtenle27IYDzuN/zjuzvn7awNvnkrE1h5fkti+f2f3Ee1sqdnfv2Pf+8dbBUz8NbmlYXTx9Tt3xz6qGvpv7aH+t/vnDGz5+fpBdcw5pa5MV23DVz4vr1oo7P/yqr/+LmqFNd7/75W3FX98orz/9Q4f4ktHkHjEjQ/CV8vYZ1u7VTamzf9Q4nzy27dieZwNLXjslPHPLt7nBvh+l56bMH0h9P9D/xje/n1ydGi7fX8Fd274RDwAA";
+    
+    const url = `https://api.ebay.com/commerce/taxonomy/v1_beta/category_tree/2/get_item_aspects_for_category?category_id=${categoryId}`
+    fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept-Encoding': 'application/gzip'
@@ -125,6 +137,7 @@ class Create extends Component {
     })
       .then(response => response.json())
       .then(data => {
+        this.setState({ customDataInputs: {} })
         data.aspects.map(aspect => {
           this.appendInput(aspect.localizedAspectName, "")
         })
@@ -173,7 +186,7 @@ class Create extends Component {
               <FormGroup>
                   <Label>Catégorie(s)</Label>
                   <Input type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, 0)}>
-                    <option disabled value="" key="none">(sélectionner)</option>
+                    <option selected disabled value="" key="none">(sélectionner)</option>
                     {this.state.ebayCategoryMap.rootCategoryNode ?
                       this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.map((categoryObject, index) => {
                         return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
@@ -185,7 +198,7 @@ class Create extends Component {
                     Object.keys(this.state.selectedCategories).map(categoryLevel => (
                       this.state.selectedCategories[categoryLevel].childCategoryTreeNodes ?
                         <Input key={categoryLevel} type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, categoryLevel)}>
-                          <option disabled value="" key="none">(sélectionner)</option>
+                          <option selected disabled value="" key="none">(sélectionner)</option>
                           {
                             this.state.selectedCategories[categoryLevel].childCategoryTreeNodes.map((categoryObject, index) => {
                               return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
