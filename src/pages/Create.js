@@ -19,10 +19,17 @@ import {
   Alert,
 } from 'reactstrap';
 
+/*
+  "Create" component
+  @description Page component that allows creating a new product
+*/
 class Create extends Component {
 
   constructor(props) {
     super(props)
+
+    // initialize the inputs' state
+    // TODO: use this internal state for 'name', 'description' and 'lat'+'lng' (instead of the Redux store)
     this.state = {
       address: '',
       availableCertifications: [],
@@ -34,6 +41,7 @@ class Create extends Component {
     this.onChange = (address) => this.setState({ address })
   }
 
+  // when the page is loaded, fetch all available certifications
   componentDidMount(){
     this.props.passageInstance.getAllCertificationsIds()
       .then((result) => {
@@ -51,12 +59,16 @@ class Create extends Component {
       })
   }
 
+  // method that updates the state when a certification is checked/unchecked
   handleChange = (e) => {
     const certificationId = e.target.name;
     this.setState({selectedCertifications: {...this.state.selectedCertifications, [certificationId]: e.target.checked}})
   }
 
+  // method that sends the new product's information to the smart contract
   handleCreateNewProduct = () => {
+
+    // generate a 'clean' representation of the selected certifications
     const selectedCertifications = this.state.selectedCertifications;
     const certificationsArray = [];
     Object.keys(selectedCertifications).map(key => {
@@ -65,22 +77,29 @@ class Create extends Component {
       }
     })
 
+    // generate a 'clean' representation of the custom data
+    // TODO: ignore fields with empty values
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
     })
 
+    // generate a 'clean' representation of the categories for use as custom data fields
     Object.keys(this.state.selectedCategories).map(inputKey => {
       const categoryKey = `Catégorie ${inputKey}`
       customDataObject[categoryKey] = this.state.selectedCategories[inputKey].category.categoryName
     })
 
+    // actually call the smart contract method
     this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
-        // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
+        // since we use an event watcher to redirect the user to the newly created product's View page,
+        // nothing actually happens here after we create a product
       })
   }
 
+  // method that gets the (lat, lng) pair of the selected location
+  // in the location autocompletion search bar
   handleGeoSelect = (address, placeId) => {
     this.setState({ address })
 
@@ -88,11 +107,14 @@ class Create extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
+        // TODO: place the data in the internal state instead of the Redux instance
         return this.props.dispatch(mainActions.updateLatLng(latLng))
       })
       .catch(error => console.error('Error', error))
   }
 
+  // real ugly method that updates the category tree, coded on a whim
+  // TODO: make this pretty, because there's clearly a better way to handle this
   handleCategorySelect = (event, selectedCategoryLevel) => {
     const categoryId = event.target.value;
     const categoryObject = 
@@ -121,15 +143,16 @@ class Create extends Component {
     }
   }
 
+  // retrieves a leaf category's aspects/properties from the eBay API
+  // e.g. the "Vehicles > Sedan" category has the following aspects: "Make, Model, Year, Transmission, Engine, Color", etc.
   setCustomAspects = (categoryId) => {
-
     // TODO: implement a thin back-end server (using Express.js?) to handle the OAuth token request flow.
-    // This is a temporary way to make the request work. Later on, we'll replace that with a call to our thin back-end server
-    // instead of hardcoding a token value like the one below (which expires every 2 hours)
-    const token = "v^1.1#i^1#I^3#f^0#r^0#p^1#t^H4sIAAAAAAAAAOVXfWwURRTv9csUKFYBUSTm2GpC1P3eO3c3vUuOtpRKPw7uLAIaMrc7266921135myPBNI0FbCxGBrF4FcIEbXGyIdiTPxLTYxBhQgiRogaIopKjNEQRBNwdnst10qgQkUS75/LvHnz5v1+7zdvdrie8oo71y1ad7oycF3x1h6upzgQ4KdyFeVld00vKZ5TVsQVOAS29tzeU9pbcqIGgUzaUZdC5NgWgsHuTNpCqm+MUFnXUm2ATKRaIAORijU1EWtuUgWGUx3XxrZmp6lgY12EksJhPWxASYKSIgiKRqzWSMykHaFEkJIUSVBCsgAhCPFkHqEsbLQQBhaOUALHyzQn0oKc5EVV4FSJZ4SQsoIKtkEXmbZFXBiOivrpqv5atyDXi6cKEIIuJkGoaGNsYaI11lhX35KsYQtiRfM8JDDAWTR2VGvrMNgG0ll48W2Q760mspoGEaLY6PAOY4OqsZFkLiN9n2ogciAMZD2kQQA1XZ8UKhfabgbgi+fhWUydNnxXFVrYxLlLMUrYSD0ENZwftZAQjXVB729JFqRNw4RuhKpfEFsei8epaDPoNjOwDdBJF2iQji+to6WQqIV1KIdpQ+FCkJOF/C7DofIcj9um1rZ002MMBVtsvACSlOF4YvgCYohTq9XqxgzspVPoFxohUCJ+7EgJs7jD8ooKM4SFoD+8NP2jqzF2zVQWw9EI4yd8fkihHcfUqfGTvhDz2ulGEaoDY0dl2a6uLqZLZGy3nRU4jmfvb25KaB0wA6hhX++sE3/z0gto04eiQbISmSrOOSSXbiJUkoDVTkWFe8KSIOZ5H5tWdLz1b4YCzOzY4zBZx0PhOUOT+FRICwMlJUxKp4nmFcp6ecAUyNEZ4HZC7KQ9mWpEZ9kMdE1dFUOGIMoGpPWwYtCSYhh0KqSHad6AkIMwldIU+X9zSiaq84RmOzBup00tN1lqnxyli64eBy7OJWA6TQwTlfwFQSIP5FWC5531CUL0YiASBDgm4wmb0ewMawPS0TzTKj/rK8JtkpvwmioqATiM1NSHrzDGh8ugRzTGhcjOuuT2Zlq9pp60O6FFTgl27XQaum38FTExqe38v2jlF0SlpU1C46prDdk/6ZGXKWyArwXIpb2Bpedh8yFBECRRkK5MqrV+UZO5q9axJljVRTbCUP8XPj3Ysa+gaJH/43sDe7jewC7ykOJY7g6+mptXXnJfacm0OcjEkDGBwSCz3SIf9y5kOmHOAaZbXB5YOXfn0KqCd9fWB7mbR19eFSX81IJnGDf3/EwZf/3sSl7mREHmRYGT+BVc9fnZUv6m0pkVe/dv21wky7PiK6oSLQ17k28mZ3OVo06BQFkREUTRC2fOntx0pvGpW+uPbT/6y4vuykPLPni189dDfW3KA20Db806cHpq4smhT6s/Ovzb+g27NoOqg83xKUeDhxoONGsb8fKVwY3qroNK6evmOzMb9i3ePf/IicoZT6uZ9nv3l/UtjFP9DTtenle27IYDzuN/zjuzvn7awNvnkrE1h5fkti+f2f3Ee1sqdnfv2Pf+8dbBUz8NbmlYXTx9Tt3xz6qGvpv7aH+t/vnDGz5+fpBdcw5pa5MV23DVz4vr1oo7P/yqr/+LmqFNd7/75W3FX98orz/9Q4f4ktHkHjEjQ/CV8vYZ1u7VTamzf9Q4nzy27dieZwNLXjslPHPLt7nBvh+l56bMH0h9P9D/xje/n1ydGi7fX8Fd274RDwAA";
+    // Below is a temporary way to make the request work. Later on, we'll replace that with a call to our thin back-end server
+    // to get a token instead of hardcoding a token value like the one below (which is requested manually and expires every 2 hours)
+    const token = "v^1.1#i^1#f^0#r^0#p^1#I^3#t^H4sIAAAAAAAAAOVXbWwURRju9fqRUorE4hdc9Fgg0dLdm9293dvbcEeOtkAj9FrurFI0zdzebLv2bveyM0d7+oPSaJEYhRjCDxqSpmoIkfgVPqKBoASRaIKgaETUBL+CoAIxQQkJcXd7lGslUKEiiffnMu+88877PO/zzuyA3rKKmv7F/X9UucqLB3tBb7HLxVaCirLSuVPcxdNLi0CBg2uwd3ZvSZ/75DwM06mMvAzhjKFj5O1Jp3QsO8YQlTV12YBYw7IO0wjLRJFjkaVLZI4BcsY0iKEYKcrbWB+ipCAPoJAQRYkTAUTIsuqXY8aNEMUHYTLghwFO5ZJCImhNY5xFjTomUCchigOsRAOe5qQ4K8qAlwWWCbD+NsrbikysGbrlwgAq7GQrO2vNglSvnSnEGJnECkKFGyMLY9FIY31DU3yeryBWOE9DjECSxaNHdUYSeVthKouuvQ12vOVYVlEQxpQvPLzD6KBy5HIyN5C+w3RCgAE/4IOKHykiK/ATQuVCw0xDcu08bIuWpFXHVUY60UjueoxabCSeRArJj5qsEI31XvuvJQtTmqohM0Q1LIgsjzQ3U+GlsEdLo1ZIx02oILp5WT3tF3hFTCJJpNUgEBCQuPwuw6HyHI/Zps7Qk5rNGPY2GWQBslJGo4kRZKGAGMspqkfNiErsdAr9pMsEArHNruhwCbOkU7eLitIWC15neH36R1YTYmqJLEEjEcZOOPyEKJjJaElq7KQjxLx2enCI6iQkI/t83d3dTDfPGGaHjwOA9T22dElM6URpSOV97V7vwdr1F9CaA0WxWtjyl0kuY+XSYwnVSkDvoMJcQPRzfJ730WmFx1r/ZijA7BvdDhPVHmoioAYDvJgU/H5JUOFEtEc4r1CfnQdKwBydhmYXIpmULVPF0lk2jUwtKfOCyvGSiuikGFRpf1BV6YSQFGlWRQgglEgoQel/0yXj1XlMMTKo2UhpSm7C1D4hSufNZDM0SS6GUinLMF7JXxUktkHeKnh2r48Poh0DW0FgRmNsYTOKkfYZ0DrRbFO7k/VN4dasm/C2KqoFcBiplhy+whgHLoNXKoyJsJE1rdubidqHetzoQrrVJcQ0UilktrI3xcTEHuf/wVF+VVRKSrNobL/dkP2TM/IGhQ3JbQG5pM/VMgKbFTiOE3jA35xU65yixnO37sQaX1UXG5ig5L/w6eEb/QgKFzk/ts+1A/S53rLeUcAH5rCzwMwy9yMl7snTsUYQo0GVwVqHbn3cm4jpQrkM1MziMtcKz5tb2wueXYNPgHtHHl4Vbray4BUGPFdmStk77qliJcBzEisCXmDbwKwrsyXs3SXT5I/KD5x+98eLG1c1tXy8YuAULErvAlUjTi5XaZGlh6IdLzXPvdT53d7AwePbz0judOW+rz2/t056ZfLP5tqdwubq+3+JrrnzDTDt1df2N4gn6P5fXxcWvTe07cW5M2rbBHZt54HyI/uqP1114m3v/g8uzHjnsOdBbhOpO7ttcOUQ139mEv9Uy/MP3GWc8eyuntaxp3J+9ey9x46v+f6hR3dtSf858MwX/eTSwfme2sVTT6+jD53Uqo+uG9h+/oUVgbMXasp3b934Yc3TA7W/mRW1hy58VrP6/KIvF3x+OFrV/9XyGnB+U83j36rc++2tcwY3uwMPTzF2en44dS64fvWRyfcNhZ6VNh1r2FnR0PXTN5/EcWX9uZcvRoulqVM27Kng9KPPqWu27N8wU1s+NFy+vwB47A+BEA8AAA==";
     
-    const url = `https://api.ebay.com/commerce/taxonomy/v1_beta/category_tree/2/get_item_aspects_for_category?category_id=${categoryId}`
-    fetch(url, {
+    // actually fetch the aspects
+    fetch(`https://api.ebay.com/commerce/taxonomy/v1_beta/category_tree/2/get_item_aspects_for_category?category_id=${categoryId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept-Encoding': 'application/gzip'
@@ -137,6 +160,7 @@ class Create extends Component {
     })
       .then(response => response.json())
       .then(data => {
+        // set data inputs for every aspect
         this.setState({ customDataInputs: {} })
         data.aspects.map(aspect => {
           this.appendInput(aspect.localizedAspectName, "")
@@ -144,6 +168,8 @@ class Create extends Component {
       })
   }
 
+  // method that adds a new custom data input to the state, which is then
+  // reflected on the page by the render() function
   appendInput(key = "", value = "") {
     var newInputKey = `input-${Object.keys(this.state.customDataInputs).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
     this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: key, value: value} }});
@@ -186,6 +212,7 @@ class Create extends Component {
               <FormGroup>
                   <Label>Catégorie(s)</Label>
                   <Input type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, 0)}>
+                    {/* This is the first category dropdown, which represents the 1st level of categories (from the root node) */}
                     <option selected disabled value="" key="none">(sélectionner)</option>
                     {this.state.ebayCategoryMap.rootCategoryNode ?
                       this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.map((categoryObject, index) => {
@@ -195,6 +222,7 @@ class Create extends Component {
                       undefined}
                   </Input>
                   {
+                    // these are the lower level categories (level 2, level 3, etc., until a leaf category is reached)
                     Object.keys(this.state.selectedCategories).map(categoryLevel => (
                       this.state.selectedCategories[categoryLevel].childCategoryTreeNodes ?
                         <Input key={categoryLevel} type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, categoryLevel)}>
@@ -216,23 +244,26 @@ class Create extends Component {
                   <Link style={{marginLeft: "10px"}} to="/createcertification">Créer +</Link>
                 </Label>
                 <div>
-                  {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
-                    this.state.availableCertifications.map((certification, index) => 
-                      <div key={index}>
-                        <input style={{marginRight: "5px"}} onChange={this.handleChange} name={certification.id} type="checkbox"></input>
-                        <span>{certification.name}</span>
+                  {
+                    // displays all available certifications
+                    this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
+                      this.state.availableCertifications.map((certification, index) => 
+                        <div key={index}>
+                          <input style={{marginRight: "5px"}} onChange={this.handleChange} name={certification.id} type="checkbox"></input>
+                          <span>{certification.name}</span>
+                        </div>
+                      )
+                      :
+                      <div style={{marginLeft:"15px"}}>
+                        Aucune certification existante.
+                        <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
                       </div>
-                    )
-                    :
-                    <div style={{marginLeft:"15px"}}>
-                      Aucune certification existante.
-                      <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
-                    </div>
                   }
                 </div>
               </FormGroup>
               <FormGroup>
                 {
+                  // displays all custom data fields from the state
                   Object.keys(this.state.customDataInputs).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
                       <Input value={this.state.customDataInputs[inputKey].key} placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
@@ -244,7 +275,6 @@ class Create extends Component {
                   Ajouter un champ de données personnalisé
                 </Link>
               </FormGroup>
-              {/* TODO: Do not save empty custom data fields */}
               <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
             </div>
           }

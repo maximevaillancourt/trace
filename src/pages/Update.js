@@ -16,13 +16,20 @@ import {
   Input,
 } from 'reactstrap';
 
+/*
+  Update component
+  @description Page component used to update a product's information.
+*/
 class Update extends Component {
 
   // TODO: get the product details to make sure we have the right information before showing the Update page
   // TODO: before actually updating the product, check if there is a newer version (i.e. someone else updated the product before us)
-
   constructor(props) {
     super(props)
+
+    // TODO: use this internal state for the input fields
+    // instead of using the Redux store (which should only hold
+    // the web3 accounts and contract instances)
     this.state = {
       address: '',
       customDataInputs: {}
@@ -31,8 +38,10 @@ class Update extends Component {
   }
 
   componentDidMount() {
+    // shorthand to get the route parameters
     this.params = this.props.match.params;
 
+    // fetch the product's custom data fields then add them to the state
     this.props.passageInstance.getProductCustomDataById(String(this.params.productId).valueOf(), this.params.versionId ? String(this.params.versionId).valueOf() : "latest")
       .then((result) => {
         const customData = JSON.parse(result);
@@ -43,6 +52,7 @@ class Update extends Component {
           })
         })
       })
+      // TODO: display an error upon failure
       .catch((error) => {
         this.setState({
           customDataJson: ""
@@ -50,12 +60,16 @@ class Update extends Component {
       })
   }
 
+  // method that adds a new custom data input to the state, which is then
+  // reflected on the page by the render() function
   appendInput() {
     var newInputKey = `input-${Object.keys(this.state.customDataInputs).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
     this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: "", value: ""} }});
     return newInputKey;
   }
 
+  // method that gets the (lat, lng) pair of the selected location
+  // in the location autocompletion search bar
   handleSelect = (address) => {
     this.setState({ address })
 
@@ -63,21 +77,25 @@ class Update extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
+        // TODO: place the data in the internal state instead of the Redux instance
         return this.props.dispatch(mainActions.updateLatLng(latLng))
       })
       .catch(error => console.error('Error', error))
   }
 
+  // method that sends the updated data to the smart contract "updateProduct" method
   handleUpdateProduct = () => {
-
+    // generate a 'clean' object representing the custom data fields
+    // TODO: prevent saving empty custom data fields
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
     })
 
+    // actually call the smart contract method
     this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.latitude.toString(), this.props.longitude.toString(), JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
-        // redirect to the product page
+        // redirect to the product page upon success
         this.props.history.push('/products/' + this.params.productId);
       })
   }
@@ -110,6 +128,8 @@ class Update extends Component {
               </FormGroup>
               <FormGroup>
                 {
+                  // for every custom data field specified in the component state,
+                  // render an input with the appropriate key/value pair
                   Object.keys(this.state.customDataInputs).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
                       <Input value={this.state.customDataInputs[inputKey].key} placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
@@ -121,7 +141,6 @@ class Update extends Component {
                   Ajouter un champ de données personnalisé
                 </Link>
               </FormGroup>
-              {/* TODO: Do not save empty custom data fields */}
               <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
             </div>
           }
