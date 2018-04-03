@@ -21,11 +21,16 @@ import {
   Table
 } from 'reactstrap';
 
+/*
+  View component
+  @description Page component that displays a product's information.
+*/
 class View extends Component {
 
   constructor(props) {
     super(props);
 
+    // product information definition
     this.state = {
       name: "",
       description: "",
@@ -39,18 +44,25 @@ class View extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps){
-    this.fetchProduct(nextProps);
-  }
-
+  // when initially loading the page, fetch the requested product
   componentDidMount(){
     this.fetchProduct(this.props);
   }
 
+  // when requesting another product, fetch it
+  // (required because the component stays mounted, and only the props change)
+  componentWillReceiveProps(nextProps){
+    this.fetchProduct(nextProps);
+  }
+
+  // fetch a product from the blockchain by productId (optionally, a "versionId" of that product can be specified)
   fetchProduct(props){
+
+    // get the requested product (at the requested version if specified, otherwise it gets the latest version)
     this.props.passageInstance.getProductById(String(props.match.params.productId).valueOf(), props.match.params.versionId ? String(props.match.params.versionId).valueOf() : "latest")
       .then((result) => {
 
+        // once we have the product data, we update the component's state
         this.setState({
           name: result[0],
           description: result[1],
@@ -62,6 +74,7 @@ class View extends Component {
           certifications: []
         })
 
+        // then, we fetch the product's certification details
         const certificationsArray = result[6];
         certificationsArray.map((certificationId) => {
           this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
@@ -76,11 +89,11 @@ class View extends Component {
             });
         });
 
+        // then, we get the product's versions list
         const versionsArray = result[5];
         versionsArray.map((versionId) => {
           this.props.passageInstance.getVersionLatLngById(String(versionId).valueOf())
             .then((latLngResult) => {
-              console.log(latLngResult)
               const version = {
                 latitude: parseFloat(latLngResult[0]),
                 longitude: parseFloat(latLngResult[1]),
@@ -91,6 +104,10 @@ class View extends Component {
         });
       })
       .catch((error) => {
+        // if something goes wrong when fetching the product,
+        // we just empty the state of the page to prevent displaying
+        // false/wrong information
+        // TODO: display an error message on product fetch failure
         this.setState({
           name: "",
           description: "",
@@ -103,7 +120,8 @@ class View extends Component {
         })
       })
 
-
+    // also, we fetch the product's custom data fields and 
+    // add it to the rest of the product's data (in the component state)
     this.props.passageInstance.getProductCustomDataById(String(props.match.params.productId).valueOf(), props.match.params.versionId ? String(props.match.params.versionId).valueOf() : "latest")
       .then((result) => {
         this.setState({
@@ -117,8 +135,12 @@ class View extends Component {
       })
   }
 
+  /*****************
+    RENDER
+  *****************/
   render() {
-    
+
+    // this is the JSX of the versions list section of the page
     const versionsList = this.state.versions.map((version, index) => {
       return (
         <li key={index}>
@@ -127,6 +149,7 @@ class View extends Component {
       )
     }).reverse()
 
+    // this is the JSX of certifications list
     const certificationsList = this.state.certifications.map((certification, index) => {
       return (
         <div style={{display:"inline-block", marginRight:"15px", width:"100px", height:"100px"}} key={index}>
@@ -135,19 +158,23 @@ class View extends Component {
       )
     })
 
+    // here's a bunch of stuff related to the Google Maps embed
     const currentLat = this.state.latitude;
     const currentLng = this.state.longitude;
 
+    // array of map markers
     const markersJSX = this.state.versions.map((version, index) => {
       return (
         <Marker key={index} label={(index + 1).toString()} position={{ lat: version.latitude, lng: version.longitude }} />
       )
     })
 
+    // array of the versions' positions
     const versionsLatLngs = this.state.versions.map((version, index) => {
       return { lat: version.latitude, lng: version.longitude }
     });
 
+    // used to display a line between the various versions' position markers
     const polylineJSX = (
       <Polyline
         path={versionsLatLngs}
@@ -160,6 +187,7 @@ class View extends Component {
       />
     )
 
+    // the actual map component, which contains the markers and the line
     const MyMapComponent = withScriptjs(withGoogleMap((props) =>
       <GoogleMap
         defaultZoom={8}
@@ -172,10 +200,13 @@ class View extends Component {
       </GoogleMap>
     ))
 
+    // used to define the customData to display whether it's available in the state
     const customData = this.state.customDataJson ? JSON.parse(this.state.customDataJson) : {};
 
+    // the actual JSX that we return is below
     return (
       <div>
+        {/* Product definition section */}
         <AnnotatedSection
           annotationContent = {
             <div>
@@ -211,6 +242,7 @@ class View extends Component {
           }
         />
 
+        {/* QR code section */}
         <AnnotatedSection
           annotationContent = {
             <div>
@@ -219,9 +251,9 @@ class View extends Component {
             </div>
           }
           panelContent = {
-            <div style={{display: "flex"}}>
-              <QRCode style={{flex:"1"}} value={this.props.match.params.productId}/>
-              <div style={{paddingLeft: "15px", flex:"1"}}>
+            <div>
+              <QRCode value={this.props.match.params.productId}/>
+              <div>
                 Identifiant unique du produit
                 <pre>{this.state.id}</pre>
               </div>
@@ -229,6 +261,7 @@ class View extends Component {
           }
         />
 
+        {/* Actions section */}
         <AnnotatedSection
           annotationContent = {
             <div>
@@ -251,10 +284,12 @@ class View extends Component {
                     </Button>
                   </Link>
               }
+              <Link style={{marginLeft: "10px"}} to="/split">Séparer ce produit</Link>
             </div>
           }
         />
 
+        {/* Google Maps section */}
         <AnnotatedSection
           annotationContent = {
             <div>
@@ -281,6 +316,7 @@ class View extends Component {
           }
         />
 
+        {/* Certifications section */}
         <AnnotatedSection
           annotationContent = {
             <div>
@@ -295,6 +331,7 @@ class View extends Component {
           }
         />
 
+        {/* Versions section */}
         <AnnotatedSection
           annotationContent = {
             <div>
