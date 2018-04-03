@@ -157,12 +157,12 @@ contract PassageMain is PassageHelper {
         }
     }
 
-    function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude, string customDataJson) public 
+    function combineProducts(bytes32[] _parts, string _name, string _description, string _latitude, string _longitude) public 
     returns (bytes32 newProductId) {
 
         bytes32[] memory finalCertificationIds = mergeCertifications(_parts);
 
-        var createdProductId = createProduct(_name, _description, _latitude, _longitude, finalCertificationIds, customDataJson);
+        var createdProductId = createProduct(_name, _description, _latitude, _longitude, finalCertificationIds, "");
         for (uint i = 0; i < _parts.length; ++i) {
             nodeToParents[createdProductId].push(_parts[i]);
             productIdToProductStruct[_parts[i]].archived = true;
@@ -172,31 +172,39 @@ contract PassageMain is PassageHelper {
     }
 
     function mergeCertifications(bytes32[] parts) private returns (bytes32[] certificationsIds) {
-
-        bytes32[] storage certsIds;
+        
+        // Add all used certifications to dictionary
         for (uint i = 0; i < parts.length; ++i) {
             var product = productIdToProductStruct[parts[i]];
             bytes32[] memory partCerts = product.certificationsIds;
             for (uint j = 0; j < partCerts.length; ++j) {
-                var prevValue = dic.get(partCerts[j]);
-                dic.set(partCerts[j], prevValue + 1);
+                dic.increment(partCerts[j]);
             }
         }
 
+        // Keep certifications that are used by every part
+        uint nbCertsCombined = 0;
         bytes32[] memory dicKeys = dic.keys();
+        bytes32[] memory certsIds = new bytes32[](parts.length * 5); // Hardcoded limits for current POF
         for (uint k = 0; k < dicKeys.length; ++k) {
             if (dic.get(dicKeys[k]) == parts.length) {
-                certsIds.push(dicKeys[k]);
-                dic.remove(dicKeys[k]);
+                certsIds[k] = dicKeys[k];
+                nbCertsCombined++;
             }
+            dic.remove(dicKeys[k]);
         }
 
-        delete dic;
-        return certsIds;
+        // Prepare return values
+        bytes32[] memory returnedCerts = new bytes32[](nbCertsCombined);
+        for (uint index = 0; index < nbCertsCombined; ++index) {
+            returnedCerts[index] = certsIds[index];
+        }
+
+        return returnedCerts;
     }
 
     function getOwnerProducts() external view returns (bytes32[] productsIds) {
-        
+
         bytes32[] memory ownedProductsIds = ownerToProductsId[msg.sender];
         bytes32[] memory activeProducts = new bytes32[](ownedProductsIds.length);
 

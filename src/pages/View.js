@@ -66,6 +66,7 @@ class View extends Component {
         certificationsArray.map((certificationId) => {
           this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
             .then((certificationResult) => {
+              console.log(certificationsArray)
               const certification = {
                 name: certificationResult[0],
                 imageUrl: certificationResult[1],
