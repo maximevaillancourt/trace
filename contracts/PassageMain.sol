@@ -195,14 +195,14 @@ contract PassageMain is PassageHelper {
         return certsIds;
     }
 
-    function getOwnerProducts() external returns (bytes32[] productsIds) {
+    function getOwnerProducts() external view returns (bytes32[] productsIds) {
         // This function should be view but we need storage for the active products trickery
         bytes32[] memory ownedProductsIds = ownerToProductsId[msg.sender];
-        bytes32[] storage activeProducts;
+        bytes32[] memory activeProducts = new bytes32[](ownedProductsIds.length);
 
         for (uint i = 0; i < ownedProductsIds.length; ++i) {
             if (!productIdToProductStruct[ownedProductsIds[i]].archived) {
-                activeProducts.push(ownedProductsIds[i]);
+                activeProducts[i] = ownedProductsIds[i];
             }
         }
 
