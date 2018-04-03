@@ -26,49 +26,30 @@ class CombineScan extends Component {
     super(props)
     this.state = {
       address: '',
-      availableCertifications: [],
-      selectedCertifications: {},
-      customDataInputs: {},
+      productParts: {}
     }
     this.onChange = (address) => this.setState({ address })
   }
 
-  componentDidMount(){
-    this.props.passageInstance.getAllCertificationsIds()
-      .then((result) => {
-        result.map((certificationId) => {
-          this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
-            .then((result) => {
-              const certification = {
-                name: result[0],
-                imageUrl: result[1],
-                id: certificationId,
-              }
-              this.setState({availableCertifications: [...this.state.availableCertifications, certification]})
-            });
-        });
-    })
-  }
-
-  handleChange = (e) => {
-    const certificationId = e.target.name;
-    this.setState({selectedCertifications: {...this.state.selectedCertifications, [certificationId]: e.target.checked}})
-  }
-
-  handleCreateNewProduct = () => {
-    const selectedCertifications = this.state.selectedCertifications;
-    const certificationsArray = [];
-    Object.keys(selectedCertifications).map(key => {
-      if(selectedCertifications[key] == true){
-        certificationsArray.push(key)
+  handleMergeProducts = () => {
+    var productPartsObject = []
+    Object.keys(this.state.productParts).map(inputKey => {
+      const value = this.state.productParts[inputKey].value;
+      if (value.length > 0) {
+        productPartsObject.push(value);
       }
     })
-
-    var customDataObject = {}
-    Object.keys(this.state.customDataInputs).map(inputKey => {
-      customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
-    })
-    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
+    /* TODO Implement customdata merging with some choosing UI
+    var customData = [];
+    for (var i = 0; i < productPartsObject.length; ++i) {
+      this.props.passageInstance.getProductCustomDataById(productPartsObject[i], "latest", {from: this.props.web3Accounts[0], gas:10000000})
+        .then(function(result) {
+          console.log(customData);
+          customData.concat(result);
+        });
+    }
+    var customDataJson = JSON.stringify(customData);*/
+    this.props.passageInstance.combineProducts(productPartsObject, this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })
@@ -87,8 +68,8 @@ class CombineScan extends Component {
   }
 
   appendInput() {
-    var newInputKey = `input-${Object.keys(this.state.customDataInputs).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
-    this.setState({ customDataInputs: {...this.state.customDataInputs, [newInputKey]: {key: "", value: ""} }});
+    var newInputKey = `input-${Object.keys(this.state.productParts).length}`; // this might not be a good idea (e.g. when removing then adding more inputs)
+    this.setState({ productParts: {...this.state.productParts, [newInputKey]: {key: "", value: ""} }});
   }
 
   render() {
@@ -112,10 +93,10 @@ class CombineScan extends Component {
             <div>
               <FormGroup>
                 {
-                  Object.keys(this.state.customDataInputs).map(inputKey =>
+                  Object.keys(this.state.productParts).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
                       Identifiant du produit: 
-                      <Input placeholder="0x..." style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                      <Input placeholder="0x..." style={{flex: 1}} onChange={(e) => { this.setState({ productParts: {...this.state.productParts, [inputKey]: {...this.state.productParts[inputKey], key: inputKey, value: e.target.value} }})}}/>
                     </FormGroup>
                   )
                 }
@@ -132,7 +113,7 @@ class CombineScan extends Component {
           annotationContent = {
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
-              Informations du produit
+              Informations du produit combiné
             </div>
           }
           panelContent = {
@@ -153,27 +134,7 @@ class CombineScan extends Component {
                     classNames={{input: "form-control"}}
                   />
               </FormGroup>
-              <FormGroup>
-                <Label>
-                  Certification(s)
-                  <Link style={{marginLeft: "10px"}} to="/createcertification">Créer +</Link>
-                </Label>
-                <div>
-                  {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
-                    this.state.availableCertifications.map((certification, index) => 
-                      <div key={index}>
-                        <input style={{marginRight: "5px"}} onChange={this.handleChange} name={certification.id} type="checkbox"></input>
-                        <span>{certification.name}</span>
-                      </div>
-                    )
-                    :
-                    <div style={{marginLeft:"15px"}}>
-                      Aucune certification existante.
-                      <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
-                    </div>
-                  }
-                </div>
-              </FormGroup>
+              <p>*Les certifications et données additionnelles pourront être modifiées après la création.</p>
             </div>
           }
         />
@@ -188,7 +149,7 @@ class CombineScan extends Component {
           }
           panelContent = {
             <div>
-              <Button color="primary" onClick={this.handleCreateNewProduct}>Effectuer la combinaison</Button>
+              <Button color="primary" onClick={this.handleMergeProducts}>Effectuer la combinaison</Button>
             </div>
           }
         />

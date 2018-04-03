@@ -27,7 +27,7 @@ class View extends Component {
   }
 
   componentDidMount() {
-    this.props.passageInstance.getOwnerProducts()
+    this.props.passageInstance.getOwnerProducts.call()
       .then((result) => {
 
         result.map((productId) => {
@@ -56,7 +56,8 @@ class View extends Component {
     const products = this.state.products.map((product, index) => {
       return (
         <Link key={index} to={`/products/${product.id}`}>
-          <div>
+        <Link key={index} to={`/products/${product.id}`}>
+          <div key={index}>
             <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
             <hr/>
           </div>
@@ -107,7 +108,7 @@ class View extends Component {
           panelContent = {
             <div>
               <div>
-                <Link style={{marginLeft: "10px"}} to="/combineVisual">Mode visuel</Link>
+                <Link style={{marginLeft: "10px"}} to="/combineList">Mode liste de produits</Link>
               </div>
               <div>
                 <Link style={{marginLeft: "10px"}} to="/combineScan">Mode scan QR</Link>

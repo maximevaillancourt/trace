@@ -79,6 +79,7 @@ class View extends Component {
         certificationsArray.map((certificationId) => {
           this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
             .then((certificationResult) => {
+              console.log(certificationsArray)
               const certification = {
                 name: certificationResult[0],
                 imageUrl: certificationResult[1],
@@ -343,6 +344,20 @@ class View extends Component {
               <ul>
                 {versionsList}
               </ul>
+            </div>
+          }
+        />
+
+        <AnnotatedSection
+          annotationContent = {
+            <div>
+              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUngroup}/>
+              Séparer ce produit
+            </div>
+          }
+          panelContent = {
+            <div>
+              <Link style={{marginLeft: "10px"}} to={"/products/" + this.props.match.params.productId + "/split"}>Séparer ce produit</Link>
             </div>
           }
         />
