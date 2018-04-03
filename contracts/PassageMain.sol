@@ -196,7 +196,7 @@ contract PassageMain is PassageHelper {
     }
 
     function getOwnerProducts() external view returns (bytes32[] productsIds) {
-        // This function should be view but we need storage for the active products trickery
+        
         bytes32[] memory ownedProductsIds = ownerToProductsId[msg.sender];
         bytes32[] memory activeProducts = new bytes32[](ownedProductsIds.length);
 
