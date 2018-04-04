@@ -1,23 +1,19 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faArrowAltCircleUp from '@fortawesome/fontawesome-free-solid/faArrowAltCircleUp'
 import faUngroup from '@fortawesome/fontawesome-free-solid/faObjectUngroup'
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
 
 import CreateProduct from './Create'
 
 import {
-  Container,
   Button,
   FormGroup,
-  Label,
-  Input,
 } from 'reactstrap';
 
 class SplitProduct extends Component {
@@ -42,7 +38,7 @@ class SplitProduct extends Component {
         const customData = JSON.parse(result);
         Object.keys(customData).map(dataKey => {
           const inputKey = this.appendInput();
-          this.setState({
+          return this.setState({
             customDataInputs: {...this.state.customDataInputs, [inputKey]: {key: dataKey, value: customData[dataKey]}}
           })
         })
@@ -76,34 +72,28 @@ class SplitProduct extends Component {
 
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
-      customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+      return customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
     })
 
     this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.latitude.toString(), this.props.longitude.toString(), JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page
-        this.props.history.push('/products/' + this.params.productId);
+        return this.props.history.push('/products/' + this.params.productId);
       })
   }
 
   render() {
-    const inputProps = {
-      value: this.state.address,
-      onChange: this.onChange,
-      placeholder: "Emplacement (adresse, lat/long)"
-    }
-
     return (
       <div>
         {/* Section des produits */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUngroup}/>
               Produits dérivés
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <FormGroup>
                 {
@@ -119,13 +109,13 @@ class SplitProduct extends Component {
 
         {/* Section des actions */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faWrench}/>
               Actions
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <Button color="primary" onClick={this.handleCreateNewProduct}>Effectuer la séparation</Button>
             </div>

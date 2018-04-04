@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
-import QRCode from 'qrcode.react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
@@ -12,12 +11,10 @@ import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
 import faStar from '@fortawesome/fontawesome-free-solid/faStar'
 
 import {
-  Container,
   Button,
   FormGroup,
   Label,
   Input,
-  Alert
 } from 'reactstrap';
 
 class CombineScan extends Component {
@@ -38,6 +35,7 @@ class CombineScan extends Component {
       if (value.length > 0) {
         productPartsObject.push(value);
       }
+      return false;
     })
     /* TODO Implement customdata merging with some choosing UI
     var customData = [];
@@ -83,13 +81,13 @@ class CombineScan extends Component {
       <div>
         {/* Section d'ajout des identifiants */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faqrcode}/>
               Identifiants des produits
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <FormGroup>
                 {
@@ -110,13 +108,13 @@ class CombineScan extends Component {
 
         {/* Section des informations du produit combiné */}       
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
               Informations du produit combiné
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <FormGroup>
                   <Label>Nom</Label>
@@ -141,13 +139,13 @@ class CombineScan extends Component {
 
         {/* Section des actions */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faWrench}/>
               Actions
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <Button color="primary" onClick={this.handleMergeProducts}>Effectuer la combinaison</Button>
             </div>

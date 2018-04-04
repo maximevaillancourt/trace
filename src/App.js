@@ -13,12 +13,10 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
   Container,
-  Button
 } from 'reactstrap';
 
 class App extends Component {
@@ -75,29 +73,18 @@ class App extends Component {
   render() {
     const bodyColor = "hsl(136.7, 25%, 98.1%)";
 
-    const activeLinkStyle = {
-      fontWeight: 'bold',
-      color: 'red'
-     }
-
     const appJSX = (
       <div style={{minHeight:"100vh", borderTop:"4px solid #50b796", backgroundColor: "black", fontFamily: "Barlow"}}>
         <Navbar color="faded" light style={{paddingTop: "1em", paddingBottom:"2em", backgroundColor: bodyColor}} expand="md">
           <Container>
-            <Link to='/'><img style={{width:"130px", marginRight: "20px"}} src="/logo-black.svg"/></Link>
+            <Link to='/'><img alt="Logo Trace" style={{width:"130px", marginRight: "20px"}} src="/logo-black.svg"/></Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
-              {/*
-              <Nav className="mr-auto" navbar>
-                <NavItem><NavLink tag={Link} to="/create">Produits</NavLink></NavItem>
-                <NavItem><NavLink tag={Link} to="/createcertification">Certifications</NavLink></NavItem>
-              </Nav>
-              */}
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <NavLink tag={Link} to="#">
                     Mon compte
-                    <img style={{marginLeft: "10px", width:"20px", height:"20px", borderRadius:"3px"}} src={blockies.createDataURL({ scale: 5, seed: this.props.web3 && this.props.passageInstance && this.props.web3Accounts ? this.props.web3Accounts[0] : ""})}/>
+                    <img alt="Avatar de profil" style={{marginLeft: "10px", width:"20px", height:"20px", borderRadius:"3px"}} src={blockies.createDataURL({ scale: 5, seed: this.props.web3 && this.props.passageInstance && this.props.web3Accounts ? this.props.web3Accounts[0] : ""})}/>
                   </NavLink>
                 </NavItem>
               </Nav>

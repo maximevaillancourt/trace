@@ -1,24 +1,20 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import * as mainActions from '../actions/mainActions';
-import QRCode from 'qrcode.react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faqrcode from '@fortawesome/fontawesome-free-solid/faQrcode'
 import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
 import faStar from '@fortawesome/fontawesome-free-solid/faStar'
 import faList from '@fortawesome/fontawesome-free-solid/faList'
 
 import {
-  Container,
   Button,
   FormGroup,
   Label,
   Input,
-  Alert
 } from 'reactstrap';
 
 class CombineList extends Component {
@@ -48,8 +44,10 @@ class CombineList extends Component {
               }
               this.setState({availableCertifications: [...this.state.availableCertifications, certification]})
             });
+          return false;
         });
-    }),
+    })
+
     this.props.passageInstance.getOwnerProducts()
       .then((result) => {
 
@@ -71,6 +69,7 @@ class CombineList extends Component {
             .catch((error) => {
               console.log(error);
             })
+          return false;
         })
       });
   }
@@ -84,14 +83,16 @@ class CombineList extends Component {
     const selectedCertifications = this.state.selectedCertifications;
     const certificationsArray = [];
     Object.keys(selectedCertifications).map(key => {
-      if(selectedCertifications[key] == true){
+      if(selectedCertifications[key] === true){
         certificationsArray.push(key)
       }
+      return false;
     })
 
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+      return false;
     })
     this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
@@ -143,13 +144,13 @@ class CombineList extends Component {
       <div>
         {/* Section de sélection des produits */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faList}/>
               Sélection des produits
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               {products && products.length > 0 ? products : 
               <div>
@@ -162,13 +163,13 @@ class CombineList extends Component {
 
         {/* Section des informations du produit combiné */}       
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
               Informations du produit combiné
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <FormGroup>
                   <Label>Nom</Label>
@@ -213,13 +214,13 @@ class CombineList extends Component {
 
         {/* Section des actions */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faWrench}/>
               Actions
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <Button color="primary" onClick={this.handleCreateNewProduct}>Effectuer la combinaison</Button>
             </div>

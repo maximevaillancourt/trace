@@ -9,7 +9,6 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faArrowAltCircleUp from '@fortawesome/fontawesome-free-solid/faArrowAltCircleUp'
 
 import {
-  Container,
   Button,
   FormGroup,
   Label,
@@ -50,6 +49,7 @@ class Update extends Component {
           this.setState({
             customDataInputs: {...this.state.customDataInputs, [inputKey]: {key: dataKey, value: customData[dataKey]}}
           })
+          return false;
         })
       })
       // TODO: display an error upon failure
@@ -90,6 +90,7 @@ class Update extends Component {
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+      return false;
     })
 
     // actually call the smart contract method
@@ -110,13 +111,13 @@ class Update extends Component {
     return (
       <div>
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faArrowAltCircleUp}/>
               Nouvelles informations
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <FormGroup>
                   <Label>Emplacement actuel</Label>

@@ -16,7 +16,6 @@ import faUngroup from '@fortawesome/fontawesome-free-solid/faObjectUngroup'
 import AnnotatedSection from '../components/AnnotatedSection'
 
 import {
-  Container,
   Button,
   Table
 } from 'reactstrap';
@@ -52,7 +51,9 @@ class View extends Component {
   // when requesting another product, fetch it
   // (required because the component stays mounted, and only the props change)
   componentWillReceiveProps(nextProps){
-    this.fetchProduct(nextProps);
+    if(nextProps){
+      this.fetchProduct(nextProps);
+    }
   }
 
   // fetch a product from the blockchain by productId (optionally, a "versionId" of that product can be specified)
@@ -77,7 +78,7 @@ class View extends Component {
         // then, we fetch the product's certification details
         const certificationsArray = result[6];
         certificationsArray.map((certificationId) => {
-          this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
+          return this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
             .then((certificationResult) => {
               console.log(certificationsArray)
               const certification = {
@@ -101,6 +102,7 @@ class View extends Component {
               }
               this.setState({versions: [...this.state.versions, version]})
             });
+          return false;
         });
       })
       .catch((error) => {
@@ -153,7 +155,7 @@ class View extends Component {
     const certificationsList = this.state.certifications.map((certification, index) => {
       return (
         <div style={{display:"inline-block", marginRight:"15px", width:"100px", height:"100px"}} key={index}>
-          {certification.imageUrl ? <img style={{width:"100%"}} src={certification.imageUrl}/> : <div>{certification.name}</div>}
+          {certification.imageUrl ? <img style={{width:"100%"}} alt={"Produit certifié " + certification.name} src={certification.imageUrl}/> : <div>{certification.name}</div>}
         </div>
       )
     })
@@ -208,13 +210,13 @@ class View extends Component {
       <div>
         {/* Product definition section */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faInfoCircle}/>
               Définition du produit
             </div>
           }
-          panelContent = {
+          panelContent={
             <Table>
               <tbody>
                 <tr>
@@ -244,13 +246,13 @@ class View extends Component {
 
         {/* QR code section */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faThumbtack}/>
               Informations de suivi
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <QRCode value={this.props.match.params.productId}/>
               <div>
@@ -263,15 +265,15 @@ class View extends Component {
 
         {/* Actions section */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faWrench}/>
               Actions
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
-              { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() != this.state.versions.slice(-1)[0].id.toString() ?
+              { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() !== this.state.versions.slice(-1)[0].id.toString() ?
                   <Link to={"/products/" + this.props.match.params.productId}>
                     <Button color="info">
                       Voir la dernière version
@@ -291,13 +293,13 @@ class View extends Component {
 
         {/* Google Maps section */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faMapMarker}/>
               Emplacement géographique
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               {currentLat && currentLng ? 
                 <div>
@@ -318,13 +320,13 @@ class View extends Component {
 
         {/* Certifications section */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faCertificate}/>
               Certifications attribuées
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               {certificationsList && certificationsList.length > 0 ? certificationsList : "Aucune certification."}
             </div>
@@ -333,13 +335,13 @@ class View extends Component {
 
         {/* Versions section */}
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faHistory}/>
               Historique des versions
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <ul>
                 {versionsList}
@@ -349,13 +351,13 @@ class View extends Component {
         />
 
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUngroup}/>
               Séparer ce produit
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <Link style={{marginLeft: "10px"}} to={"/products/" + this.props.match.params.productId + "/split"}>Séparer ce produit</Link>
             </div>

@@ -4,7 +4,6 @@ import * as mainActions from '../actions/mainActions';
 import { Link } from 'react-router-dom'
 
 import {
-  Container,
   FormGroup,
   Input,
   InputGroup,

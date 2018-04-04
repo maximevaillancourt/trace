@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
 
 import {
-  Container,
   Button,
   FormGroup,
   Label,
@@ -35,13 +33,13 @@ class CreateCertification extends Component {
     return (
       <div>
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faCertificate}/>
               Nouvelle certification
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <FormGroup>
                   <Label>Nom</Label>

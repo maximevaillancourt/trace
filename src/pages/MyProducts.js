@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
@@ -11,10 +9,6 @@ import faGroup from '@fortawesome/fontawesome-free-solid/faObjectGroup'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import Search from '../components/Search';
-
-import {
-  Container
-} from 'reactstrap';
 
 class View extends Component {
 
@@ -48,6 +42,7 @@ class View extends Component {
             .catch((error) => {
               console.log(error);
             })
+          return false;
         })
       });
   }
@@ -67,27 +62,27 @@ class View extends Component {
     return (
       <div>
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faSearch}/>
               Consulter un produit
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <Search/>
             </div>
           }
         />
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faList}/>
               Mes produits
               <Link style={{marginLeft: "10px"}} to="/create">Ajouter +</Link>
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               {products && products.length > 0 ? products : 
               <div>
@@ -98,13 +93,13 @@ class View extends Component {
           }
         />
         <AnnotatedSection
-          annotationContent = {
+          annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faGroup}/>
               Combiner des produits
             </div>
           }
-          panelContent = {
+          panelContent={
             <div>
               <div>
                 <Link style={{marginLeft: "10px"}} to="/combineList">Mode liste de produits</Link>
