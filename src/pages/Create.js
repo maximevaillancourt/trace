@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 import ebayCategoryMap from '../utils/ebay-categories.json'
@@ -25,9 +24,12 @@ class Create extends Component {
   constructor(props) {
     super(props)
 
-    // initialize the inputs' state
-    // TODO: use this internal state for 'name', 'description' and 'lat'+'lng' (instead of the Redux store)
+    // initialize the component's state
     this.state = {
+      name: '',
+      description: '',
+      latitude: '',
+      longitude: '',
       address: '',
       availableCertifications: [],
       selectedCertifications: {},
@@ -76,10 +78,13 @@ class Create extends Component {
     })
 
     // generate a 'clean' representation of the custom data
-    // TODO: ignore fields with empty values
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
-      return customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+      const input = this.state.customDataInputs[inputKey]
+      if(input.key.trim() !== "" && input.value.trim() !== ""){
+        customDataObject[input.key] = input.value;
+      }
+      return false;
     })
 
     // generate a 'clean' representation of the categories for use as custom data fields
@@ -89,7 +94,7 @@ class Create extends Component {
     })
 
     // actually call the smart contract method
-    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.createProduct(this.state.name, this.state.description, this.state.latitude.toString(), this.state.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // since we use an event watcher to redirect the user to the newly created product's View page,
         // nothing actually happens here after we create a product
@@ -105,8 +110,7 @@ class Create extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        // TODO: place the data in the internal state instead of the Redux instance
-        return this.props.dispatch(mainActions.updateLatLng(latLng))
+        this.setState({latitude: latLng.lat, longitude: latLng.lng})
       })
       .catch(error => console.error('Error', error))
   }
@@ -159,11 +163,15 @@ class Create extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        // set data inputs for every aspect
-        this.setState({ customDataInputs: {} })
-        data.aspects.map(aspect => {
-          return this.appendInput(aspect.localizedAspectName, "")
-        })
+        if(!data.aspects){
+          console.warn("The request to the eBay API failed. The API token is probably expired.") // TODO: update this upon implementing the OAuth token handler
+        } else {
+          // set data inputs for every aspect
+          this.setState({ customDataInputs: {} })
+          data.aspects.map(aspect => {
+            return this.appendInput(aspect.localizedAspectName, "")
+          })
+        }
       })
   }
 
@@ -194,11 +202,11 @@ class Create extends Component {
             <div>
               <FormGroup>
                   <Label>Nom</Label>
-                  <Input placeholder="Nom du produit" value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
+                  <Input placeholder="Nom du produit" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Description</Label>
-                  <Input placeholder="Description sommaire du produit" value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
+                  <Input placeholder="Description sommaire du produit" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Emplacement actuel</Label>
@@ -285,14 +293,8 @@ class Create extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    products: state.temporaryGodReducer.products,
-    web3Accounts: state.temporaryGodReducer.web3Accounts,
-    name: state.temporaryGodReducer.name,
-    description: state.temporaryGodReducer.description,
-    latitude: state.temporaryGodReducer.latitude,
-    longitude: state.temporaryGodReducer.longitude,
-    alert: state.temporaryGodReducer.alert,
+    passageInstance: state.reducer.passageInstance,
+    web3Accounts: state.reducer.web3Accounts
   };
 }
 

@@ -14,24 +14,20 @@ import SplitProduct from './pages/SplitProduct';
 
 const Routes = () => (
   <Router>
-    <div>
-      <App>
-        <Switch>
-          <Route exact path="/" component={MyProducts} />
-          <Route exact path="/create" component={Create} />
-          <Route exact path="/CreateCertification" component={CreateCertification} />
-          <Route exact path="/products/:productId" component={View} />
-          {/* TODO: Split product */}
-          <Route exact path="/products/:productId/split" component={SplitProduct} />
-          {/* TODO: Combine products */}
-          <Route exact path="/combineScan" component={CombineScan} />
-          <Route exact path="/combineList" component={CombineList} />
-          <Route exact path="/products/:productId/versions/:versionId" component={View} />
-          <Route exact path="/products/:productId/update" component={Update} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </App>
-    </div>
+    <App>
+      <Switch>
+        <Route exact path="/" component={MyProducts} />
+        <Route exact path="/create" component={Create} />
+        <Route exact path="/CreateCertification" component={CreateCertification} />
+        <Route exact path="/products/:productId" component={View} />
+        <Route exact path="/products/:productId/versions/:versionId" component={View} />
+        <Route exact path="/products/:productId/update" component={Update} />
+        <Route exact path="/products/:productId/split" component={SplitProduct} />
+        <Route exact path="/combineScan" component={CombineScan} />
+        <Route exact path="/combineList" component={CombineList} />
+        <Route path="*" component={NotFound} />
+      </Switch>
+    </App>
   </Router>
 );
 

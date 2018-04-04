@@ -26,19 +26,19 @@ class App extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-        isOpen: false
+      isOpen: false
     };
   }
   toggle() {
-      this.setState({
-          isOpen: !this.state.isOpen
-      });
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
   }
 
   componentWillMount() {
     getWeb3
-      .then(results => {
-        this.props.dispatch(mainActions.setWeb3Instance(results.web3))
+      .then(data => {
+        this.props.dispatch(mainActions.setWeb3Instance(data.web3))
         this.instantiateContract()
       })
       .catch((err) => {
@@ -60,7 +60,8 @@ class App extends Component {
         const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
         event.watch((error, result) => {
           if (!error){
-            this.props.history.push('/products/' + result.args.newProductId); // upon product creation, redirect to the product page
+            // upon product creation, redirect to the product page
+            this.props.history.push('/products/' + result.args.newProductId);
           } else {
             console.log(error);
           }
@@ -122,9 +123,9 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    web3: state.temporaryGodReducer.web3,
-    web3Accounts: state.temporaryGodReducer.web3Accounts,
-    passageInstance: state.temporaryGodReducer.passageInstance
+    web3: state.reducer.web3,
+    web3Accounts: state.reducer.web3Accounts,
+    passageInstance: state.reducer.passageInstance
   };
 }
 

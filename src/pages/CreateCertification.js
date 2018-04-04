@@ -60,8 +60,8 @@ class CreateCertification extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    web3Accounts: state.temporaryGodReducer.web3Accounts,
+    passageInstance: state.reducer.passageInstance,
+    web3Accounts: state.reducer.web3Accounts,
   };
 }
 

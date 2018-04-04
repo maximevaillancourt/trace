@@ -11,7 +11,6 @@ import faWrench from '@fortawesome/fontawesome-free-solid/faWrench'
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 import faCertificate from '@fortawesome/fontawesome-free-solid/faCertificate'
 import faHistory from '@fortawesome/fontawesome-free-solid/faHistory'
-import faUngroup from '@fortawesome/fontawesome-free-solid/faObjectUngroup'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 
@@ -80,7 +79,6 @@ class View extends Component {
         certificationsArray.map((certificationId) => {
           return this.props.passageInstance.getCertificationById(String(certificationId).valueOf())
             .then((certificationResult) => {
-              console.log(certificationsArray)
               const certification = {
                 name: certificationResult[0],
                 imageUrl: certificationResult[1],
@@ -286,7 +284,11 @@ class View extends Component {
                     </Button>
                   </Link>
               }
-              <Link style={{marginLeft: "10px"}} to="/split">Séparer ce produit</Link>
+              <Link style={{marginLeft: "10px"}} to={"/products/" + this.props.match.params.productId + "/split"}>
+                <Button color="warning">
+                  Séparer ce produit
+                </Button>
+              </Link>
             </div>
           }
         />
@@ -349,20 +351,6 @@ class View extends Component {
             </div>
           }
         />
-
-        <AnnotatedSection
-          annotationContent={
-            <div>
-              <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUngroup}/>
-              Séparer ce produit
-            </div>
-          }
-          panelContent={
-            <div>
-              <Link style={{marginLeft: "10px"}} to={"/products/" + this.props.match.params.productId + "/split"}>Séparer ce produit</Link>
-            </div>
-          }
-        />
       </div>
     );
   }
@@ -370,7 +358,7 @@ class View extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance
+    passageInstance: state.reducer.passageInstance
   };
 }
 

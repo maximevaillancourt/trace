@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 import { Link } from 'react-router-dom'
 
 import {
@@ -14,16 +12,22 @@ import {
 
 class Search extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      productIdToView: ""
+    };
+  }
+
   render() {
-    
     return (
       <div>
         <FormGroup>
           <Label>Identifiant unique du produit à consulter</Label>
           <InputGroup>
-            <Input placeholder="0x..." value={this.props.productIdToView} onChange={(e) => {this.props.dispatch(mainActions.updateProductIdToView(e.target.value))}}></Input>
+            <Input placeholder="0x..." value={this.state.productIdToView} onChange={(e) => {this.setState({productIdToView: e.target.value})}}></Input>
             <InputGroupAddon addonType="append">
-              <Link to={"/products/" + this.props.productIdToView}><Button style={{borderBottomLeftRadius:"0", borderTopLeftRadius:"0"}} color="primary">Consulter</Button></Link>
+              <Link to={"/products/" + this.state.productIdToView}><Button style={{borderBottomLeftRadius:"0", borderTopLeftRadius:"0"}} color="primary">Consulter</Button></Link>
             </InputGroupAddon>
           </InputGroup>
         </FormGroup>        
@@ -32,11 +36,4 @@ class Search extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    productIdToView: state.temporaryGodReducer.productIdToView
-  };
-}
-
-export default connect(mapStateToProps)(Search);
+export default Search;

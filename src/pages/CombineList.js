@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
@@ -22,6 +21,10 @@ class CombineList extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      name: '',
+      description: '',
+      latitude: '',
+      longitude: '',
       address: '',
       availableCertifications: [],
       selectedCertifications: {},
@@ -94,7 +97,7 @@ class CombineList extends Component {
       customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
       return false;
     })
-    this.props.passageInstance.createProduct(this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.createProduct(this.state.name, this.state.description, this.state.latitude.toString(), this.state.longitude.toString(), certificationsArray, JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })
@@ -107,7 +110,7 @@ class CombineList extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        return this.props.dispatch(mainActions.updateLatLng(latLng))
+        this.setState({latitude: latLng.lat, longitude: latLng.lng})
       })
       .catch(error => console.error('Error', error))
   }
@@ -120,12 +123,12 @@ class CombineList extends Component {
   render() {
     const products = this.state.products.map((product, index) => {
       return (
-        <div>
+        <div key={index}>
           <FormGroup>
-              <Input type="checkbox" name="productSelection" onChange={(e) => {}}></Input>
+            <Input type="checkbox" name="productSelection" onChange={(e) => {}}></Input>
           </FormGroup>
           <Link to={`/products/${product.id}`}>
-            <div key={index}>
+            <div>
               <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
               <hr/>
             </div>
@@ -173,11 +176,11 @@ class CombineList extends Component {
             <div>
               <FormGroup>
                   <Label>Nom</Label>
-                  <Input placeholder="Nom du produit" value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
+                  <Input placeholder="Nom du produit" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Description</Label>
-                  <Input placeholder="Description sommaire du produit" value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
+                  <Input placeholder="Description sommaire du produit" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Emplacement actuel</Label>
@@ -233,14 +236,8 @@ class CombineList extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    products: state.temporaryGodReducer.products,
-    web3Accounts: state.temporaryGodReducer.web3Accounts,
-    name: state.temporaryGodReducer.name,
-    description: state.temporaryGodReducer.description,
-    latitude: state.temporaryGodReducer.latitude,
-    longitude: state.temporaryGodReducer.longitude,
-    alert: state.temporaryGodReducer.alert,
+    passageInstance: state.reducer.passageInstance,
+    web3Accounts: state.reducer.web3Accounts
   };
 }
 

@@ -117,8 +117,8 @@ class View extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    productIdToView: state.temporaryGodReducer.productIdToView
+    passageInstance: state.reducer.passageInstance,
+    productIdToView: state.reducer.productIdToView
   };
 }
 

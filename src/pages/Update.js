@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
@@ -26,10 +25,9 @@ class Update extends Component {
   constructor(props) {
     super(props)
 
-    // TODO: use this internal state for the input fields
-    // instead of using the Redux store (which should only hold
-    // the web3 accounts and contract instances)
     this.state = {
+      latitude: '',
+      longitude: '',
       address: '',
       customDataInputs: {}
     }
@@ -77,24 +75,25 @@ class Update extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        // TODO: place the data in the internal state instead of the Redux instance
-        return this.props.dispatch(mainActions.updateLatLng(latLng))
+        this.setState({latitude: latLng.lat, longitude: latLng.lng})
       })
       .catch(error => console.error('Error', error))
   }
 
   // method that sends the updated data to the smart contract "updateProduct" method
   handleUpdateProduct = () => {
-    // generate a 'clean' object representing the custom data fields
-    // TODO: prevent saving empty custom data fields
+    // generate a 'clean' representation of the custom data
     var customDataObject = {}
     Object.keys(this.state.customDataInputs).map(inputKey => {
-      customDataObject[this.state.customDataInputs[inputKey].key] = this.state.customDataInputs[inputKey].value;
+      const input = this.state.customDataInputs[inputKey]
+      if(input.key.trim() !== "" && input.value.trim() !== ""){
+        customDataObject[input.key] = input.value;
+      }
       return false;
     })
 
     // actually call the smart contract method
-    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.props.latitude.toString(), this.props.longitude.toString(), JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.updateProduct(String(this.params.productId).valueOf(), this.state.latitude.toString(), this.state.longitude.toString(), JSON.stringify(customDataObject), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // redirect to the product page upon success
         this.props.history.push('/products/' + this.params.productId);
@@ -153,13 +152,8 @@ class Update extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    products: state.temporaryGodReducer.products,
-    web3Accounts: state.temporaryGodReducer.web3Accounts,
-    name: state.temporaryGodReducer.name,
-    description: state.temporaryGodReducer.description,
-    latitude: state.temporaryGodReducer.latitude,
-    longitude: state.temporaryGodReducer.longitude,
+    passageInstance: state.reducer.passageInstance,
+    web3Accounts: state.reducer.web3Accounts
   };
 }
 

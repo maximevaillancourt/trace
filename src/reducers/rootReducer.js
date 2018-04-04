@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
-import temporaryGodReducer from './temporaryGodReducer';
+import reducer from './passageReducer';
 
 const rootReducer = combineReducers({
-  temporaryGodReducer
+  reducer
 });
 
 export default rootReducer;

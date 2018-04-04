@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
 
@@ -22,6 +21,10 @@ class CombineScan extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      name: '',
+      description: '',
+      latitude: '',
+      longitude: '',
       address: '',
       productParts: {}
     }
@@ -47,7 +50,7 @@ class CombineScan extends Component {
         });
     }
     var customDataJson = JSON.stringify(customData);*/
-    this.props.passageInstance.combineProducts(productPartsObject, this.props.name, this.props.description, this.props.latitude.toString(), this.props.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.combineProducts(productPartsObject, this.state.name, this.state.description, this.state.latitude.toString(), this.state.longitude.toString(), {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })
@@ -60,7 +63,7 @@ class CombineScan extends Component {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        return this.props.dispatch(mainActions.updateLatLng(latLng))
+        this.setState({latitude: latLng.lat, longitude: latLng.lng})
       })
       .catch(error => console.error('Error', error))
   }
@@ -118,11 +121,11 @@ class CombineScan extends Component {
             <div>
               <FormGroup>
                   <Label>Nom</Label>
-                  <Input placeholder="Nom du produit" value={this.props.name} onChange={(e) => {this.props.dispatch(mainActions.updateName(e.target.value))}}></Input>
+                  <Input placeholder="Nom du produit" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Description</Label>
-                  <Input placeholder="Description sommaire du produit" value={this.props.description} onChange={(e) => {this.props.dispatch(mainActions.updateDescription(e.target.value))}}></Input>
+                  <Input placeholder="Description sommaire du produit" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Emplacement actuel</Label>
@@ -158,14 +161,8 @@ class CombineScan extends Component {
 
 function mapStateToProps(state) {
   return {
-    passageInstance: state.temporaryGodReducer.passageInstance,
-    products: state.temporaryGodReducer.products,
-    web3Accounts: state.temporaryGodReducer.web3Accounts,
-    name: state.temporaryGodReducer.name,
-    description: state.temporaryGodReducer.description,
-    latitude: state.temporaryGodReducer.latitude,
-    longitude: state.temporaryGodReducer.longitude,
-    alert: state.temporaryGodReducer.alert,
+    passageInstance: state.reducer.passageInstance,
+    web3Accounts: state.reducer.web3Accounts
   };
 }
 
