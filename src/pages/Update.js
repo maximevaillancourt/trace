@@ -51,11 +51,10 @@ class Update extends Component {
           return false;
         })
       })
-      // TODO: display an error upon failure
       .catch((error) => {
-        this.setState({
-          customDataJson: ""
-        })
+        // if something goes wrong when fetching the product, we just redirect
+        // to the home page to prevent displaying false/wrong information
+        return this.props.history.push('/');
       })
   }
 

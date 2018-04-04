@@ -96,20 +96,9 @@ class View extends Component {
         });
       })
       .catch((error) => {
-        // if something goes wrong when fetching the product,
-        // we just empty the state of the page to prevent displaying
-        // false/wrong information
-        // TODO: display an error message on product fetch failure
-        this.setState({
-          name: "",
-          description: "",
-          latitude: "",
-          longitude: "",
-          versionCreationDate: "",
-          versions: [],
-          certifications: [],
-          id: "",
-        })
+        // if something goes wrong when fetching the product, we just redirect
+        // to the home page to prevent displaying false/wrong information
+        return this.props.history.push('/');
       })
 
     // also, we fetch the product's custom data fields and 
@@ -121,9 +110,9 @@ class View extends Component {
         })
       })
       .catch((error) => {
-        this.setState({
-          customDataJson: ""
-        })
+        // if something goes wrong when fetching the product, we just redirect
+        // to the home page to prevent displaying false/wrong information
+        return this.props.history.push('/');
       })
   }
 
