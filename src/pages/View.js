@@ -47,14 +47,6 @@ class View extends Component {
     this.fetchProduct(this.props);
   }
 
-  // when requesting another product, fetch it
-  // (required because the component stays mounted, and only the props change)
-  componentWillReceiveProps(nextProps){
-    if(nextProps){
-      this.fetchProduct(nextProps);
-    }
-  }
-
   // fetch a product from the blockchain by productId (optionally, a "versionId" of that product can be specified)
   fetchProduct(props){
 
