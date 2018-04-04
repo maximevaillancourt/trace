@@ -26,6 +26,7 @@ class CombineScan extends Component {
       latitude: '',
       longitude: '',
       address: '',
+      buttonDisabled: false,
       productParts: {}
     }
     this.onChange = (address) => this.setState({ address })
@@ -56,14 +57,13 @@ class CombineScan extends Component {
       })
   }
 
-  handleSelect = (address, placeId) => {
-    this.setState({ address })
+  handleSelect = (address) => {
+    this.setState({address, buttonDisabled: true})
 
     geocodeByAddress(this.state.address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        this.setState({latitude: latLng.lat, longitude: latLng.lng})
+        this.setState({latitude: latLng.lat, longitude: latLng.lng, buttonDisabled: false})
       })
       .catch(error => console.error('Error', error))
   }
@@ -150,7 +150,7 @@ class CombineScan extends Component {
           }
           panelContent={
             <div>
-              <Button color="primary" onClick={this.handleMergeProducts}>Effectuer la combinaison</Button>
+              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleMergeProducts}>Effectuer la combinaison</Button>
             </div>
           }
         />

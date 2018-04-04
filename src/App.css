@@ -3,6 +3,12 @@
   border-color: hsl(161, 42%, 52%);
 }
 
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #959595 !important;
+  background-color: #e4e4e4 !important;
+  border-color: #e4e4e4 !important;
+}
+
 .btn-primary:hover{
   background-color:  hsl(161, 42%, 42%);
   border-color: hsl(161, 42%, 42%);

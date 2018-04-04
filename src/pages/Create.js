@@ -35,6 +35,7 @@ class Create extends Component {
       selectedCertifications: {},
       customDataInputs: {},
       selectedCategories: {},
+      buttonDisabled: false,
       ebayCategoryMap: ebayCategoryMap
     }
     this.onChange = (address) => this.setState({ address })
@@ -101,16 +102,13 @@ class Create extends Component {
       })
   }
 
-  // method that gets the (lat, lng) pair of the selected location
-  // in the location autocompletion search bar
-  handleGeoSelect = (address, placeId) => {
-    this.setState({ address })
+  handleGeoSelect = (address) => {
+    this.setState({address, buttonDisabled: true})
 
     geocodeByAddress(this.state.address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        this.setState({latitude: latLng.lat, longitude: latLng.lng})
+        this.setState({latitude: latLng.lat, longitude: latLng.lng, buttonDisabled: false})
       })
       .catch(error => console.error('Error', error))
   }
@@ -282,7 +280,7 @@ class Create extends Component {
                   Ajouter un champ de données personnalisé
                 </Link>
               </FormGroup>
-              <Button color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
+              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
             </div>
           }
         />

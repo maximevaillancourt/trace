@@ -29,6 +29,7 @@ class Update extends Component {
       latitude: '',
       longitude: '',
       address: '',
+      updateButtonDisabled: false,
       customDataInputs: {}
     }
     this.onChange = (address) => this.setState({ address })
@@ -69,13 +70,12 @@ class Update extends Component {
   // method that gets the (lat, lng) pair of the selected location
   // in the location autocompletion search bar
   handleSelect = (address) => {
-    this.setState({ address })
+    this.setState({address, updateButtonDisabled: true})
 
     geocodeByAddress(this.state.address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        // TODO: disable the "update" button until a lat/long is returned from the Google Maps API
-        this.setState({latitude: latLng.lat, longitude: latLng.lng})
+        this.setState({latitude: latLng.lat, longitude: latLng.lng, updateButtonDisabled: false})
       })
       .catch(error => console.error('Error', error))
   }
@@ -141,7 +141,7 @@ class Update extends Component {
                   Ajouter un champ de données personnalisé
                 </Link>
               </FormGroup>
-              <Button color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
+              <Button disabled={this.state.updateButtonDisabled} color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>
             </div>
           }
         />
