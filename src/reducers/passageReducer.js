@@ -1,8 +1,6 @@
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
 
-// TODO: split into multiple (cleaner) reducers
-// see best practices here: https://medium.com/@kylpo/redux-best-practices-eef55a20cc72
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case types.SET_WEB3_INSTANCE:
