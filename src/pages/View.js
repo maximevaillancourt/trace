@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import QRCode from 'qrcode.react'
 import { Link } from 'react-router-dom'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker, Polyline } from "react-google-maps"
+import { withGoogleMap, GoogleMap, Marker, Polyline } from "react-google-maps"
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faInfoCircle from '@fortawesome/fontawesome-free-solid/faInfoCircle'
@@ -180,7 +180,7 @@ class View extends Component {
     )
 
     // the actual map component, which contains the markers and the line
-    const MyMapComponent = withScriptjs(withGoogleMap((props) =>
+    const MyMapComponent = withGoogleMap((props) =>
       <GoogleMap
         defaultZoom={8}
         defaultCenter={{ lat: currentLat, lng: currentLng }}
@@ -190,7 +190,7 @@ class View extends Component {
           {polylineJSX}
         </div>
       </GoogleMap>
-    ))
+    )
 
     // used to define the customData to display whether it's available in the state
     const customData = this.state.customDataJson ? JSON.parse(this.state.customDataJson) : {};
@@ -299,7 +299,6 @@ class View extends Component {
                 <div>
                   <pre>{currentLat}, {currentLng}</pre>
                   <MyMapComponent
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDvLv2v8JgbUGp4tEM7wRmDB0fXbO_Em4I&libraries=geometry,drawing,places"
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: `400px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
