@@ -60,6 +60,9 @@ contract PassageMain is PassageHelper {
         // TODO: add ownerOf modifier (causes 'revert' error when added, let's try to debug and fix that)
         // TODO: check if msg.sender == product owner OR if msg.sender is god
 
+        // Get base product from storage
+        Product storage product = productIdToProductStruct[_productId];
+
         // Generate a pseudo-random product ID
         // from the current time, the sender's address, and the productId
         bytes32 newVersionId = keccak256(now, msg.sender, _productId);
@@ -79,9 +82,6 @@ contract PassageMain is PassageHelper {
 
         // Save new product version ID
         productVersionIds.push(newVersionId);
-
-        // Get base product from storage
-        Product storage product = productIdToProductStruct[_productId];
 
         // Add new version ID to product
         product.versions.push(newVersionId);
