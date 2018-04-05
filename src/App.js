@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux';
+import Notifications, {notify} from 'react-notify-toast'
 
 import PassageMainContractJson from '../build/contracts/PassageMain.json'
 import getWeb3 from './utils/getWeb3'
@@ -60,8 +61,8 @@ class App extends Component {
         const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
         event.watch((error, result) => {
           if (!error){
-            // upon product creation, redirect to the product page
-            this.props.history.push('/products/' + result.args.newProductId);
+            this.props.history.push('/');
+            notify.show("Produit créé avec succès.", "custom", 5000, { background: '#50b796', text: "#FFFFFF" });
           } else {
             console.log(error);
           }
@@ -76,6 +77,7 @@ class App extends Component {
 
     const appJSX = (
       <div style={{minHeight:"100vh", borderTop:"4px solid #50b796", backgroundColor: "black", fontFamily: "Barlow"}}>
+        <Notifications/>
         <Navbar color="faded" light style={{paddingTop: "1em", paddingBottom:"2em", backgroundColor: bodyColor}} expand="md">
           <Container>
             <Link to='/'><img alt="Logo Trace" style={{width:"130px", marginRight: "20px"}} src="/logo-black.svg"/></Link>
