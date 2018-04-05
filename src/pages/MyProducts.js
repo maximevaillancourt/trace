@@ -10,7 +10,7 @@ import faGroup from '@fortawesome/fontawesome-free-solid/faObjectGroup'
 import AnnotatedSection from '../components/AnnotatedSection'
 import Search from '../components/Search';
 
-class View extends Component {
+class MyProducts extends Component {
 
   constructor(props) {
     super(props);
@@ -21,13 +21,11 @@ class View extends Component {
   }
 
   componentDidMount() {
-    this.props.passageInstance.getOwnerProducts.call()
+    this.props.passageInstance.getOwnerProducts({ from: this.props.web3Accounts[0] })
       .then((result) => {
-
         result.map((productId) => {
           this.props.passageInstance.getProductById(String(productId).valueOf(), "latest")
             .then((result) => {
-              var _this = this;
               const product = {
                 name: result[0],
                 description: result[1],
@@ -118,8 +116,9 @@ class View extends Component {
 function mapStateToProps(state) {
   return {
     passageInstance: state.reducer.passageInstance,
-    productIdToView: state.reducer.productIdToView
+    productIdToView: state.reducer.productIdToView,
+    web3Accounts: state.reducer.web3Accounts
   };
 }
 
-export default connect(mapStateToProps)(View);
+export default connect(mapStateToProps)(MyProducts);
