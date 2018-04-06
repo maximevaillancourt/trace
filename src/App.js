@@ -58,6 +58,19 @@ class App extends Component {
         this.props.dispatch(mainActions.setPassageInstance(instance))
         this.props.dispatch(mainActions.setWeb3Accounts(accounts))
 
+        // remember the current web3 account
+        var currentAccount = accounts[0];
+
+        // every 500ms, check if the web3 account changed
+        setInterval(() => {
+          this.props.web3.eth.getAccounts((error, accounts) => {
+            // reload the entire app if the account changed
+            if (accounts[0] !== currentAccount) {
+              window.location = "/"
+            }
+          })
+        }, 500)
+
         const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
         event.watch((error, result) => {
           if (!error){
