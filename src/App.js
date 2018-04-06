@@ -71,6 +71,7 @@ class App extends Component {
           })
         }, 500)
 
+        // upon product creation, redirect to the home page and show a notification
         const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
         event.watch((error, result) => {
           if (!error){
