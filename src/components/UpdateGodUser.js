@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
-import { Link } from 'react-router-dom'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -37,13 +35,13 @@ class UpdateGodUser extends Component {
   render() {
     return (
       <AnnotatedSection
-        annotationContent = {
+        annotationContent={
           <div>
             <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUser}/>
             Transférer le God mode a un autre utilisateur.
           </div>
         }
-        panelContent = {
+        panelContent={
           <div>
             <FormGroup>
               <Label>Adresse du nouveau God</Label>

@@ -1,21 +1,8 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import * as mainActions from '../actions/mainActions';
-import { Link } from 'react-router-dom'
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import UpdateGodUser from '../components/UpdateGodUser';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
-
-import {
-    Button,
-    FormGroup,
-    InputGroup,
-    InputGroupAddon,
-    Label,
-    Input
-} from 'reactstrap';
 
 class Account extends Component {
 
