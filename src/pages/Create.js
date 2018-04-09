@@ -43,7 +43,7 @@ class Create extends Component {
 
   // when the page is loaded, fetch all available certifications
   componentDidMount(){
-    this.props.passageInstance.getAllCertificationsIds()
+    this.props.passageInstance.getActorCertificationsIds({from: this.props.web3Accounts[0]})
       .then((result) => {
         result.map((certificationId) => {
           return this.props.passageInstance.getCertificationById(String(certificationId).valueOf())

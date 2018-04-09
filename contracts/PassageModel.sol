@@ -79,5 +79,5 @@ contract PassageModel {
     
     // TODO: handle certifying actors addresses
     // (see https://etherscan.io/address/0x06012c8cf97bead5deae237070f9587f8e7a266d#code)
-
+    mapping (address => bytes32[]) certifiersAddressToCertificationIds; // Certifing Actors to their certifications IDs 
 }

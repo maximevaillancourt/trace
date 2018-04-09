@@ -223,8 +223,9 @@ contract PassageMain is PassageHelper {
     }
 
     function createCertification(
-      string _name,
-      string _imageUrl
+        string _name,
+        string _imageUrl,
+        address _certificationOwner
     ) public returns (bytes32 certificationId) {
     
         // Generate a pseudo-random certification ID
@@ -244,12 +245,17 @@ contract PassageMain is PassageHelper {
 
         // TODO: handle certification owner
         // certification.owner = msg.sender; // ??????
+        certifiersAddressToCertificationIds[_certificationOwner].push(newCertificationId);
 
         return newCertificationId;
     }
 
     function getAllCertificationsIds() external view returns (bytes32[] certificationsIds) {
         return certificationIds;
+    }
+
+    function getActorCertificationsIds() external view returns (bytes32[] certificationsIds) {
+        return certifiersAddressToCertificationIds[msg.sender];
     }
 
     function getCertificationById(bytes32 _certificationId) external view returns (string name, string imageUrl) {

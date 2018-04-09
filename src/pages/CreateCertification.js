@@ -19,11 +19,12 @@ class CreateCertification extends Component {
     this.state = {
       name: '',
       imageUrl: '',
+      certificationOwner: '',
     }
   }
 
   handleCreateNewCertification = () => {
-    this.props.passageInstance.createCertification(this.state.name, this.state.imageUrl, {from: this.props.web3Accounts[0], gas:1000000})
+    this.props.passageInstance.createCertification(this.state.name, this.state.imageUrl, this.state.certificationOwner, {from: this.props.web3Accounts[0], gas:1000000})
       .then((result) => {
         this.props.history.push('/create'); // redirect to the home page
       })
@@ -44,6 +45,10 @@ class CreateCertification extends Component {
               <FormGroup>
                   <Label>Nom</Label>
                   <Input placeholder="Nom de la certification" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
+              </FormGroup>
+              <FormGroup>
+                  <Label>Adresse du certificateur</Label>
+                  <Input placeholder="0x..." value={this.state.certificationOwner} onChange={(e) => {this.setState({certificationOwner: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>URL de l'image de la certification</Label>
