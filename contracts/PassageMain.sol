@@ -243,9 +243,8 @@ contract PassageMain is PassageHelper {
         // Add new certification ID
         certificationIds.push(newCertificationId);
 
-        // TODO: handle certification owner
-        // certification.owner = msg.sender; // ??????
-        certifiersAddressToCertificationIds[_certificationOwner].push(newCertificationId);
+        // Add certifiction to certifier
+        certifiersAddressToCertificationIds[_certificationOwner == address(0)? msg.sender: _certificationOwner].push(newCertificationId);
 
         return newCertificationId;
     }

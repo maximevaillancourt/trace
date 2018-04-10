@@ -21,3 +21,8 @@ a {
 a:hover {
   color: hsl(161, 42%, 42%);
 }
+
+/* Remove first line */
+.table.noHeaderLine > tbody > tr:first-child > td {
+  border: none;
+}

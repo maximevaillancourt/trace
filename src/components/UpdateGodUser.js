@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import AnnotatedSection from '../components/AnnotatedSection'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
+import faUserPlus from '@fortawesome/fontawesome-free-solid/faUserPlus'
 
 import {
     Button,
@@ -37,8 +37,8 @@ class UpdateGodUser extends Component {
       <AnnotatedSection
         annotationContent={
           <div>
-            <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUser}/>
-            Transférer le God mode a un autre utilisateur.
+            <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUserPlus}/>
+            Transférer God mode
           </div>
         }
         panelContent={
