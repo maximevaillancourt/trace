@@ -31,7 +31,7 @@ class UpdateGodUser extends Component {
         // product created! ... but we use an event watcher to show the success message, so nothing actuelly happens here after we create a product
       })
   }
-  
+
   render() {
     return (
       <AnnotatedSection
@@ -58,7 +58,7 @@ class UpdateGodUser extends Component {
     );
   }
 }
-  
+
 function mapStateToProps(state) {
   return {
     web3: state.reducer.web3,
@@ -69,4 +69,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(UpdateGodUser);
-  
+

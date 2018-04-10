@@ -39,10 +39,10 @@ contract PassageHelper is PassageEvents {
 
     // TODO: require IsGod
     // liste de god accounts qui peuvent ajouter *leurs* certifications à n'importe quel produit
-    modifier onlyGod() { 
-        require(msg.sender == godUser); 
-        _; 
-    } 
+    modifier onlyGod() {
+        require(msg.sender == godUser);
+        _;
+    }
     
     // request to transfer *product* ownership
     function requestOwnershipTransfer(bytes32 _productId, address _newOwnerAddress) public {

@@ -8,10 +8,10 @@ contract PassageMain is PassageHelper {
     using DictionaryBytes32Uint for DictionaryBytes32Uint.Data;
     DictionaryBytes32Uint.Data private dic;    
 
-    function PassageMain() public { 
-        // Creator of the contract is default God 
-        godUser = msg.sender; 
-    } 
+    function PassageMain() public {
+        // Creator of the contract is default God
+        godUser = msg.sender;
+    }
     
     function createProduct(
       string _name,
@@ -244,7 +244,7 @@ contract PassageMain is PassageHelper {
         certificationIds.push(newCertificationId);
 
         // Add certifiction to certifier
-        certifiersAddressToCertificationIds[_certificationOwner == address(0)? msg.sender: _certificationOwner].push(newCertificationId);
+        certifiersAddressToCertificationIds[_certificationOwner == address(0) ? msg.sender : _certificationOwner].push(newCertificationId);
 
         return newCertificationId;
     }
@@ -275,10 +275,10 @@ contract PassageMain is PassageHelper {
         return (version.latitude, version.longitude);
     }
 
-    // modifie the god user  
-    function updateGodUser(address _newGodAddress) public onlyGod { 
-        require(_newGodAddress != address(0)); 
-        godUser = _newGodAddress; 
+    // modify the god user
+    function updateGodUser(address _newGodAddress) public onlyGod {
+        require(_newGodAddress != address(0));
+        godUser = _newGodAddress;
     }
 
     function isUserGod() external view returns (bool) {
