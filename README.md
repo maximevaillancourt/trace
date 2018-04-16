@@ -11,13 +11,12 @@ that can be added to products. A mobile companion app (not developed yet) would
 allow scanning Trace QR codes placed on the actual products to see the data
 on-premise (e.g. at the grocery store).
 
-**Keep in mind that this is mostly a proof of concept** that was developed as part of a university project. It
-is not production-ready by any means. However, we invite you to play around with the project
-and use it as you see fit.
+⚠️ **Keep in mind that this is only a proof of concept** that was developed as part of a university project. It
+is **not production ready** by any means. However, we invite you to play around with the project and use it as you see fit. There are some rough edges, so we definitely appreciate your help.
 
 Made using the Truffle toolkit, React.js, Redux, and Webpack.
 
-Logo design by [@mailhiotlaur](https://twitter.com/mailhiotlaur).
+Logo design by [Laurence Mailhiot](https://twitter.com/mailhiotlaur).
 
 ## Screenshot
 
