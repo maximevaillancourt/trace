@@ -1,42 +1,118 @@
-# Projet de session de la session d'hiver 2018 à l'Université de Sherbrooke
+![logo](https://user-images.githubusercontent.com/8457808/38817198-e01811b0-4165-11e8-9288-2c16c04ae2df.png)
 
-## Comment démarrer le projet
+# Trace
 
-Assurez-vous de ne pas avoir l'extension MetaMask activée lors du développement de l'application (pour tout de suite -- on pourra corriger ça plus tard).
+> A transparent supply chain management platform with end users in mind.
 
-0. Cloner le projet et y naviguer
+Trace is a decentralized application based on the Ethereum blockchain aiming to
+let consumers see the data behind the products they buy every day. It currently 
+allows industry experts to add products to the app, as well as create certifications
+that can be added to products. A mobile companion app (not developed yet) would 
+allow scanning Trace QR codes placed on the actual products to see the data
+on-premise (e.g. at the grocery store).
 
-    ```
-    git clone https://[VOTRE_CIP]@depot.ami.usherbrooke.ca/Passage_Group/Passage_Project.git
-    cd Passage_Project
+**Keep in mind that this is mostly a proof of concept** that was developed as part of a university project. It
+is not production-ready by any means. However, we invite you to play around with the project
+and use it as you see fit.
+
+Made using the Truffle toolkit, React.js, Redux, and Webpack.
+
+Logo design by [@mailhiotlaur](https://twitter.com/mailhiotlaur).
+
+## Installing / Getting started
+
+0. Clone the repo:
+
+    ```shell
+    git clone https://github.com/maximevaillancourt/trace.git
+    cd trace
     ```
     
-    Ne pas oublier pas de remplacer [VOTRE_CIP] par votre CIP :)
+1. Install the Truffle toolkit globally and install project dependencies:
 
-1. Installer Truffle globalement, et installer les dépendances de projet :
-
-    ```
+    ```shell
     npm install -g truffle && npm install
     ```
 
-2. Dans une fenêtre de terminal, lancer la console de développement de Truffle :
+2. In a new shell, start the Truffle development console:
 
-    ```
+    ```shell
     truffle develop
     ```
 
-3. Dans la console de développement de Truffle qu'on vient de lancer, entrer la commande suivante pour compiler et déployer les contrats intelligents : 
+3. In the Truffle console, compile and deploy the smart contracts:
 
-    ```
+    This will effectively reset your local blockchain, meaning that all existing transactions will be deleted.
+
+    ```shell
     migrate --reset
     ```
-    
-    Noter que cette commande réinitialise votre blockchain local, donc toutes les données y étant stockées seront perdues.
 
-4. Dans une nouvelle fenêtre de terminal, lancer le serveur Webpack pour le front-end.
+4. Back in a regular shell, start the Webpack server:
 
-    ``` 
+    ```shell
     npm run start
     ```
 
-Une nouvelle fenêtre devrait s'ouvrir dans le navigateur à l'adresse `http://localhost:3000`.
+A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually).
+
+## Developing
+
+To change something in the "smart contracts" side of things, you need to compile your contracts every time you change something
+using the following command in the Truffle console:
+
+    ```shell
+    migrate --reset
+    ```
+
+As for the React app, the Webpack server should refresh the app automatically when a change is detected.
+
+### Building
+
+Once you're ready to bundle the front-end app, use the `build` script to bundle everything together.
+
+```shell
+npm run build
+```
+
+### Deploying
+
+You're free to deploy the generated front-end bundle wherever you see fit. As for the smart contract, you can deploy it through Ganache/Truffle by adding a new network configuration. See [this guide](http://truffleframework.com/tutorials/deploying-to-the-live-network) for more information.
+
+## Features
+
+* Add a product to the platform
+* Search for a particular product
+* Add certifications to products (e.g. "biological", "non-GMO", etc.)
+* Browse a product's version history
+* See the product's previous positions on a map
+* Combine products into one
+* Split a product into many (WIP)
+
+# Contributing
+
+For bug fixes, documentation changes, and small features:  
+
+1. [Fork it](https://github.com/maximevaillancourt/trace/fork)
+2. Create your feature branch (`git checkout -b my-new-feature`)  
+3. Commit your changes (`git commit -am 'Add some feature'`)  
+4. Push to the branch (`git push origin my-new-feature`)  
+5. Create a new Pull Request
+
+For larger new features: do everything as above, but first also make contact with the project maintainers to be sure your change fits with the project direction and you won't be wasting effort going in the wrong direction
+
+## Links
+
+- Repository: https://github.com/maximevaillancourt/trace
+- Issue tracker: https://github.com/maximevaillancourt/trace/issues
+  - In case of sensitive bugs like security vulnerabilities, please contact
+    mv@maximevaillancourt.com directly instead of using issue tracker. We value your effort
+    to improve the security and privacy of this project!
+- Related projects:
+  - Provenance: http://provenance.org/
+  - SCTS: https://github.com/AtrauraBlockchain/scts
+  - Phinomenal: https://github.com/phi-nomenal/phi-nomenal
+
+## Licensing
+
+The code in this project is licensed under MIT license. See the [LICENSE](LICENSE).
