@@ -1,4 +1,4 @@
-![logo](https://user-images.githubusercontent.com/8457808/38817198-e01811b0-4165-11e8-9288-2c16c04ae2df.png)
+![logo](https://user-images.githubusercontent.com/8457808/38818082-db3aea62-4167-11e8-8e59-7af47131c087.png)
 
 # Trace
 
@@ -14,6 +14,8 @@ on-premise (e.g. at the grocery store).
 **Keep in mind that this is mostly a proof of concept** that was developed as part of a university project. It
 is not production-ready by any means. However, we invite you to play around with the project
 and use it as you see fit.
+
+![scrot](https://user-images.githubusercontent.com/8457808/38819232-d35aed1e-4168-11e8-90e7-1d74fe726729.png)
 
 Made using the Truffle toolkit, React.js, Redux, and Webpack.
 
@@ -61,9 +63,9 @@ A browser window should then open automatically at `http://localhost:3000` (or w
 To change something in the "smart contracts" side of things, you need to compile your contracts every time you change something
 using the following command in the Truffle console:
 
-    ```shell
-    migrate --reset
-    ```
+```shell
+migrate --reset
+```
 
 As for the React app, the Webpack server should refresh the app automatically when a change is detected.
 
@@ -105,9 +107,6 @@ For larger new features: do everything as above, but first also make contact wit
 
 - Repository: https://github.com/maximevaillancourt/trace
 - Issue tracker: https://github.com/maximevaillancourt/trace/issues
-  - In case of sensitive bugs like security vulnerabilities, please contact
-    mv@maximevaillancourt.com directly instead of using issue tracker. We value your effort
-    to improve the security and privacy of this project!
 - Related projects:
   - Provenance: http://provenance.org/
   - SCTS: https://github.com/AtrauraBlockchain/scts
