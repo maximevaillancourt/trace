@@ -103,7 +103,7 @@ class Update extends Component {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
-      placeholder: "Emplacement (adresse, lat/long)"
+      placeholder: "Location (exact address, latitude & longitude, business)"
     }
 
     return (
@@ -112,13 +112,13 @@ class Update extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faArrowAltCircleUp}/>
-              Nouvelles informations
+              New information
             </div>
           }
           panelContent={
             <div>
               <FormGroup>
-                  <Label>Emplacement actuel</Label>
+                  <Label>Current location</Label>
                   <PlacesAutocomplete
                     inputProps={inputProps}
                     onSelect={this.handleSelect}
@@ -131,13 +131,13 @@ class Update extends Component {
                   // render an input with the appropriate key/value pair
                   Object.keys(this.state.customDataInputs).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
-                      <Input value={this.state.customDataInputs[inputKey].key} placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].key} placeholder="Property (e.g. 'color')" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Valeur (e.g. 'red')" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
                     </FormGroup>
                   )
                 }
                 <Link to="#" onClick={ () => this.appendInput() }>
-                  Ajouter un champ de données personnalisé
+                  Add a custom data field
                 </Link>
               </FormGroup>
               <Button disabled={this.state.updateButtonDisabled} color="primary" onClick={this.handleUpdateProduct}>Créer une nouvelle version</Button>

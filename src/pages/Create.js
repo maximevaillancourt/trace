@@ -1,19 +1,12 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import { Link } from 'react-router-dom'
-import ebayCategoryMap from '../utils/ebay-categories.json'
-
+import { Button, FormGroup, Label, Input } from 'reactstrap';
 import AnnotatedSection from '../components/AnnotatedSection'
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faStar from '@fortawesome/fontawesome-free-solid/faStar'
-
-import {
-  Button,
-  FormGroup,
-  Label,
-  Input,
-} from 'reactstrap';
+import ebayCategoryMap from '../utils/ebay-categories.json'
 
 /*
   "Create" component
@@ -114,7 +107,7 @@ class Create extends Component {
   }
 
   // real ugly method that updates the category tree, coded on a whim
-  // TODO: make this pretty, because there's clearly a better way to handle this
+  // TODO: improve this -- there's clearly a better way to handle this
   handleCategorySelect = (event, selectedCategoryLevel) => {
     const categoryId = event.target.value;
     const categoryObject = 
@@ -147,10 +140,11 @@ class Create extends Component {
   // retrieves a leaf category's aspects/properties from the eBay API
   // e.g. the "Vehicles > Sedan" category has the following aspects: "Make, Model, Year, Transmission, Engine, Color", etc.
   setCustomAspects = (categoryId) => {
+   
     // TODO: implement a thin back-end server (using Express.js?) to handle the OAuth token request flow.
     // Below is a temporary way to make the request work. Later on, we'll replace that with a call to our thin back-end server
     // to get a token instead of hardcoding a token value like the one below (which is requested manually and expires every 2 hours)
-    const token = "v^1.1#i^1#f^0#r^0#p^1#I^3#t^H4sIAAAAAAAAAOVXbWwURRju9fqRUorE4hdc9Fgg0dLdm9293dvbcEeOtkAj9FrurFI0zdzebLv2bveyM0d7+oPSaJEYhRjCDxqSpmoIkfgVPqKBoASRaIKgaETUBL+CoAIxQQkJcXd7lGslUKEiiffnMu+88877PO/zzuyA3rKKmv7F/X9UucqLB3tBb7HLxVaCirLSuVPcxdNLi0CBg2uwd3ZvSZ/75DwM06mMvAzhjKFj5O1Jp3QsO8YQlTV12YBYw7IO0wjLRJFjkaVLZI4BcsY0iKEYKcrbWB+ipCAPoJAQRYkTAUTIsuqXY8aNEMUHYTLghwFO5ZJCImhNY5xFjTomUCchigOsRAOe5qQ4K8qAlwWWCbD+NsrbikysGbrlwgAq7GQrO2vNglSvnSnEGJnECkKFGyMLY9FIY31DU3yeryBWOE9DjECSxaNHdUYSeVthKouuvQ12vOVYVlEQxpQvPLzD6KBy5HIyN5C+w3RCgAE/4IOKHykiK/ATQuVCw0xDcu08bIuWpFXHVUY60UjueoxabCSeRArJj5qsEI31XvuvJQtTmqohM0Q1LIgsjzQ3U+GlsEdLo1ZIx02oILp5WT3tF3hFTCJJpNUgEBCQuPwuw6HyHI/Zps7Qk5rNGPY2GWQBslJGo4kRZKGAGMspqkfNiErsdAr9pMsEArHNruhwCbOkU7eLitIWC15neH36R1YTYmqJLEEjEcZOOPyEKJjJaElq7KQjxLx2enCI6iQkI/t83d3dTDfPGGaHjwOA9T22dElM6URpSOV97V7vwdr1F9CaA0WxWtjyl0kuY+XSYwnVSkDvoMJcQPRzfJ730WmFx1r/ZijA7BvdDhPVHmoioAYDvJgU/H5JUOFEtEc4r1CfnQdKwBydhmYXIpmULVPF0lk2jUwtKfOCyvGSiuikGFRpf1BV6YSQFGlWRQgglEgoQel/0yXj1XlMMTKo2UhpSm7C1D4hSufNZDM0SS6GUinLMF7JXxUktkHeKnh2r48Poh0DW0FgRmNsYTOKkfYZ0DrRbFO7k/VN4dasm/C2KqoFcBiplhy+whgHLoNXKoyJsJE1rdubidqHetzoQrrVJcQ0UilktrI3xcTEHuf/wVF+VVRKSrNobL/dkP2TM/IGhQ3JbQG5pM/VMgKbFTiOE3jA35xU65yixnO37sQaX1UXG5ig5L/w6eEb/QgKFzk/ts+1A/S53rLeUcAH5rCzwMwy9yMl7snTsUYQo0GVwVqHbn3cm4jpQrkM1MziMtcKz5tb2wueXYNPgHtHHl4Vbray4BUGPFdmStk77qliJcBzEisCXmDbwKwrsyXs3SXT5I/KD5x+98eLG1c1tXy8YuAULErvAlUjTi5XaZGlh6IdLzXPvdT53d7AwePbz0judOW+rz2/t056ZfLP5tqdwubq+3+JrrnzDTDt1df2N4gn6P5fXxcWvTe07cW5M2rbBHZt54HyI/uqP1114m3v/g8uzHjnsOdBbhOpO7ttcOUQ139mEv9Uy/MP3GWc8eyuntaxp3J+9ey9x46v+f6hR3dtSf858MwX/eTSwfme2sVTT6+jD53Uqo+uG9h+/oUVgbMXasp3b934Yc3TA7W/mRW1hy58VrP6/KIvF3x+OFrV/9XyGnB+U83j36rc++2tcwY3uwMPTzF2en44dS64fvWRyfcNhZ6VNh1r2FnR0PXTN5/EcWX9uZcvRoulqVM27Kng9KPPqWu27N8wU1s+NFy+vwB47A+BEA8AAA===";
+    const token = ""; // should start with something like "v^1.1#..."
     
     // actually fetch the aspects
     fetch(`https://api.ebay.com/commerce/taxonomy/v1_beta/category_tree/2/get_item_aspects_for_category?category_id=${categoryId}`, {
@@ -162,7 +156,7 @@ class Create extends Component {
       .then(response => response.json())
       .then(data => {
         if(!data.aspects){
-          console.warn("The request to the eBay API failed. The API token is probably expired.") // TODO: update this upon implementing the OAuth token handler
+          console.warn("The request to the eBay API failed. The API token has expired or is invalid.") // TODO: update this upon implementing the OAuth token handler
         } else {
           // set data inputs for every aspect
           this.setState({ customDataInputs: {} })
@@ -184,7 +178,7 @@ class Create extends Component {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
-      placeholder: "Emplacement (adresse, latitude & longitude, entreprise)"
+      placeholder: "Location (exact address, latitude & longitude, business)"
     }
 
     return (
@@ -193,21 +187,21 @@ class Create extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
-              Informations du produit
+              Product information
             </div>
           }
           panelContent={
             <div>
               <FormGroup>
-                  <Label>Nom</Label>
-                  <Input placeholder="Nom du produit" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
+                  <Label>Name</Label>
+                  <Input placeholder="Product name" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Description</Label>
-                  <Input placeholder="Description sommaire du produit" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
+                  <Input placeholder="Product description" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
-                  <Label>Emplacement actuel</Label>
+                  <Label>Current location</Label>
                   <PlacesAutocomplete
                     inputProps={inputProps}
                     onSelect={this.handleGeoSelect}
@@ -215,7 +209,7 @@ class Create extends Component {
                   />
               </FormGroup>
               <FormGroup>
-                  <Label>Catégorie(s)</Label>
+                  <Label>Categorie(s)</Label>
                   <Input defaultValue="" type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, 0)}>
                     {/* This is the first category dropdown, which represents the 1st level of categories (from the root node) */}
                     <option disabled value="" key="none">(sélectionner)</option>
@@ -231,7 +225,7 @@ class Create extends Component {
                     Object.keys(this.state.selectedCategories).map(categoryLevel => (
                       this.state.selectedCategories[categoryLevel].childCategoryTreeNodes ?
                         <Input defaultValue="" key={categoryLevel} type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, categoryLevel)}>
-                          <option disabled value="" key="none">(sélectionner)</option>
+                          <option disabled value="" key="none">(select)</option>
                           {
                             this.state.selectedCategories[categoryLevel].childCategoryTreeNodes.map((categoryObject, index) => {
                               return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
@@ -260,8 +254,8 @@ class Create extends Component {
                       )
                       :
                       <div style={{marginLeft:"15px"}}>
-                        Aucune certification existante.
-                        <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
+                        No certification available.
+                        <Link style={{marginLeft: "10px"}} to="/createcertification">Create a certification</Link>
                       </div>
                   }
                 </div>
@@ -277,10 +271,10 @@ class Create extends Component {
                   )
                 }
                 <Link to="#" onClick={ () => this.appendInput() }>
-                  Ajouter un champ de données personnalisé
+                  Add a custom data field
                 </Link>
               </FormGroup>
-              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Créer un nouveau produit</Button>
+              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Create product</Button>
             </div>
           }
         />

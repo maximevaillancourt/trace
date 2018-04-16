@@ -18,8 +18,8 @@ contract PassageModel {
         bytes32 certificationId;
         string name;
         string imageUrl;
-        // TODO: date d'expiration de la certification
-        //bytes32 certificationActorId; // Agency/company behind the certification
+        // TODO: certification expiration date
+        //bytes32 certificationActorId; // agency/company behind the certification
     }
 
     struct ProductVersion {
@@ -44,8 +44,8 @@ contract PassageModel {
         address owner;
         address nextAuthorizedOwnerAddress;
 
-        // TODO: ontologie / catégorie / standard de descriptions de produits (catégories) ???
-        // TODO: catégories favorites selon le domaine d'activités de l'organisation qui utilise la plateforme
+        // TODO: standard product categories/descriptions
+        // TODO: allow users to set favourite categories based on their industry
         // TODO: UPC/EAN codes, GS1 categories https://www.gs1.org/gpc/latest
 
         string name;
@@ -77,7 +77,7 @@ contract PassageModel {
     address public godUser;
     address[] public certifingUsers;
 
-    // TODO: handle certifying actors addresses
+    // TODO: handle certifying actors' addresses
     // (see https://etherscan.io/address/0x06012c8cf97bead5deae237070f9587f8e7a266d#code)
     mapping (address => bytes32[]) certifiersAddressToCertificationIds; // Certifing Actors to their certifications IDs
 }

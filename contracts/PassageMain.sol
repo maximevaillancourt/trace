@@ -9,8 +9,8 @@ contract PassageMain is PassageHelper {
     DictionaryBytes32Uint.Data private dic;    
 
     function PassageMain() public {
-        // Creator of the contract is default God
-        godUser = msg.sender;
+      // Creator of the contract is default God
+      godUser = msg.sender;
     }
     
     function createProduct(
@@ -98,26 +98,26 @@ contract PassageMain is PassageHelper {
     function getProductById(bytes32 _productId, bytes32 specificVersionId) external view productIdExists(_productId)
     returns (string name, string description, string _latitude, string _longitude, uint versionCreationDate, bytes32[] versions, bytes32[] certificationsIds) {
 
-        // Get the requested product from storage
-        Product storage product = productIdToProductStruct[_productId];
+      // Get the requested product from storage
+      Product storage product = productIdToProductStruct[_productId];
 
-        // Initialize a variable that will hold the requested product version struct
-        ProductVersion storage requestedVersion;
+      // Initialize a variable that will hold the requested product version struct
+      ProductVersion storage requestedVersion;
 
-        if (specificVersionId == "latest") {
-          // Get the latest product version
-          requestedVersion = versionIdToVersionStruct[product.latestVersionId];
+      if (specificVersionId == "latest") {
+        // Get the latest product version
+        requestedVersion = versionIdToVersionStruct[product.latestVersionId];
 
-        } else {
-          // Get the requested product version
-          requestedVersion = versionIdToVersionStruct[specificVersionId];
-        }
+      } else {
+        // Get the requested product version
+        requestedVersion = versionIdToVersionStruct[specificVersionId];
+      }
 
-        // Return the requested data
-        return (product.name, product.description, requestedVersion.latitude, requestedVersion.longitude, requestedVersion.creationDate, product.versions, product.certificationsIds);
+      // Return the requested data
+      return (product.name, product.description, requestedVersion.latitude, requestedVersion.longitude, requestedVersion.creationDate, product.versions, product.certificationsIds);
 
-        // TODO: return the product versions using another function (i.e. getProductVersions(_productId))
-        // instead of directly (as above)
+      // TODO: return the product versions using another function (i.e. getProductVersions(_productId))
+      // instead of directly (as above)
     }
 
     function getProductCustomDataById(bytes32 _productId, bytes32 specificVersionId) external view productIdExists(_productId)
@@ -149,7 +149,7 @@ contract PassageMain is PassageHelper {
     productIdExists(_originalProductId) productIdsExist(_newProductIds) {
       
         /* 
-        UI:
+        // TODO in the UI:
         - Scan a product (view)
         - Split product (button)
         - Number of different products to split into (number input)

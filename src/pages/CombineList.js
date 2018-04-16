@@ -129,7 +129,7 @@ class CombineList extends Component {
           </FormGroup>
           <Link to={`/products/${product.id}`}>
             <div>
-              <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
+              <b>{product.name || "Untitled product"}</b> &mdash; {product.description || "No description"}
               <hr/>
             </div>
           </Link>
@@ -140,50 +140,48 @@ class CombineList extends Component {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
-      placeholder: "Emplacement (adresse, latitude & longitude, entreprise)"
+      placeholder: "Location (exact address, latitude & longitude, business)"
     }
 
     return (
       <div>
-        {/* Section de sélection des produits */}
         <AnnotatedSection
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faList}/>
-              Sélection des produits
+              Product selection
             </div>
           }
           panelContent={
             <div>
               {products && products.length > 0 ? products : 
               <div>
-                Vous n'avez créé aucun produit.
-                <Link style={{marginLeft: "10px"}} to="/create">Ajouter un produit</Link>
+                You did not add any product yet.
+                <Link style={{marginLeft: "10px"}} to="/create">Add a product</Link>
               </div>}
             </div>
           }
         />
 
-        {/* Section des informations du produit combiné */}       
         <AnnotatedSection
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
-              Informations du produit combiné
+              Combined product data
             </div>
           }
           panelContent={
             <div>
               <FormGroup>
-                  <Label>Nom</Label>
-                  <Input placeholder="Nom du produit" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
+                  <Label>Name</Label>
+                  <Input placeholder="Product name" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Description</Label>
-                  <Input placeholder="Description sommaire du produit" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
+                  <Input placeholder="Product description" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
-                  <Label>Emplacement actuel</Label>
+                  <Label>Current location</Label>
                   <PlacesAutocomplete
                     inputProps={inputProps}
                     onSelect={this.handleSelect}
@@ -193,7 +191,7 @@ class CombineList extends Component {
               <FormGroup>
                 <Label>
                   Certification(s)
-                  <Link style={{marginLeft: "10px"}} to="/createcertification">Créer +</Link>
+                  <Link style={{marginLeft: "10px"}} to="/createcertification">Create +</Link>
                 </Label>
                 <div>
                   {this.state.availableCertifications && this.state.availableCertifications.length > 0 ?
@@ -205,8 +203,8 @@ class CombineList extends Component {
                     )
                     :
                     <div style={{marginLeft:"15px"}}>
-                      Aucune certification existante.
-                      <Link style={{marginLeft: "10px"}} to="/createcertification">Créer une certification</Link>
+                      No certification available.
+                      <Link style={{marginLeft: "10px"}} to="/createcertification">Create a certification</Link>
                     </div>
                   }
                 </div>
@@ -214,8 +212,6 @@ class CombineList extends Component {
             </div>
           }
         />
-
-        {/* Section des actions */}
         <AnnotatedSection
           annotationContent={
             <div>
@@ -225,7 +221,7 @@ class CombineList extends Component {
           }
           panelContent={
             <div>
-              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Effectuer la combinaison</Button>
+              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Combine products</Button>
             </div>
           }
         />

@@ -50,7 +50,7 @@ class MyProducts extends Component {
       return (
         <Link key={index} to={`/products/${product.id}`}>
           <div key={index}>
-            <b>{product.name || "Produit sans nom"}</b> &mdash; {product.description || "Aucune description"}
+            <b>{product.name || "Untitled product"}</b> &mdash; {product.description || "No description"}
             <hr/>
           </div>
         </Link>
@@ -63,7 +63,7 @@ class MyProducts extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faSearch}/>
-              Consulter un produit
+              View a product
             </div>
           }
           panelContent={
@@ -76,16 +76,16 @@ class MyProducts extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faList}/>
-              Mes produits
-              <Link style={{marginLeft: "10px"}} to="/create">Ajouter +</Link>
+              My products
+              <Link style={{marginLeft: "10px"}} to="/create">Create +</Link>
             </div>
           }
           panelContent={
             <div>
               {products && products.length > 0 ? products : 
               <div>
-                Vous n'avez créé aucun produit.
-                <Link style={{marginLeft: "10px"}} to="/create">Ajouter un produit</Link>
+                You did not create a product yet.
+                <Link style={{marginLeft: "10px"}} to="/create">Create a product</Link>
               </div>}
             </div>
           }
@@ -94,16 +94,16 @@ class MyProducts extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faGroup}/>
-              Combiner des produits
+              Combine products
             </div>
           }
           panelContent={
             <div>
               <div>
-                <Link style={{marginLeft: "10px"}} to="/combineList">Mode liste de produits</Link>
+                <Link style={{marginLeft: "10px"}} to="/combineList">List mode</Link>
               </div>
               <div>
-                <Link style={{marginLeft: "10px"}} to="/combineScan">Mode scan QR</Link>
+                <Link style={{marginLeft: "10px"}} to="/combineScan">QR scan mode</Link>
               </div>
             </div>
           }

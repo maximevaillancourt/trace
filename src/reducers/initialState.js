@@ -1,3 +1,4 @@
+// TODO: clean this up
 export default {
   products: [],
   name: "",

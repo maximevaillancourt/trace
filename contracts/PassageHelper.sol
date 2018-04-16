@@ -37,8 +37,7 @@ contract PassageHelper is PassageEvents {
         _;
     }
 
-    // TODO: require IsGod
-    // liste de god accounts qui peuvent ajouter *leurs* certifications à n'importe quel produit
+    // list of "god" users, who can add their own certifications to any product
     modifier onlyGod() {
         require(msg.sender == godUser);
         _;

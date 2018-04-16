@@ -116,9 +116,6 @@ class View extends Component {
       })
   }
 
-  /*****************
-    RENDER
-  *****************/
   render() {
 
     // this is the JSX of the versions list section of the page
@@ -134,7 +131,7 @@ class View extends Component {
     const certificationsList = this.state.certifications.map((certification, index) => {
       return (
         <div style={{display:"inline-block", marginRight:"15px", width:"100px", height:"100px"}} key={index}>
-          {certification.imageUrl ? <img style={{width:"100%"}} alt={"Produit certifié " + certification.name} src={certification.imageUrl}/> : <div>{certification.name}</div>}
+          {certification.imageUrl ? <img style={{width:"100%"}} alt={"Product has certification " + certification.name} src={certification.imageUrl}/> : <div>{certification.name}</div>}
         </div>
       )
     })
@@ -192,14 +189,14 @@ class View extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faInfoCircle}/>
-              Définition du produit
+              Product definition
             </div>
           }
           panelContent={
             <Table>
               <tbody>
                 <tr>
-                  <th scope="row">Nom</th>
+                  <th scope="row">Name</th>
                   <td>{this.state.name}</td>
                 </tr>
                 <tr>
@@ -207,7 +204,7 @@ class View extends Component {
                   <td>{this.state.description}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Date de création de la version</th>
+                  <th scope="row">Last updated on</th>
                   <td>{this.state.versionCreationDate}</td>
                 </tr>
                 {
@@ -228,14 +225,14 @@ class View extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faThumbtack}/>
-              Informations de suivi
+              Tracking information
             </div>
           }
           panelContent={
             <div>
               <QRCode value={this.props.match.params.productId}/>
               <div>
-                Identifiant unique du produit
+                Unique product identifier
                 <pre>{this.state.id}</pre>
               </div>
             </div>
@@ -255,19 +252,19 @@ class View extends Component {
               { this.props.match.params.versionId && this.state.versions && this.state.versions.length > 0 && this.props.match.params.versionId.toString() !== this.state.versions.slice(-1)[0].id.toString() ?
                   <Link to={"/products/" + this.props.match.params.productId}>
                     <Button color="info">
-                      Voir la dernière version
+                      View latest version
                     </Button>
                   </Link>
                 :
                   <Link to={"/products/" + this.props.match.params.productId + "/update"}>
                     <Button color="success">
-                      Mettre à jour
+                      Update product
                     </Button>
                   </Link>
               }
               <Link style={{marginLeft: "10px"}} to={"/products/" + this.props.match.params.productId + "/split"}>
                 <Button color="warning">
-                  Séparer ce produit
+                  Split this product
                 </Button>
               </Link>
             </div>
@@ -279,7 +276,7 @@ class View extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faMapMarker}/>
-              Emplacement géographique
+              Location
             </div>
           }
           panelContent={
@@ -294,7 +291,7 @@ class View extends Component {
                   />
                 </div>
                 :
-                <p>Impossible d'afficher l'emplacement géographique.</p>
+                <p>Unable to display the product's location.</p>
               }
             </div>
           }
@@ -305,12 +302,12 @@ class View extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faCertificate}/>
-              Certifications attribuées
+              Product certifications
             </div>
           }
           panelContent={
             <div>
-              {certificationsList && certificationsList.length > 0 ? certificationsList : "Aucune certification."}
+              {certificationsList && certificationsList.length > 0 ? certificationsList : "No certification."}
             </div>
           }
         />
@@ -320,7 +317,7 @@ class View extends Component {
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faHistory}/>
-              Historique des versions
+              Version history
             </div>
           }
           panelContent={

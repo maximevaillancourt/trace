@@ -13,6 +13,7 @@ import CreateProduct from './Create'
 import {
   Button,
   FormGroup,
+  Alert
 } from 'reactstrap';
 
 class SplitProduct extends Component {
@@ -86,12 +87,13 @@ class SplitProduct extends Component {
   render() {
     return (
       <div>
+        <Alert color="warning">The "Split product" feature is not ready. Use this page with caution.</Alert>
         {/* Section des produits */}
         <AnnotatedSection
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faUngroup}/>
-              Produits dérivés
+              By-products
             </div>
           }
           panelContent={
@@ -101,7 +103,7 @@ class SplitProduct extends Component {
                   <CreateProduct/>
                 }
                 <Link to="#" onClick={ () => this.appendInput() }>
-                  Ajouter un produit dérivé
+                  Add a by-product
                 </Link>
               </FormGroup>
             </div>
@@ -118,7 +120,7 @@ class SplitProduct extends Component {
           }
           panelContent={
             <div>
-              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Effectuer la séparation</Button>
+              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleCreateNewProduct}>Split product</Button>
             </div>
           }
         />

@@ -77,17 +77,16 @@ class CombineScan extends Component {
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange,
-      placeholder: "Emplacement (adresse, latitude & longitude, entreprise)"
+      placeholder: "Location (exact address, latitude & longitude, business)"
     }
 
     return (
       <div>
-        {/* Section d'ajout des identifiants */}
         <AnnotatedSection
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faqrcode}/>
-              Identifiants des produits
+              Product identifiers
             </div>
           }
           panelContent={
@@ -96,51 +95,49 @@ class CombineScan extends Component {
                 {
                   Object.keys(this.state.productParts).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
-                      Identifiant du produit: 
+                      Product identifier: 
                       <Input placeholder="0x..." style={{flex: 1}} onChange={(e) => { this.setState({ productParts: {...this.state.productParts, [inputKey]: {...this.state.productParts[inputKey], key: inputKey, value: e.target.value} }})}}/>
                     </FormGroup>
                   )
                 }
                 <Link to="#" onClick={ () => this.appendInput() }>
-                  Ajouter un produit à la combinaison
+                  Add a product to combine
                 </Link>
               </FormGroup>
             </div>
           }
         />
 
-        {/* Section des informations du produit combiné */}       
         <AnnotatedSection
           annotationContent={
             <div>
               <FontAwesomeIcon fixedWidth style={{paddingTop:"3px", marginRight:"6px"}} icon={faStar}/>
-              Informations du produit combiné
+              Combined product data
             </div>
           }
           panelContent={
             <div>
               <FormGroup>
-                  <Label>Nom</Label>
-                  <Input placeholder="Nom du produit" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
+                  <Label>Name</Label>
+                  <Input placeholder="Product name" value={this.state.name} onChange={(e) => {this.setState({name: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
                   <Label>Description</Label>
-                  <Input placeholder="Description sommaire du produit" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
+                  <Input placeholder="Product description" value={this.state.description} onChange={(e) => {this.setState({description: e.target.value})}}></Input>
               </FormGroup>
               <FormGroup>
-                  <Label>Emplacement actuel</Label>
+                  <Label>Current location</Label>
                   <PlacesAutocomplete
                     inputProps={inputProps}
                     onSelect={this.handleSelect}
                     classNames={{input: "form-control"}}
                   />
               </FormGroup>
-              <p>*Les certifications et données additionnelles pourront être modifiées après la création.</p>
+              <p>Certifications and custom data can be modified after the merge.</p>
             </div>
           }
         />
 
-        {/* Section des actions */}
         <AnnotatedSection
           annotationContent={
             <div>
@@ -150,7 +147,7 @@ class CombineScan extends Component {
           }
           panelContent={
             <div>
-              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleMergeProducts}>Effectuer la combinaison</Button>
+              <Button disabled={this.state.buttonDisabled} color="primary" onClick={this.handleMergeProducts}>Combine products</Button>
             </div>
           }
         />

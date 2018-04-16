@@ -62,7 +62,7 @@ class App extends Component {
         // remember the current web3 account
         var currentAccount = accounts[0];
 
-        // every 500ms, check if the web3 account changed
+        // every 1000ms, check if the web3 account changed
         setInterval(() => {
           this.props.web3.eth.getAccounts((error, accounts) => {
             // reload the entire app if the account changed
@@ -70,14 +70,14 @@ class App extends Component {
               window.location = "/"
             }
           })
-        }, 500)
+        }, 1000)
 
         // upon product creation, redirect to the home page and show a notification
         const event = instance.ProductCreated({owner: this.props.web3Accounts[0]}) // TODO: extract event watchers into a new method/class?
         event.watch((error, result) => {
           if (!error){
             this.props.history.push('/');
-            notify.show("Produit créé avec succès.", "custom", 5000, { background: '#50b796', text: "#FFFFFF" });
+            notify.show("Product created.", "custom", 5000, { background: '#50b796', text: "#FFFFFF" });
           } else {
             console.log(error);
           }
@@ -101,8 +101,8 @@ class App extends Component {
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <NavLink tag={Link} to="/account">
-                    Mon compte
-                    <img alt="Avatar de profil" style={{marginLeft: "10px", width:"20px", height:"20px", borderRadius:"3px"}} src={blockies.createDataURL({ scale: 5, seed: this.props.web3 && this.props.passageInstance && this.props.web3Accounts ? this.props.web3Accounts[0] : ""})}/>
+                    My account
+                    <img alt="Profile avatar" style={{marginLeft: "10px", width:"20px", height:"20px", borderRadius:"3px"}} src={blockies.createDataURL({ scale: 5, seed: this.props.web3 && this.props.passageInstance && this.props.web3Accounts ? this.props.web3Accounts[0] : ""})}/>
                   </NavLink>
                 </NavItem>
               </Nav>
