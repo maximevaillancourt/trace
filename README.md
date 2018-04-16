@@ -15,11 +15,13 @@ on-premise (e.g. at the grocery store).
 is not production-ready by any means. However, we invite you to play around with the project
 and use it as you see fit.
 
-![scrot](https://user-images.githubusercontent.com/8457808/38819232-d35aed1e-4168-11e8-90e7-1d74fe726729.png)
-
 Made using the Truffle toolkit, React.js, Redux, and Webpack.
 
 Logo design by [@mailhiotlaur](https://twitter.com/mailhiotlaur).
+
+## Screenshot
+
+![scrot](https://user-images.githubusercontent.com/8457808/38819232-d35aed1e-4168-11e8-90e7-1d74fe726729.png)
 
 ## Installing / Getting started
 
