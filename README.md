@@ -11,8 +11,9 @@ that can be added to products. A mobile companion app (not developed yet) would
 allow scanning Trace QR codes placed on the actual products to see the data
 on-premise (e.g. at the grocery store).
 
-⚠️ **Keep in mind that this is only a proof of concept** that was developed as part of a university project. It
-is **not production ready** by any means. However, we invite you to play around with the project and use it as you see fit. There are some rough edges, so we definitely appreciate your help.
+Keep in mind that **this is a proof of concept**. It is *not* production ready by any means. However, we do invite you to play around with the project and use it as you see fit. There are some rough edges, so we definitely appreciate your help in improving the platform.
+
+This project was developed under the supervision of Bessam Abdulrazak, director of the [Ambient Intelligence Lab](https://ami.usherbrooke.ca/welcome/en-lab/) at Université de Sherbrooke.
 
 Made using the Truffle toolkit, React.js, Redux, and Webpack.
 
