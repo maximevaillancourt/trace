@@ -113,6 +113,7 @@ For larger new features: do everything as above, but first also make contact wit
   - Provenance: http://provenance.org/
   - SCTS: https://github.com/AtrauraBlockchain/scts
   - Phinomenal: https://github.com/phi-nomenal/phi-nomenal
+  - Sawtooth Lake traceability example: https://provenance.sawtooth.me/
 
 ## Licensing
 
