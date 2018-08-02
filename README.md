@@ -58,7 +58,13 @@ Logo design by [Laurence Mailhiot](https://twitter.com/mailhiotlaur).
     npm run start
     ```
 
-A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually).
+A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually). It might say in the browser window "Waiting for Web3..."  If it does, see steps 5-6.
+
+5.  If you don't already have Metamask, get it (https://metamask.io/).  In Metamask, Import Account (click on the button with the person and arrows in a circle next to the hamburger), using Private Keys. Copy a private key from the output of the Truffle Develop and paste it into the Private Key in Metamask.
+
+6.  Then, connect to your private network. Click the network chooser (it will likely say "Main Ethereum Network" at the top), and choose Custom RPC. In there, enter the URL in your truffle.js file (default in this repo is http://localhost:9545). Then click Save.
+
+7. You should be up and running now!
 
 ## Developing
 
