@@ -212,7 +212,7 @@ class Create extends Component {
                   <Label>Categorie(s)</Label>
                   <Input defaultValue="" type="select" name="select" id="exampleSelect" onChange={(e) => this.handleCategorySelect(e, 0)}>
                     {/* This is the first category dropdown, which represents the 1st level of categories (from the root node) */}
-                    <option disabled value="" key="none">(sélectionner)</option>
+                    <option disabled value="" key="none">(select)</option>
                     {this.state.ebayCategoryMap.rootCategoryNode ?
                       this.state.ebayCategoryMap.rootCategoryNode.childCategoryTreeNodes.map((categoryObject, index) => {
                         return (<option value={categoryObject.category.categoryId} key={index}>{categoryObject.category.categoryName}</option>)
@@ -265,8 +265,8 @@ class Create extends Component {
                   // displays all custom data fields from the state
                   Object.keys(this.state.customDataInputs).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
-                      <Input value={this.state.customDataInputs[inputKey].key} placeholder="Propriété (par exemple, «Couleur»)" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Valeur (par exemple, «Rouge»)" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].key} placeholder="Property (e.g. 'color')" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Value (e.g. 'red')" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
                     </FormGroup>
                   )
                 }

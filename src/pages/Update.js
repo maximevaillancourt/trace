@@ -132,7 +132,7 @@ class Update extends Component {
                   Object.keys(this.state.customDataInputs).map(inputKey =>
                     <FormGroup style={{display:"flex"}} key={inputKey}>
                       <Input value={this.state.customDataInputs[inputKey].key} placeholder="Property (e.g. 'color')" style={{flex: 1, marginRight:"15px"}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], key: e.target.value} }})}}/>
-                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Valeur (e.g. 'red')" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
+                      <Input value={this.state.customDataInputs[inputKey].value} placeholder="Value (e.g. 'red')" style={{flex: 1}} onChange={(e) => {this.setState({ customDataInputs: {...this.state.customDataInputs, [inputKey]: {...this.state.customDataInputs[inputKey], value: e.target.value} }})}}/>
                     </FormGroup>
                   )
                 }
