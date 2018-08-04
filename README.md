@@ -58,24 +58,24 @@ Logo design by [Laurence Mailhiot](https://twitter.com/mailhiotlaur).
     npm run start
     ```
 
-A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually). It might say in the browser window "Waiting for Web3..."  If it does, see steps 5-6.
+    A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually). If you see the Trace home page, you're ready to go. Otherwise, if the page is stuck on "Waiting for Web3...", proceed to steps 5 and 6. 
 
-5.  If you don't already have Metamask, get it (https://metamask.io/).  In Metamask, Import Account (click on the button with the person and arrows in a circle next to the hamburger), using Private Keys. Copy a private key from the output of the Truffle Develop and paste it into the Private Key in Metamask.
+5.  Install the [MetaMask browser extension](https://metamask.io/). Once installed, click on the MetaMask icon, then use the "Import Account" feature to create an account from a private key. Copy the first private key from the first few lines of output of `truffle develop` and paste it into the "Private Key" field in Metamask.
 
-6.  Then, connect to your private network. Click the network chooser (it will likely say "Main Ethereum Network" at the top), and choose Custom RPC. In there, enter the URL in your truffle.js file (default in this repo is http://localhost:9545). Then click Save.
+6.  Connect to your private network. Click the network chooser (it will likely say "Main Ethereum Network" at the top), and choose "Custom RPC". In there, enter the URL that matches the configuration in the `truffle.js` file (which should be `http://localhost:9545` by default), then click "Save".
 
-7. You should be up and running now!
+7. Refresh the page in your browser, and you should be good to go!
 
 ## Developing
 
-To change something in the "smart contracts" side of things, you need to compile your contracts every time you change something
+To change something in the "smart contracts" side of things, you need to compile your contracts every time you change them
 using the following command in the Truffle console:
 
 ```shell
 migrate --reset
 ```
 
-As for the React app, the Webpack server should refresh the app automatically when a change is detected.
+As for the React front-end, the Webpack server should refresh the page in your browser automatically when a change is detected.
 
 ### Building
 
@@ -105,8 +105,7 @@ For bug fixes, documentation changes, and small features:
 
 1. [Fork it](https://github.com/maximevaillancourt/trace/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)  
-3. Commit your changes (`git commit -am 'Add some feature'`)  
-   **NOTE: Please be sure that you have GPG Signing configured in GitHub (https://help.github.com/articles/signing-commits-using-gpg/)
+3. Commit your changes (`git commit -am 'Add some feature'`) using [GPG signing](https://help.github.com/articles/signing-commits-using-gpg/)
 4. Push to the branch (`git push origin my-new-feature`)  
 5. Create a new Pull Request
 
