@@ -132,3 +132,4 @@ typings/
 # End of https://www.gitignore.io/api/intellij,solidity
 
 .vscode
+build_webpack
