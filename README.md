@@ -58,7 +58,13 @@ Logo design by [Laurence Mailhiot](https://twitter.com/mailhiotlaur).
     npm run start
     ```
 
-A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually).
+A browser window should then open automatically at `http://localhost:3000` (or whatever port you set manually). It might say in the browser window "Waiting for Web3..."  If it does, see steps 5-6.
+
+5.  If you don't already have Metamask, get it (https://metamask.io/).  In Metamask, Import Account (click on the button with the person and arrows in a circle next to the hamburger), using Private Keys. Copy a private key from the output of the Truffle Develop and paste it into the Private Key in Metamask.
+
+6.  Then, connect to your private network. Click the network chooser (it will likely say "Main Ethereum Network" at the top), and choose Custom RPC. In there, enter the URL in your truffle.js file (default in this repo is http://localhost:9545). Then click Save.
+
+7. You should be up and running now!
 
 ## Developing
 
@@ -100,6 +106,7 @@ For bug fixes, documentation changes, and small features:
 1. [Fork it](https://github.com/maximevaillancourt/trace/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)  
 3. Commit your changes (`git commit -am 'Add some feature'`)  
+   **NOTE: Please be sure that you have GPG Signing configured in GitHub (https://help.github.com/articles/signing-commits-using-gpg/)
 4. Push to the branch (`git push origin my-new-feature`)  
 5. Create a new Pull Request
 
