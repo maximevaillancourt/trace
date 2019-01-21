@@ -35,7 +35,7 @@ Logo design by [Laurence Mailhiot](https://twitter.com/mailhiotlaur).
 1. Install the Truffle toolkit globally and install project dependencies:
 
     ```shell
-    npm install -g truffle && npm install
+    npm install -g truffle@4.1.7 && npm install
     ```
 
 2. In a new shell, start the Truffle development console:
