@@ -1,39 +1,39 @@
-import Web3 from 'web3'
+import Web3 from "web3";
 
 let getWeb3 = new Promise(function(resolve, reject) {
-  // Wait for loading completion to avoid race conditions with web3 injection timing.
-  window.addEventListener('load', function() {
-    var results
-    var web3 = window.web3
-
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    if (typeof web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider.
-      web3 = new Web3(web3.currentProvider)
-
-      results = {
-        web3: web3
+  window.addEventListener("load", async () => {
+    const ethereum = window.ethereum;
+    const web3 = window.web3;
+    if (ethereum) {
+      window.web3 = new Web3(ethereum);
+      try {
+        // Request account access if needed
+        await ethereum.enable();
+        // Acccounts now exposed
+        web3.eth.sendTransaction({
+          /* ... */
+        });
+      } catch (error) {
+        // User denied account access...
       }
-
-      console.log('Injected web3 detected.');
-
-      resolve(results)
-    } else {
-      // Fallback to localhost if no web3 injection. Configured to
-      // use the development console's port.
-      var provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545')
-
-      web3 = new Web3(provider)
-
-      results = {
-        web3: web3
-      }
-
-      console.log('No web3 instance injected, using Local web3.');
-
-      resolve(results)
     }
-  })
-})
+    // Legacy dapp browsers...
+    else if (window.web3) {
+      window.web3 = new Web3(web3.currentProvider);
+      // Acccounts always exposed
+      web3.eth.sendTransaction({
+        /* ... */
+      });
+    }
+    // Non-dapp browsers...
+    else {
+      console.log(
+        "Non-Ethereum browser detected. You should consider trying MetaMask!"
+      );
+    }
 
-export default getWeb3
+    resolve({ web3 });
+  });
+});
+
+export default getWeb3;
